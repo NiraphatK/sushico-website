@@ -21,7 +21,8 @@ Customers can sign in with **email or phone number**, select **time, party size,
 The system confirms reservations only if active bookings do not exceed available seats.  
 Table numbers are **not assigned at booking time** — instead, staff assign them during **check-in** to optimize usage and reduce no-shows.  
 
-Admins can configure store policies like **Cut-off Time, Grace Period, Store Hours, and Table Settings**.  
+In addition, the system provides a **Menu Page** where customers can view food items (name, price, and image).  
+Admins can upload and manage menu items alongside store policies like **Cut-off Time, Grace Period, Store Hours, and Table Settings**.  
 
 ---
 
@@ -31,6 +32,7 @@ Admins can configure store policies like **Cut-off Time, Grace Period, Store Hou
 - Book, cancel, or edit reservations before cut-off time  
 - Choose time, party size, and seat type (BAR / TABLE)  
 - Check booking status and confirm arrival (check-in)  
+- **Browse restaurant menu items (name, price, image)**  
 
 ### 🧑‍🍳 Staff
 - View daily reservations overview  
@@ -42,8 +44,11 @@ Admins can configure store policies like **Cut-off Time, Grace Period, Store Hou
 - Manage table information (add/edit/remove/enable/disable)  
 - Configure cut-off, grace period, buffer, store hours, and slot granularity  
 - View daily statistics, no-show rate, and peak hours reports  
+- **Add, edit, delete, or hide menu items**  
+- **Upload menu item images for display on the customer-facing menu page**  
 
 ---
+
 
 ## 🛠 Tech Stack
 - **Language** → [PHP 8.2+](https://www.php.net/)  
