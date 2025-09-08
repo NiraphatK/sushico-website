@@ -64,15 +64,35 @@ Admins can upload and manage menu items alongside store policies like **Cut-off 
 - Composer 2+  
 - MySQL
 
-### Installation
-```bash
+## 📦 Installation
+```
+# 1. Start XAMPP
+- Start Apache and MySQL in XAMPP Control Panel
+
+# 2. Clone the repository
 git clone https://github.com/NiraphatK/sushico-website.git
 cd sushico-website
 
+# 3. Install dependencies
 composer install
+
+# 4. Copy .env and update DB settings
 cp .env.example .env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=sushico
+DB_USERNAME=root
+DB_PASSWORD=
+
+# 5. Create DB and import SQL
+- Visit http://localhost/phpmyadmin
+- Import .sql file from database/ folder
+
+# 6. Generate app key
 php artisan key:generate
-php artisan migrate --seed
+
+# 7. Run the project
 php artisan serve
 ```
 Now open: http://localhost:8000 🎉
