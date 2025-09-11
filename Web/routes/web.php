@@ -23,7 +23,7 @@ Route::get('/dashboard', [DashboardController::class, 'index']);
 // User CRUD
 Route::get('/users', [UserController::class, 'index']);
 Route::get('/users/adding',  [UserController::class, 'adding']);
-Route::post('/users/create', [UserController::class, 'create']);
+Route::post('/users', [UserController::class, 'create']);
 Route::get('/users/{id}',  [UserController::class, 'edit']);
 Route::put('/users/{id}',  [UserController::class, 'update']);
 Route::delete('/users/remove/{id}',  [UserController::class, 'remove']);

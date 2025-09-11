@@ -596,7 +596,7 @@
                 </p>
                 <div class="hero-cta" data-aos="fade-up" data-aos-delay="320">
                     <a href="/reservation" class="btn btn-salmon">จองโต๊ะ</a>
-                    <a href="/aboutus" class="btn btn-ghost">เรื่องราวของเรา</a>
+                    <a href="/about-us" class="btn btn-ghost">เรื่องราวของเรา</a>
                 </div>
             </div>
         </section>
