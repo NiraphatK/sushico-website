@@ -378,6 +378,11 @@
             -webkit-backdrop-filter: blur(10px) saturate(120%);
             transition: transform .25s ease, box-shadow .25s ease;
             position: relative;
+
+            /* ทำให้การ์ดสูงเท่ากัน */
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         .menu-card:hover {
@@ -454,6 +459,11 @@
 
         .menu-body {
             padding: 16px;
+
+            /* ทำให้ภายในจัด layout เป็นคอลัมน์ */
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
         }
 
         .menu-title {
@@ -467,6 +477,15 @@
         .menu-desc {
             color: var(--muted);
             font-size: .96rem;
+
+            /* ป้องกันการ์ดเตี้ยเกิน */
+            flex-grow: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            /* จำกัดไม่เกิน 3 บรรทัด */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 4.5em;
         }
 
         .price {
@@ -486,6 +505,7 @@
             background: linear-gradient(90deg, transparent, rgba(11, 18, 32, .12) 20%, rgba(11, 18, 32, .12) 80%, transparent);
             margin: .6rem 0 1rem;
         }
+
 
         /* ---------- FOOTER ---------- */
         footer {

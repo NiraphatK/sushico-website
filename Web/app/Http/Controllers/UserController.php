@@ -70,7 +70,7 @@ class UserController extends Controller
                 'full_name'     => strip_tags($request->input('full_name')),
                 'phone'         => strip_tags($request->input('phone')),
                 'email'         => $request->input('email'),
-                'password_hash' => bcrypt($request->input('password_hash')),
+                'password_hash' => bcrypt($request->input('password')),
                 'role'          => $request->input('role'),
                 'is_active'     => 1,
 
@@ -109,46 +109,55 @@ class UserController extends Controller
     } //func edit
 
 
-    public function update($id, Request $request)
+    public function update($user_id, Request $request)
     {
         //vali msg 
         $messages = [
-            'admin_username.required' => 'กรุณากรอกข้อมูล',
-            'admin_username.email' => 'รูปแบบอีเมลไม่ถูกต้อง',
-            'admin_username.unique' => 'Email ซ้ำ เพิ่มใหม่อีกครั้ง !!',
-
-            'admin_name.required' => 'กรุณากรอกข้อมูล',
-            'admin_name.min' => 'กรอกข้อมูลขั้นต่ำ :min ตัว',
+            'full_name.required' => 'กรุณากรอกชื่อ-สกุล',
+            'phone.required'     => 'กรุณากรอกเบอร์โทรศัพท์',
+            'phone.unique'       => 'เบอร์โทรนี้มีในระบบแล้ว',
+            'email.email'        => 'รูปแบบอีเมลไม่ถูกต้อง',
+            'email.unique'       => 'อีเมลนี้มีในระบบแล้ว',
         ];
 
         //rule
         $validator = Validator::make($request->all(), [
-            'admin_username' => [
+            'full_name' => 'required|string|max:100',
+            'phone'     => [
                 'required',
-                'email',
-                Rule::unique('tbl_admin', 'admin_username')->ignore($id, 'id'), //ห้ามแก้ซ้ำ
+                'string',
+                'max:20',
+                Rule::unique('users', 'phone')->ignore($user_id, 'user_id'),
             ],
-
-            'admin_name' => 'required|min:4',
+            'email'     => [
+                'nullable',
+                'email',
+                Rule::unique('users', 'email')->ignore($user_id, 'user_id'),
+            ],
+            'role'      => 'required|in:CUSTOMER,STAFF,ADMIN',
+            'is_active' => 'required|boolean',
 
         ], $messages);
 
         //check 
         if ($validator->fails()) {
-            return redirect('admin/' . $id)
+            return redirect('users/' . $user_id)
                 ->withErrors($validator)
                 ->withInput();
         }
 
         try {
-            $admin = UserModel::find($id);
-            $admin->update([
-                'admin_username' => strip_tags($request->input('admin_username')),
-                'admin_name' => strip_tags($request->input('admin_name')),
+            $user = UserModel::findOrFail($user_id);
+            $user->update([
+                'full_name' => strip_tags($request->input('full_name')),
+                'phone'     => strip_tags($request->input('phone')),
+                'email'     => $request->input('email'),
+                'role'      => $request->input('role'),
+                'is_active' => $request->input('is_active'),
             ]);
             // แสดง Alert ก่อน return
             Alert::success('ปรับปรุงข้อมูลสำเร็จ');
-            return redirect('/admin');
+            return redirect('/users');
         } catch (\Exception $e) {
             //return response()->json(['error' => $e->getMessage()], 500); //สำหรับ debug
             return view('errors.404');
@@ -169,17 +178,16 @@ class UserController extends Controller
         }
     } //remove 
 
-    public function reset($id)
+    public function reset($user_id)
     {
         try {
             //query data for form edit 
-            $admin = UserModel::findOrFail($id); // ใช้ findOrFail เพื่อให้เจอหรือ 404
-            if (isset($admin)) {
-                $id = $admin->id;
-                $admin_name = $admin->admin_name;
-                $admin_username = $admin->admin_username;
-                // $password = $admin->password;
-                return view('admin.editPassword', compact('id', 'admin_name', 'admin_username'));
+            $user = UserModel::findOrFail($user_id); // ใช้ findOrFail เพื่อให้เจอหรือ 404
+            if (isset($user)) {
+                $user_id   = $user->user_id;
+                $full_name = $user->full_name;
+                $email     = $user->email;
+                return view('users.editPassword', compact('user_id', 'full_name', 'email'));
             }
         } catch (\Exception $e) {
             // return response()->json(['error' => $e->getMessage()], 500); //สำหรับ debug
@@ -187,42 +195,39 @@ class UserController extends Controller
         }
     } //func reset
 
-    public function resetPassword($id, Request $request)
+    public function resetPassword($user_id, Request $request)
     {
         //vali msg 
         $messages = [
-            'password.required' => 'กรุณากรอกรหัสผ่าน',
-            'password.min' => 'กรอกข้อมูลขั้นต่ำ :min ตัว',
-            'password.confirmed' => 'รหัสผ่านไม่ตรงกัน',
-
-            'password_confirmation.required' => 'กรุณากรอกข้อมูล',
-            'password_confirmation.min' => 'กรอกข้อมูลขั้นต่ำ :min ตัว',
+            'password.required'   => 'กรุณากรอกรหัสผ่าน',
+            'password.min'        => 'รหัสผ่านต้องอย่างน้อย :min ตัวอักษร',
+            'password.confirmed'  => 'รหัสผ่านไม่ตรงกัน',
         ];
 
         //rule
         $validator = Validator::make($request->all(), [
-            'password' => 'required|min:4|confirmed',
-            'password_confirmation' => 'required|min:3',
+            'password'              => 'required|min:6|confirmed',
+            'password_confirmation' => 'required|min:6',
 
         ], $messages);
 
         //check 
         if ($validator->fails()) {
-            return redirect('admin/reset/' . $id)
+            return redirect('users/reset/' . $user_id)
                 ->withErrors($validator)
                 ->withInput();
         }
 
         try {
-            $admin = UserModel::find($id);
-            $admin->update([
-                'admin_password' => bcrypt($request->input('password')),
+            $user = UserModel::find($user_id);
+            $user->update([
+                'password_hash' => bcrypt($request->input('password')),
             ]);
             // แสดง Alert ก่อน return
             Alert::success('แก้ไขรหัสผ่านสำเร็จ');
-            return redirect('/admin');
+            return redirect('/users');
         } catch (\Exception $e) {
-            //return response()->json(['error' => $e->getMessage()], 500); //สำหรับ debug
+            // return response()->json(['error' => $e->getMessage()], 500); //สำหรับ debug
             return view('errors.404');
         }
     } //fun resetPassword 

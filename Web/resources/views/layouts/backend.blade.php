@@ -100,13 +100,27 @@
             {{-- Sidebar --}}
             <aside class="col-md-3 col-lg-2 sidebar">
                 <nav class="nav flex-column">
-                    <a href="/" class="nav-link"><i class="bi bi-house-door me-2"></i> Home</a>
-                    <a href="/dashboard" class="nav-link active"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
-                    <a href="/users" class="nav-link"><i class="bi bi-people me-2"></i> Users</a>
-                    <a href="/menu" class="nav-link"><i class="bi bi-journal-text me-2"></i> Menu</a>
+
+                    <a href="/" class="nav-link {{ request()->is('/') ? 'active' : '' }}">
+                        <i class="bi bi-house-door me-2"></i> Home
+                    </a>
+
+                    <a href="/dashboard" class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}">
+                        <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                    </a>
+
+                    <a href="/users" class="nav-link {{ request()->is('users*') ? 'active' : '' }}">
+                        <i class="bi bi-people me-2"></i> Users
+                    </a>
+
+                    <a href="/menu" class="nav-link {{ request()->is('menu*') ? 'active' : '' }}">
+                        <i class="bi bi-journal-text me-2"></i> Menu
+                    </a>
+
                 </nav>
                 @yield('sidebarMenu')
             </aside>
+
 
             {{-- Main Content --}}
             <main class="col-md-9 col-lg-10">
