@@ -596,7 +596,7 @@
                     <li class="nav-item"><a class="nav-link" href="/about-us">เกี่ยวกับเรา</a></li>
                     <li class="nav-item"><a class="nav-link" href="/menus">เมนู</a></li>
                     <li class="nav-item"><a class="nav-link" href="/contact-us">ติดต่อเรา</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/dashboard" target="_blank">BackOffice</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/dashboard" target="_blank">จัดการหลังบ้าน</a></li>
                 </ul>
                 <div class="ms-3 d-flex align-items-center gap-2">
                     <a href="/reservation" class="btn btn-salmon">จองโต๊ะ</a>
