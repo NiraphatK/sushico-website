@@ -23,7 +23,7 @@ class HomeController extends Controller
 
     public function contact()
     {
-        return view('home.contact-us'); // เกี่ยวกับเรา
+        return view('home.contact-us'); // ติดต่อเรา
     }
 
     public function menu()

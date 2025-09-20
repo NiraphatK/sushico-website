@@ -109,16 +109,20 @@
                         <i class="bi bi-speedometer2 me-2"></i> Dashboard
                     </a>
 
-                    <a href="/users" class="nav-link {{ request()->is('users*') ? 'active' : '' }}">
+                    <a href="/users" class="nav-link {{ request()->is('users') ? 'active' : '' }}">
                         <i class="bi bi-people me-2"></i> Users
                     </a>
 
-                    <a href="/table" class="nav-link {{ request()->is('table*') ? 'active' : '' }}">
+                    <a href="/table" class="nav-link {{ request()->is('table') ? 'active' : '' }}">
                         <i class="bi bi-table me-2"></i> Table
                     </a>
 
-                    <a href="/menu" class="nav-link {{ request()->is('menu*') ? 'active' : '' }}">
+                    <a href="/menu" class="nav-link {{ request()->is('menu') ? 'active' : '' }}">
                         <i class="bi bi-journal-text me-2"></i> Menu
+                    </a>
+
+                    <a href="/store-settings" class="nav-link {{ request()->is('store-settings') ? 'active' : '' }}">
+                        <i class="bi bi-journal-text me-2"></i> Store setting
                     </a>
 
                 </nav>

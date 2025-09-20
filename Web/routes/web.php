@@ -45,3 +45,8 @@ Route::post('/menu',  [MenuItemController::class, 'create']);
 Route::get('/menu/{id}',  [MenuItemController::class, 'edit']);
 Route::put('/menu/{id}',  [MenuItemController::class, 'update']);
 Route::delete('/menu/remove/{id}',  [MenuItemController::class, 'remove']);
+
+// Store settings
+Route::get('/store-settings', [StoreSettingController::class, 'index']);
+Route::put('/store-settings/update', [StoreSettingController::class, 'update']);
+Route::post('/store-settings/reset', [StoreSettingController::class, 'reset']);

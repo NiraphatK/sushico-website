@@ -33,15 +33,17 @@ class DashboardController extends Controller
 
             //วิวแยกตามเดือน
             // กําาหนดวันเริ่มต้น = ย้อนหลังไป 11 เดือนจากปัจจุบัน และปัดให้เป็นวันแรกของเดือนนั้น 
-            $startDate = Carbon::now()->subMonths(11)->startOfMonth();
+            // $startDate = Carbon::now()->subMonths(11)->startOfMonth();
             // กําหนดวันสิ้นสุด = เดือนปัจจุบัน และปัดให้เป็นวันสุดท้ายของเดือน
-            $endDate = Carbon::now()->endOfMonth();
+            // $endDate = Carbon::now()->endOfMonth();
 
             //raw sql
             $monthlyVisits = DB::table('counter')
-                ->selectRaw('DATE_FORMAT(c_date, "%M-%Y") as ym, COUNT(*) as total')->whereBetween('c_date', [$startDate, $endDate])
+                ->selectRaw('DATE_FORMAT(c_date, "%M-%Y") as ym, COUNT(*) as total')
+                // ->whereBetween('c_date', [$startDate, $endDate])
                 ->groupBy('ym')
                 ->orderByRaw('DATE_FORMAT(c_date, "%Y-%m") DESC')
+                ->limit(12)
                 ->get();
             // แปลงเป็น array สําหรับ Chart.js
             $label = $monthlyVisits->pluck('ym');
