@@ -19,8 +19,7 @@
                 <label class="col-sm-3">
                     Time Zone
                     <i class="fa-solid fa-circle-info text-primary" data-bs-toggle="tooltip"
-                        title="กำหนดโซนเวลา เช่น Asia/Bangkok เพื่อใช้ในการคำนวณเวลาการจอง">
-                    </i>
+                        title="กำหนดโซนเวลา เช่น Asia/Bangkok เพื่อใช้ในการคำนวณเวลาการจอง"></i>
                 </label>
                 <div class="col-sm-6">
                     <select name="timezone" class="form-control">
@@ -34,6 +33,9 @@
                             </option>
                         @endforeach
                     </select>
+                    @if ($errors->has('timezone'))
+                        <div class="text-danger">{{ $errors->first('timezone') }}</div>
+                    @endif
                 </div>
             </div>
 
@@ -42,12 +44,14 @@
                 <label class="col-sm-3">
                     Cut-off Minutes
                     <i class="fa-solid fa-circle-info text-primary" data-bs-toggle="tooltip"
-                        title="เวลาปิดรับการจองล่วงหน้าก่อนถึงเวลา เช่น 30 นาที">
-                    </i>
+                        title="เวลาปิดรับการจองล่วงหน้าก่อนถึงเวลา เช่น 30 นาที"></i>
                 </label>
                 <div class="col-sm-3">
                     <input type="number" class="form-control" name="cut_off_minutes"
                         value="{{ old('cut_off_minutes', $setting->cut_off_minutes) }}">
+                    @if ($errors->has('cut_off_minutes'))
+                        <div class="text-danger">{{ $errors->first('cut_off_minutes') }}</div>
+                    @endif
                 </div>
             </div>
 
@@ -56,12 +60,14 @@
                 <label class="col-sm-3">
                     Grace Minutes
                     <i class="fa-solid fa-circle-info text-primary" data-bs-toggle="tooltip"
-                        title="เวลาผ่อนผันเมื่อลูกค้ามาสาย เช่น 15 นาที ก่อนเปลี่ยนสถานะเป็น No Show">
-                    </i>
+                        title="เวลาผ่อนผันเมื่อลูกค้ามาสาย เช่น 15 นาที ก่อนเปลี่ยนสถานะเป็น No Show"></i>
                 </label>
                 <div class="col-sm-3">
                     <input type="number" class="form-control" name="grace_minutes"
                         value="{{ old('grace_minutes', $setting->grace_minutes) }}">
+                    @if ($errors->has('grace_minutes'))
+                        <div class="text-danger">{{ $errors->first('grace_minutes') }}</div>
+                    @endif
                 </div>
             </div>
 
@@ -70,12 +76,14 @@
                 <label class="col-sm-3">
                     Buffer Minutes
                     <i class="fa-solid fa-circle-info text-primary" data-bs-toggle="tooltip"
-                        title="เวลาสำหรับทำความสะอาดโต๊ะก่อนรอบถัดไป เช่น 10 นาที">
-                    </i>
+                        title="เวลาสำหรับทำความสะอาดโต๊ะก่อนรอบถัดไป เช่น 10 นาที"></i>
                 </label>
                 <div class="col-sm-3">
                     <input type="number" class="form-control" name="buffer_minutes"
                         value="{{ old('buffer_minutes', $setting->buffer_minutes) }}">
+                    @if ($errors->has('buffer_minutes'))
+                        <div class="text-danger">{{ $errors->first('buffer_minutes') }}</div>
+                    @endif
                 </div>
             </div>
 
@@ -84,12 +92,14 @@
                 <label class="col-sm-3">
                     Slot Granularity Minutes
                     <i class="fa-solid fa-circle-info text-primary" data-bs-toggle="tooltip"
-                        title="ช่วงเวลาในการจอง เช่น 15 นาทีต่อ 1 slot">
-                    </i>
+                        title="ช่วงเวลาในการจอง เช่น 15 นาทีต่อ 1 slot"></i>
                 </label>
                 <div class="col-sm-3">
                     <input type="number" class="form-control" name="slot_granularity_minutes"
                         value="{{ old('slot_granularity_minutes', $setting->slot_granularity_minutes) }}">
+                    @if ($errors->has('slot_granularity_minutes'))
+                        <div class="text-danger">{{ $errors->first('slot_granularity_minutes') }}</div>
+                    @endif
                 </div>
             </div>
 
@@ -98,12 +108,14 @@
                 <label class="col-sm-3">
                     Default Duration Minutes
                     <i class="fa-solid fa-circle-info text-primary" data-bs-toggle="tooltip"
-                        title="ระยะเวลาเริ่มต้นที่ลูกค้าสามารถใช้โต๊ะ เช่น 60 นาที">
-                    </i>
+                        title="ระยะเวลาเริ่มต้นที่ลูกค้าสามารถใช้โต๊ะ เช่น 60 นาที"></i>
                 </label>
                 <div class="col-sm-3">
                     <input type="number" class="form-control" name="default_duration_minutes"
                         value="{{ old('default_duration_minutes', $setting->default_duration_minutes) }}">
+                    @if ($errors->has('default_duration_minutes'))
+                        <div class="text-danger">{{ $errors->first('default_duration_minutes') }}</div>
+                    @endif
                 </div>
             </div>
 
@@ -116,6 +128,7 @@
             </div>
         </form>
 
+        <!-- ฟอร์ม Reset แยก -->
         <form id="reset-form" action="/store-settings/reset" method="post" style="display:none;">
             @csrf
         </form>
