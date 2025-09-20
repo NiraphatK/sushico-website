@@ -24,7 +24,10 @@
                 <div class="col-sm-6">
                     <select name="timezone" class="form-control">
                         @php
-                            $timezones = ['Asia/Bangkok', 'UTC'];
+                            $timezones = [
+                                'Asia/Bangkok',
+                                // 'UTC'
+                            ];
                         @endphp
                         @foreach ($timezones as $tz)
                             <option value="{{ $tz }}"

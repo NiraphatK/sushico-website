@@ -50,3 +50,14 @@ Route::delete('/menu/remove/{id}',  [MenuItemController::class, 'remove']);
 Route::get('/store-settings', [StoreSettingController::class, 'index']);
 Route::put('/store-settings/update', [StoreSettingController::class, 'update']);
 Route::post('/store-settings/reset', [StoreSettingController::class, 'reset']);
+
+// Reservation CRUD
+Route::get('/reservations', [ReservationController::class, 'index']);
+Route::get('/reservations/adding', [ReservationController::class, 'adding']);
+Route::post('/reservations', [ReservationController::class, 'create']);
+Route::get('/reservations/{id}', [ReservationController::class, 'edit']);
+Route::put('/reservations/{id}', [ReservationController::class, 'update']);
+Route::delete('/reservations/remove/{id}', [ReservationController::class, 'remove']);
+
+// Reservation Check-in
+Route::post('/reservations/checkin/{id}', [ReservationController::class, 'checkIn']);
