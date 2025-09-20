@@ -32,7 +32,7 @@ Admins can upload and manage menu items alongside store policies like **Cut-off 
 - Book, cancel, or edit reservations before cut-off time  
 - Choose time, party size, and seat type (BAR / TABLE)  
 - Check booking status and confirm arrival (check-in)  
-- **Browse restaurant menu items (name, price, image)**  
+- Browse restaurant menu items (name, price, image)
 
 ### 🧑‍🍳 Staff
 - View daily reservations overview  
@@ -44,8 +44,8 @@ Admins can upload and manage menu items alongside store policies like **Cut-off 
 - Manage table information (add/edit/remove/enable/disable)  
 - Configure cut-off, grace period, buffer, store hours, and slot granularity  
 - View daily statistics, no-show rate, and peak hours reports  
-- **Add, edit, delete, or hide menu items**  
-- **Upload menu item images for display on the customer-facing menu page**  
+- Add, edit, delete, or hide menu items
+- Upload menu item images for display on the customer-facing menu page
 
 ---
 
