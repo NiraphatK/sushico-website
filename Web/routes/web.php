@@ -30,6 +30,14 @@ Route::delete('/users/remove/{id}',  [UserController::class, 'remove']);
 Route::get('/users/reset/{id}',  [UserController::class, 'reset']);
 Route::put('/users/reset/{id}',  [UserController::class, 'resetPassword']);
 
+// Table CRUD
+Route::get('/table', [TableController::class, 'index']);
+Route::get('/table/adding',  [TableController::class, 'adding']);
+Route::post('/table',  [TableController::class, 'create']);
+Route::get('/table/{id}',  [TableController::class, 'edit']);
+Route::put('/table/{id}',  [TableController::class, 'update']);
+Route::delete('/table/remove/{id}',  [TableController::class, 'remove']);
+
 // Menu CRUD
 Route::get('/menu', [MenuItemController::class, 'index']);
 Route::get('/menu/adding',  [MenuItemController::class, 'adding']);

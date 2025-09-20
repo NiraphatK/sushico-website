@@ -113,6 +113,10 @@
                         <i class="bi bi-people me-2"></i> Users
                     </a>
 
+                    <a href="/table" class="nav-link {{ request()->is('table*') ? 'active' : '' }}">
+                        <i class="bi bi-table me-2"></i> Table
+                    </a>
+
                     <a href="/menu" class="nav-link {{ request()->is('menu*') ? 'active' : '' }}">
                         <i class="bi bi-journal-text me-2"></i> Menu
                     </a>
