@@ -599,7 +599,7 @@
                     <li class="nav-item"><a class="nav-link" href="/dashboard" target="_blank">จัดการหลังบ้าน</a></li>
                 </ul>
                 <div class="ms-3 d-flex align-items-center gap-2">
-                    <a href="/my-reservations" class="btn btn-salmon">จองโต๊ะ</a>
+                    <a href="/reservation" class="btn btn-salmon">จองโต๊ะ</a>
                     <a href="/menus" class="btn btn-ghost">ดูเมนู</a>
                 </div>
             </div>
@@ -615,7 +615,7 @@
                     วัตถุดิบสดใหม่ คัดพิเศษทุกวัน — Nigiri, Sashimi & Signature Rolls
                 </p>
                 <div class="hero-cta" data-aos="fade-up" data-aos-delay="320">
-                    <a href="/my-reservations" class="btn btn-salmon">จองโต๊ะ</a>
+                    <a href="/reservation" class="btn btn-salmon">จองโต๊ะ</a>
                     <a href="/about-us" class="btn btn-ghost">เรื่องราวของเรา</a>
                 </div>
             </div>

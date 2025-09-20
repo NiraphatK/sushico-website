@@ -17,6 +17,7 @@ Route::get('/menus', [HomeController::class, 'menu']);
 Route::get('/contact-us', [HomeController::class, 'contact']);
 Route::get('/reservation', [HomeController::class, 'reservation']);
 
+
 // Dashboard
 Route::get('/dashboard', [DashboardController::class, 'index']);
 
