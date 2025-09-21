@@ -610,10 +610,53 @@
         <!-- Banner -->
         <section class="banner">
             <div class="container" data-aos="zoom-in" data-aos-delay="80">
-                <h1>Taste the Art of Sushi 🍣</h1>
-                <p class="lead mt-2" data-aos="fade-up" data-aos-delay="200">
-                    วัตถุดิบสดใหม่ คัดพิเศษทุกวัน — Nigiri, Sashimi & Signature Rolls
-                </p>
+                @php
+                    use Illuminate\Support\Facades\Route;
+
+                    $defaultTitle = 'Taste the Art of Sushi 🍣';
+                    $defaultLead = 'วัตถุดิบสดใหม่ คัดพิเศษทุกวัน — Nigiri, Sashimi & Signature Rolls';
+
+                    $routeTitles = [
+                        'home.index' => 'Taste the Art of Sushi 🍣',
+                        'home.about' => 'About Us',
+                        'home.contact' => 'Contact Us',
+                        'menu.index' => 'Our Menu',
+                        'reservation.index' => 'Reservation',
+                    ];
+
+                    $routeLeads = [
+                        'home.index' => $defaultLead,
+                        'home.about' => 'จากตลาดปลา ถึงจานตรงหน้าคุณ — เรื่องเล่าจากครัวของเรา',
+                        'home.contact' => 'เปิดทุกวัน • โทร 02-xxx-xxxx • Line @sushico',
+                        'menu.index' => 'คัดวัตถุดิบสดใหม่ทุกวัน — Nigiri, Sashimi & Signature Rolls',
+                        'reservation.index' => 'สำรองที่นั่งล่วงหน้า เพื่อช่วงเวลาที่ลงตัว',
+                    ];
+
+                    // ชื่อ route ปัจจุบัน (ถ้าไม่มีชื่อ จะเป็น null)
+                    $current = Route::currentRouteName();
+
+                    // Fallback เผื่อมีหน้าไหนยังไม่ตั้งชื่อ: ใช้ path ช่วยแมปให้
+                    if (!$current) {
+                        $path = request()->path(); // '', 'about-us', 'contact-us', ...
+                        $pathMap = [
+                            '' => 'home.index',
+                            'about-us' => 'home.about',
+                            'contact-us' => 'home.contact',
+                            'menus' => 'menu.index',
+                            'menus/search' => 'menu.search',
+                            'reservation' => 'reservation.index',
+                        ];
+                        $current = $pathMap[$path] ?? null;
+                    }
+
+                    $bannerTitle = $bannerTitle ?? ($current && isset($routeTitles[$current]) ? $routeTitles[$current] : $defaultTitle);
+                    $bannerLead = $bannerLead ?? ($current && isset($routeLeads[$current]) ? $routeLeads[$current] : $defaultLead);
+                @endphp
+
+
+                <h1>{{ $bannerTitle }}</h1>
+                <p class="lead mt-2" data-aos="fade-up" data-aos-delay="200">{{ $bannerLead }}</p>
+
                 <div class="hero-cta" data-aos="fade-up" data-aos-delay="320">
                     <a href="/reservation" class="btn btn-salmon">จองโต๊ะ</a>
                     <a href="/about-us" class="btn btn-ghost">เรื่องราวของเรา</a>
