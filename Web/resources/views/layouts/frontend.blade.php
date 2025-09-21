@@ -618,8 +618,29 @@
                     <a href="/reservation" class="btn btn-salmon">จองโต๊ะ</a>
                     <a href="/about-us" class="btn btn-ghost">เรื่องราวของเรา</a>
                 </div>
+
+                {{-- Hero Search (โชว์เฉพาะหน้าเมนู) --}}
+                @if (request()->is('menus*'))
+                    <form action="{{ route('menu.search') }}" method="GET" class="mt-4" role="search"
+                        aria-label="ค้นหาเมนู">
+                        <div class="container-xxl">
+                            <div class="row justify-content-center">
+                                <div class="col-12 col-md-8 col-lg-6">
+                                    <div class="input-group input-group-lg shadow-sm"
+                                        style="border-radius: var(--radius); overflow: hidden;">
+                                        <input type="text" name="keyword" class="form-control"
+                                            placeholder="ค้นหาเช่น ซูชิแซลมอน อูนางิ เผ็ด …"
+                                            value="{{ request('keyword') }}">
+                                        <button class="btn btn-salmon" type="submit">ค้นหา</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                @endif
             </div>
         </section>
+
 
 
 
@@ -655,7 +676,7 @@
         window.addEventListener('load', () => AOS.refresh());
 
         // Parallax hover for menu cards (only pointer: fine)
-        (function() {
+        (function () {
             if (!window.matchMedia || !window.matchMedia('(pointer: fine)').matches) return;
             const cards = document.querySelectorAll('.menu-card.parallax .menu-thumb img, .menu-card .menu-thumb img');
             const clamp = (n, min, max) => Math.min(Math.max(n, min), max);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\MenuItemModel;
 use Illuminate\Pagination\Paginator; //แบ่งหน้า
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request; 
 
 class HomeController extends Controller
 {
@@ -39,5 +40,34 @@ class HomeController extends Controller
     public function reservation()
     {
         return view('home.reservation'); // จองโต๊ะ
+    }
+
+    public function searchMenu(Request $request)
+    {
+        Paginator::useBootstrap();
+
+        // validate แบบเบา ๆ ป้องกัน input แปลก ๆ
+        $validated = $request->validate([
+            'keyword' => 'nullable|string|max:100'
+        ]);
+
+        $keyword = trim($validated['keyword'] ?? '');
+
+        $menuQuery = MenuItemModel::query()
+            ->where('is_active', 1);
+
+        if ($keyword !== '') {
+            $menuQuery->where(function ($q) use ($keyword) {
+                $q->where('name', 'like', "%{$keyword}%")
+                    ->orWhere('description', 'like', "%{$keyword}%");
+            });
+        }
+
+        $menu = $menuQuery
+            ->orderBy('menu_id', 'desc')
+            ->paginate(8)
+            ->appends(['keyword' => $keyword]); // ให้ pagination จำคำค้น
+
+        return view('home.menu_index', compact('menu', 'keyword'));
     }
 }
