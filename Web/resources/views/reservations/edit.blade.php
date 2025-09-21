@@ -56,12 +56,19 @@
                                 <input type="time" name="start_time" class="form-control"
                                     min="{{ $settings->open_time }}" max="{{ $settings->close_time }}"
                                     step="{{ $settings->slot_granularity_minutes * 60 }}"
-                                    value="{{ \Carbon\Carbon::parse($reservation->start_at)->format('H:i') }}" required>
+                                    value="{{ old('start_time', \Carbon\Carbon::parse($reservation->start_at)->format('H:i')) }}"
+                                    required>
+
                                 <div class="form-text text-muted">
-                                    เวลาสิ้นสุดจะถูกกำหนดอัตโนมัติ ({{ $settings->default_duration_minutes }}
-                                    นาทีหลังจากเริ่ม)
+                                    เวลาเปิดร้าน: {{ $settings->open_time }} – ปิดร้าน: {{ $settings->close_time }}
+                                    (เลือกได้ทีละ {{ $settings->slot_granularity_minutes }} นาที)
                                 </div>
+
+                                @error('start_time')
+                                    <small class="text-danger">** {{ $message }} </small>
+                                @enderror
                             </div>
+
 
                             {{-- สถานะ --}}
                             <div class="mb-3">

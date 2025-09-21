@@ -23,5 +23,7 @@ class StoreSettingModel extends Model
         'buffer_minutes',
         'slot_granularity_minutes',
         'default_duration_minutes',
+        'open_time',
+        'close_time',
     ];
 }

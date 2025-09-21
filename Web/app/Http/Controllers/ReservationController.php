@@ -71,18 +71,66 @@ class ReservationController extends Controller
             $startAt = Carbon::parse($today . ' ' . $request->input('start_time'));
             $endAt   = $startAt->copy()->addMinutes($settings->default_duration_minutes);
 
-            // ตรวจสอบว่าลูกค้าคนนี้มีการจองที่ยังไม่จบอยู่แล้วหรือไม่
+            // ตรวจสอบว่าเวลาจองอยู่ในช่วงเปิด–ปิดร้าน
+            $openAt  = Carbon::parse($today . ' ' . $settings->open_time);
+            $closeAt = Carbon::parse($today . ' ' . $settings->close_time);
+            $now     = Carbon::now($settings->timezone ?? 'Asia/Bangkok');
+
+            // กันไม่ให้จองก่อนร้านเปิด
+            if ($startAt->lt($openAt)) {
+                Alert::error(
+                    'ไม่สามารถจองได้',
+                    'เวลาที่เลือกก่อนเวลาเปิดร้าน (' . $settings->open_time . ')'
+                );
+                return redirect('reservations/adding')->withInput();
+            }
+
+            // กันไม่ให้จองเกินเวลาปิด
+            if ($endAt->gt($closeAt)) {
+                Alert::error(
+                    'ไม่สามารถจองได้',
+                    'เวลาที่เลือกเกินเวลาปิดร้าน (' . $settings->close_time . ') ' .
+                        '(กรุณาจองให้เสร็จสิ้นก่อนเวลาปิดร้าน และต้องจองล่วงหน้าอย่างน้อย ' . $settings->cut_off_minutes . ' นาที)'
+                );
+                return redirect('reservations/adding')->withInput();
+            }
+
+            // กันไม่ให้จอง เวลาที่ผ่านมาแล้ว / ใกล้เกินไป
+            if ($startAt->lt($now->copy()->addMinutes($settings->cut_off_minutes))) {
+                $nextAvailable = $now->copy()->addMinutes($settings->cut_off_minutes)->format('H:i');
+                Alert::error(
+                    'ไม่สามารถจองได้',
+                    'เวลาที่เลือกผ่านไปแล้วหรือใกล้เกินไป (กรุณาจองเวลาหลัง ' . $nextAvailable . ')'
+                );
+
+                return redirect('reservations/adding')->withInput();
+            }
+
+            // ตรวจสอบว่าเวลาที่เลือกอยู่ในช่วงเวลาเปิด–ปิดร้าน
+            if ($startAt->lt($openAt) || $endAt->gt($closeAt)) {
+                Alert::error(
+                    'ไม่สามารถจองได้',
+                    'กรุณาเลือกเวลาภายในช่วง ' . $settings->open_time . ' - ' . $settings->close_time .
+                        ' และต้องจองล่วงหน้าอย่างน้อย ' . $settings->cut_off_minutes . ' นาที'
+                );
+                return redirect('reservations/adding')->withInput();
+            }
+
+
+
+            // ตรวจสอบว่าลูกค้ามีจองอยู่แล้วหรือไม่
             $hasActive = ReservationModel::where('user_id', $request->input('user_id'))
-                ->whereDate('start_at', $today) // จำกัดว่าเป็นวันเดียวกัน
+                ->whereDate('start_at', $today)
                 ->whereIn('status', ['CONFIRMED', 'SEATED'])
                 ->exists();
 
+            // ถ้าลูกค้ามีจองอยู่แล้ว
             if ($hasActive) {
                 Alert::error('ไม่สามารถจองได้', 'ลูกค้านี้มีการจองที่ยังไม่เสร็จสิ้นอยู่แล้ว');
                 return redirect('reservations/adding')->withInput();
             }
 
-            // ถ้าไม่มีการจองซ้ำ → บันทึกใหม่
+            // ถ้าผ่านทุก validation
             ReservationModel::create([
                 'user_id'    => $request->input('user_id'),
                 'table_id'   => null,
@@ -125,12 +173,6 @@ class ReservationController extends Controller
             'seat_type'  => 'required|in:BAR,TABLE',
             'start_time' => 'required|date_format:H:i',
             'status'     => 'required|in:CONFIRMED,SEATED,COMPLETED,CANCELLED,NO_SHOW',
-        ], [
-            'user_id.required'    => 'กรุณาเลือกผู้ใช้งาน',
-            'party_size.required' => 'กรุณาระบุจำนวนลูกค้า',
-            'seat_type.required'  => 'กรุณาเลือกประเภทที่นั่ง',
-            'start_time.required' => 'กรุณาเลือกเวลาเริ่มต้น',
-            'status.required'     => 'กรุณาเลือกสถานะ',
         ]);
 
         if ($validator->fails()) {
@@ -143,6 +185,53 @@ class ReservationController extends Controller
             $today   = Carbon::today()->format('Y-m-d');
             $startAt = Carbon::parse($today . ' ' . $request->input('start_time'));
             $endAt   = $startAt->copy()->addMinutes($settings->default_duration_minutes);
+
+            $openAt  = Carbon::parse($today . ' ' . $settings->open_time);
+            $closeAt = Carbon::parse($today . ' ' . $settings->close_time);
+            $now     = Carbon::now($settings->timezone ?? 'Asia/Bangkok');
+
+
+            // กันไม่ให้จองก่อนร้านเปิด
+            if ($startAt->lt($openAt)) {
+                Alert::error(
+                    'ไม่สามารถแก้ไขได้',
+                    'เวลาที่เลือกก่อนเวลาเปิดร้าน (' . $settings->open_time . ')'
+                );
+                return redirect('reservations/' . $id)->withInput();
+            }
+
+            // กันไม่ให้จองเกินเวลาปิด
+            if ($endAt->gt($closeAt)) {
+                Alert::error(
+                    'ไม่สามารถแก้ไขได้',
+                    'เวลาที่เลือกเกินเวลาปิดร้าน (' . $settings->close_time . ') ' .
+                        '(กรุณาจองให้เสร็จสิ้นก่อนเวลาปิดร้าน และต้องจองล่วงหน้าอย่างน้อย ' . $settings->cut_off_minutes . ' นาที)'
+                );
+                return redirect('reservations/' . $id)->withInput();
+            }
+
+            // กันไม่ให้จองเวลาที่ผ่านมาแล้ว
+            if ($startAt->lt($now->copy()->addMinutes($settings->cut_off_minutes))) {
+                $nextAvailable = $now->copy()
+                    ->addMinutes($settings->cut_off_minutes)
+                    ->ceilMinute($settings->slot_granularity_minutes);
+
+                Alert::error(
+                    'ไม่สามารถแก้ไขได้',
+                    'เวลาที่เลือกผ่านไปแล้วหรือใกล้เกินไป (กรุณาเลือกเวลาหลัง ' . $nextAvailable->format('H:i') . ')'
+                );
+                return redirect('reservations/' . $id)->withInput();
+            }
+
+            // ตรวจสอบว่าอยู่นอกช่วงเวลาเปิด–ปิดร้าน
+            if ($startAt->lt($openAt) || $endAt->gt($closeAt)) {
+                Alert::error(
+                    'ไม่สามารถแก้ไขได้',
+                    'กรุณาเลือกเวลาภายในช่วง ' . $settings->open_time . ' - ' . $settings->close_time .
+                        ' และต้องจองล่วงหน้าอย่างน้อย ' . $settings->cut_off_minutes . ' นาที'
+                );
+                return redirect('reservations/' . $id)->withInput();
+            }
 
             $reservation = ReservationModel::findOrFail($id);
             $reservation->update([

@@ -21,7 +21,7 @@
                     <i class="fa-solid fa-circle-info text-primary" data-bs-toggle="tooltip"
                         title="กำหนดโซนเวลา เช่น Asia/Bangkok เพื่อใช้ในการคำนวณเวลาการจอง"></i>
                 </label>
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     <select name="timezone" class="form-control">
                         @php
                             $timezones = [
@@ -38,6 +38,38 @@
                     </select>
                     @if ($errors->has('timezone'))
                         <div class="text-danger">{{ $errors->first('timezone') }}</div>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Open Time -->
+            <div class="form-group row mb-2">
+                <label class="col-sm-3">
+                    Open Time
+                    <i class="fa-solid fa-circle-info text-primary" data-bs-toggle="tooltip"
+                        title="เวลาที่ร้านเปิดให้บริการ เช่น 09:00"></i>
+                </label>
+                <div class="col-sm-3">
+                    <input type="time" class="form-control" name="open_time"
+                        value="{{ old('open_time', $setting->open_time) }}">
+                    @if ($errors->has('open_time'))
+                        <div class="text-danger">{{ $errors->first('open_time') }}</div>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Close Time -->
+            <div class="form-group row mb-2">
+                <label class="col-sm-3">
+                    Close Time
+                    <i class="fa-solid fa-circle-info text-primary" data-bs-toggle="tooltip"
+                        title="เวลาที่ร้านปิดให้บริการ เช่น 20:00"></i>
+                </label>
+                <div class="col-sm-3">
+                    <input type="time" class="form-control" name="close_time"
+                        value="{{ old('close_time', $setting->close_time) }}">
+                    @if ($errors->has('close_time'))
+                        <div class="text-danger">{{ $errors->first('close_time') }}</div>
                     @endif
                 </div>
             </div>

@@ -67,15 +67,17 @@
                                     min="{{ $settings->open_time }}" max="{{ $settings->close_time }}"
                                     step="{{ $settings->slot_granularity_minutes * 60 }}" value="{{ old('start_time') }}"
                                     required>
+
                                 <div class="form-text text-muted">
-                                    เลือกได้ทีละ {{ $settings->slot_granularity_minutes }} นาที
-                                    (ระบบจะกำหนดเวลาสิ้นสุดให้อัตโนมัติ {{ $settings->default_duration_minutes }}
-                                    นาทีหลังจากเริ่ม)
+                                    เวลาเปิดร้าน: {{ $settings->open_time }} – ปิดร้าน: {{ $settings->close_time }}
+                                    (เลือกได้ทีละ {{ $settings->slot_granularity_minutes }} นาที)
                                 </div>
+
                                 @error('start_time')
                                     <small class="text-danger">** {{ $message }} </small>
                                 @enderror
                             </div>
+
 
                             <div class="d-flex justify-content-end">
                                 <button type="submit" class="btn btn-primary">บันทึกการจอง</button>

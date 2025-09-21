@@ -20,13 +20,15 @@ class StoreSettingController extends Controller
 
         // ถ้ายังไม่มี ให้สร้างใหม่
         if (!$setting) {
-            $setting = StoreSettingModel::create([
+            $setting = StoreSettingModel::create(attributes: [
                 'timezone' => 'Asia/Bangkok',
                 'cut_off_minutes' => 30,
                 'grace_minutes' => 15,
                 'buffer_minutes' => 10,
                 'slot_granularity_minutes' => 15,
                 'default_duration_minutes' => 60,
+                'open_time' => '9:00',
+                'close_time' => '20:00',
             ]);
         }
 
@@ -64,6 +66,11 @@ class StoreSettingController extends Controller
             'default_duration_minutes.min'      => 'Duration ต้องไม่น้อยกว่า :min นาที',
             'default_duration_minutes.max'      => 'Duration ต้องไม่เกิน :max นาที',
 
+            'open_time.required'  => 'กรุณาระบุเวลาเปิดร้าน',
+            'open_time.date_format' => 'รูปแบบเวลาเปิดร้านไม่ถูกต้อง (ตัวอย่าง 09:00)',
+            'close_time.required' => 'กรุณาระบุเวลาปิดร้าน',
+            'close_time.date_format' => 'รูปแบบเวลาปิดร้านไม่ถูกต้อง (ตัวอย่าง 20:00)',
+            'close_time.after' => 'เวลาปิดร้าน ต้องอยู่หลังเวลาเปิดร้าน',
         ];
 
         //rule
@@ -74,6 +81,8 @@ class StoreSettingController extends Controller
             'buffer_minutes'           => 'required|integer|min:1|max:127',
             'slot_granularity_minutes' => 'required|integer|min:1|max:127',
             'default_duration_minutes' => 'required|integer|min:1|max:127',
+            'open_time'  => 'required|date_format:H:i',
+            'close_time' => 'required|date_format:H:i|after:open_time',
         ], $messages);
 
         //check 
@@ -92,6 +101,8 @@ class StoreSettingController extends Controller
                 'buffer_minutes' => $request->buffer_minutes,
                 'slot_granularity_minutes' => $request->slot_granularity_minutes,
                 'default_duration_minutes' => $request->default_duration_minutes,
+                'open_time' => $request->open_time,
+                'close_time' => $request->close_time,
             ]);
             // แสดง Alert ก่อน return
             Alert::success('อัปเดตการตั้งค่าสำเร็จ');
@@ -117,6 +128,8 @@ class StoreSettingController extends Controller
                     'buffer_minutes' => 10,
                     'slot_granularity_minutes' => 15,
                     'default_duration_minutes' => 60,
+                    'open_time' => '9:00',
+                    'close_time' => '20:00',
                 ]);
             } else {
                 // ถ้าไม่มี record ให้สร้างใหม่
@@ -127,6 +140,8 @@ class StoreSettingController extends Controller
                     'buffer_minutes' => 10,
                     'slot_granularity_minutes' => 15,
                     'default_duration_minutes' => 60,
+                    'open_time' => '9:00',
+                    'close_time' => '20:00',
                 ]);
             }
 
