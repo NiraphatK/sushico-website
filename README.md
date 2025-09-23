@@ -92,7 +92,10 @@ DB_PASSWORD=
 # 6. Generate app key
 php artisan key:generate
 
-# 7. Run the project
+# 7. Link storage (if images are not showing)
+php artisan storage:link
+
+# 8. Run the project
 php artisan serve
 ```
 Now open: http://localhost:8000 🎉
