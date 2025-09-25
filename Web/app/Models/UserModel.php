@@ -23,9 +23,11 @@ class UserModel extends Authenticatable
         'is_active',
     ];
 
-    protected $hidden = [
-        'password_hash',
-    ];
+    // ระบุให้ Laravel รู้ว่าใช้ password column ไหน
+    public function getAuthPassword()
+    {
+        return $this->password_hash;
+    }
 
     // ความสัมพันธ์: user มีหลาย reservation
     public function reservations()

@@ -575,6 +575,69 @@
                 transition: none !important;
             }
         }
+
+        .input-group,
+        .input-group *:focus,
+        .input-group *:focus-visible,
+        .input-group *:focus-within {
+            box-shadow: none !important;
+            outline: none !important;
+        }
+
+        /* Hero Search Box */
+        .search-hero {
+            display: flex;
+            border-radius: var(--radius);
+            border: 1px solid rgba(11, 18, 32, .12);
+            overflow: hidden;
+            background: rgba(255, 255, 255, .9);
+            backdrop-filter: blur(10px) saturate(120%);
+            -webkit-backdrop-filter: blur(10px) saturate(120%);
+            transition: box-shadow .2s ease, transform .2s ease;
+        }
+
+        .search-hero:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 28px rgba(11, 18, 32, .08);
+        }
+
+        .search-input {
+            flex: 1;
+            border: none !important;
+            outline: none !important;
+            padding: 1rem 1.2rem;
+            font-size: 1.05rem;
+            background: transparent;
+        }
+
+        .search-input:focus {
+            box-shadow: none !important;
+        }
+
+        .search-input::placeholder {
+            color: var(--muted);
+            opacity: .85;
+        }
+
+        .search-btn {
+            border-radius: 0 !important;
+            padding: 0 1.4rem;
+            font-weight: 800;
+            color: #0b0f19;
+            background: linear-gradient(135deg, var(--salmon), var(--gold) 55%);
+            box-shadow: none !important;
+            transition: none !important;
+        }
+
+        /* ยกเลิก hover/focus/active */
+        .search-btn:hover,
+        .search-btn:focus,
+        .search-btn:active {
+            background: linear-gradient(135deg, var(--salmon), var(--gold) 55%) !important;
+            color: #0b0f19 !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
     </style>
 
     @yield('css_before')
@@ -596,11 +659,22 @@
                     <li class="nav-item"><a class="nav-link" href="/about-us">เกี่ยวกับเรา</a></li>
                     <li class="nav-item"><a class="nav-link" href="/menus">เมนู</a></li>
                     <li class="nav-item"><a class="nav-link" href="/contact-us">ติดต่อเรา</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/dashboard" target="_blank">จัดการหลังบ้าน</a></li>
+                    {{-- แสดง เฉพาะ Admin/Staff --}}
+                    @if (Auth::guard('user')->check() && in_array(Auth::guard('user')->user()->role, ['ADMIN', 'STAFF']))
+                        <li class="nav-item"><a class="nav-link" href="/dashboard">จัดการหลังบ้าน</a></li>
+                    @endif
                 </ul>
                 <div class="ms-3 d-flex align-items-center gap-2">
                     <a href="/reservation" class="btn btn-salmon">จองโต๊ะ</a>
-                    <a href="/menus" class="btn btn-ghost">ดูเมนู</a>
+                    {{-- ถ้า login แล้ว → โชว์ Logout / ถ้ายังไม่ login → โชว์ Login --}}
+                    @if (Auth::guard('user')->check())
+                        <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-ghost">ออกจากระบบ</button>
+                        </form>
+                    @else
+                        <a href="/login" class="btn btn-ghost">เข้าสู่ระบบ</a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -649,8 +723,12 @@
                         $current = $pathMap[$path] ?? null;
                     }
 
-                    $bannerTitle = $bannerTitle ?? ($current && isset($routeTitles[$current]) ? $routeTitles[$current] : $defaultTitle);
-                    $bannerLead = $bannerLead ?? ($current && isset($routeLeads[$current]) ? $routeLeads[$current] : $defaultLead);
+                    $bannerTitle =
+                        $bannerTitle ??
+                        ($current && isset($routeTitles[$current]) ? $routeTitles[$current] : $defaultTitle);
+                    $bannerLead =
+                        $bannerLead ??
+                        ($current && isset($routeLeads[$current]) ? $routeLeads[$current] : $defaultLead);
                 @endphp
 
 
@@ -669,12 +747,11 @@
                         <div class="container-xxl">
                             <div class="row justify-content-center">
                                 <div class="col-12 col-md-8 col-lg-6">
-                                    <div class="input-group input-group-lg shadow-sm"
-                                        style="border-radius: var(--radius); overflow: hidden;">
-                                        <input type="text" name="keyword" class="form-control"
+                                    <div class="search-hero shadow-none">
+                                        <input type="text" name="keyword" class="form-control search-input"
                                             placeholder="ค้นหาเช่น ซูชิแซลมอน อูนางิ เผ็ด …"
                                             value="{{ request('keyword') }}">
-                                        <button class="btn btn-salmon" type="submit">ค้นหา</button>
+                                        <button class="btn btn-salmon search-btn" type="submit">ค้นหา</button>
                                     </div>
                                 </div>
                             </div>
@@ -719,7 +796,7 @@
         window.addEventListener('load', () => AOS.refresh());
 
         // Parallax hover for menu cards (only pointer: fine)
-        (function () {
+        (function() {
             if (!window.matchMedia || !window.matchMedia('(pointer: fine)').matches) return;
             const cards = document.querySelectorAll('.menu-card.parallax .menu-thumb img, .menu-card .menu-thumb img');
             const clamp = (n, min, max) => Math.min(Math.max(n, min), max);

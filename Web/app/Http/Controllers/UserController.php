@@ -12,6 +12,12 @@ use Illuminate\Pagination\Paginator;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        // ใช้ middleware 'auth:user' เพื่อบังคับให้ต้องล็อกอินในฐานะ admin/staff ก่อนใช้งาน controller นี้
+        // ถ้าไม่ล็อกอินหรือไม้ได้ใช้ guard 'user' จะถูก redirect ไปหน้า login
+        $this->middleware(['auth:user', 'role:ADMIN,STAFF']);
+    }
 
     public function index()
     {

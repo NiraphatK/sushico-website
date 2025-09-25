@@ -127,10 +127,16 @@
                 🍣 Sushico Admin
             </a>
             <div class="ms-auto d-flex align-items-center">
-                <span class="me-3 text-muted">Hi, <b>Admin</b></span>
-                <a href="/logout" class="btn btn-sm btn-primary">
+                <span class="me-3 text-muted">Hi, <b>{{session('full_name')}}</b></span>
+                <a href="#"
+                    class="btn btn-sm btn-primary"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="bi bi-box-arrow-right"></i> Logout
                 </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
+                    @csrf
+                </form>
+
             </div>
         </div>
     </nav>
