@@ -27,16 +27,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // เวลาใช้ auth middleware ถ้า user ยังไม่ login → Laravel จะ redirect ไปหา route ที่ชื่อว่า login โดยอัตโนมัติ
 // ถ้าไม่เจอ → มันก็โยน error Route [login] not defined.
 
-// Dashboard + CRUD (เฉพาะ ADMIN, STAFF)
+// Dashboard + CRUD (เฉพาะ ADMIN)
 // login เสร็จไปหน้า Dashboard
-
-Route::middleware(['auth:user', 'role:ADMIN,STAFF'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-
-    // Dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index']);
-
+Route::middleware(['auth:user', 'role:ADMIN'])->group(function () {
     // User CRUD
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/users/adding', [UserController::class, 'adding']);
@@ -67,6 +60,12 @@ Route::middleware(['auth:user', 'role:ADMIN,STAFF'])->group(function () {
     Route::get('/store-settings', [StoreSettingController::class, 'index']);
     Route::put('/store-settings/update', [StoreSettingController::class, 'update']);
     Route::post('/store-settings/reset', [StoreSettingController::class, 'reset']);
+});
+
+// Dashboard + CRUD (เฉพาะ ADMIN, STAFF)
+Route::middleware(['auth:user', 'role:ADMIN,STAFF'])->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Reservation CRUD
     Route::get('/reservations', [ReservationController::class, 'index']);

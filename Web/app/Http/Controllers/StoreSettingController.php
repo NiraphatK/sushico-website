@@ -15,35 +15,41 @@ class StoreSettingController extends Controller
 
     public function __construct()
     {
-        // ใช้ middleware 'auth:user' เพื่อบังคับให้ต้องล็อกอินในฐานะ admin/staff ก่อนใช้งาน controller นี้
+        // ใช้ middleware 'auth:user' เพื่อบังคับให้ต้องล็อกอินในฐานะ admin ก่อนใช้งาน controller นี้
         // ถ้าไม่ล็อกอินหรือไม้ได้ใช้ guard 'user' จะถูก redirect ไปหน้า login
-        $this->middleware(['auth:user', 'role:ADMIN,STAFF']);
+        $this->middleware(['auth:user', 'role:ADMIN']);
     }
 
+    private function defaults(): array
+    {
+        return [
+            'timezone'                 => 'Asia/Bangkok',
+            'cut_off_minutes'          => 30,
+            'grace_minutes'            => 15,
+            'buffer_minutes'           => 10,
+            'slot_granularity_minutes' => 15,
+            'default_duration_minutes' => 60,
+            'open_time'                => '09:00', // ต้องมี 0 นำหน้าให้ตรง H:i
+            'close_time'               => '20:00',
+        ];
+    }
     public function index()
     {
-        // เอาค่าตั้งค่าแถวเดียว (Singleton)
-        $setting = StoreSettingModel::first();
-
-        // ถ้ายังไม่มี ให้สร้างใหม่
-        if (!$setting) {
-            $setting = StoreSettingModel::create(attributes: [
-                'timezone' => 'Asia/Bangkok',
-                'cut_off_minutes' => 30,
-                'grace_minutes' => 15,
-                'buffer_minutes' => 10,
-                'slot_granularity_minutes' => 15,
-                'default_duration_minutes' => 60,
-                'open_time' => '9:00',
-                'close_time' => '20:00',
-            ]);
-        }
-
+        // ป้องกันซ้ำ: ถ้าไม่มี ให้สร้างด้วย firstOrCreate
+        $setting = StoreSettingModel::firstOrCreate([], $this->defaults());
         return view('store-settings.edit', compact('setting'));
     }
 
     public function update(Request $request)
     {
+        // normalize: ถ้ามีวินาที ตัดให้เหลือ 5 ตัวแรก (HH:MM)
+        foreach (['open_time', 'close_time'] as $key) {
+            $val = $request->input($key);
+            if (is_string($val) && preg_match('/^\d{2}:\d{2}:\d{2}$/', $val)) {
+                $request->merge([$key => substr($val, 0, 5)]);
+            }
+        }
+        
         //vali msg 
         $messages = [
             'timezone.required' => 'กรุณาเลือก Timezone',
@@ -73,24 +79,39 @@ class StoreSettingController extends Controller
             'default_duration_minutes.min'      => 'Duration ต้องไม่น้อยกว่า :min นาที',
             'default_duration_minutes.max'      => 'Duration ต้องไม่เกิน :max นาที',
 
-            'open_time.required'  => 'กรุณาระบุเวลาเปิดร้าน',
-            'open_time.date_format' => 'รูปแบบเวลาเปิดร้านไม่ถูกต้อง (ตัวอย่าง 09:00)',
-            'close_time.required' => 'กรุณาระบุเวลาปิดร้าน',
+            'open_time.required'     => 'กรุณาระบุเวลาเปิดร้าน',
+            'open_time.date_format'  => 'รูปแบบเวลาเปิดร้านไม่ถูกต้อง (ตัวอย่าง 09:00)',
+            'close_time.required'    => 'กรุณาระบุเวลาปิดร้าน',
             'close_time.date_format' => 'รูปแบบเวลาปิดร้านไม่ถูกต้อง (ตัวอย่าง 20:00)',
-            'close_time.after' => 'เวลาปิดร้าน ต้องอยู่หลังเวลาเปิดร้าน',
+            'close_time.after'       => 'เวลาปิดร้าน ต้องอยู่หลังเวลาเปิดร้าน',
         ];
 
         //rule
         $validator = Validator::make($request->all(), [
-            'timezone'                 => 'required|string',
+            'timezone'                 => ['required', 'string', Rule::in(timezone_identifiers_list())],
             'cut_off_minutes'          => 'required|integer|min:1|max:127',
             'grace_minutes'            => 'required|integer|min:1|max:127',
             'buffer_minutes'           => 'required|integer|min:1|max:127',
             'slot_granularity_minutes' => 'required|integer|min:1|max:127',
             'default_duration_minutes' => 'required|integer|min:1|max:127',
-            'open_time'  => 'required|date_format:H:i',
-            'close_time' => 'required|date_format:H:i|after:open_time',
+            'open_time'                => 'required|date_format:H:i',
+            'close_time'               => 'required|date_format:H:i|after:open_time',
         ], $messages);
+
+        // ตรวจ business rules เพิ่มเติม
+        $validator->after(function ($v) use ($request) {
+            $slot     = (int) $request->slot_granularity_minutes;
+            $duration = (int) $request->default_duration_minutes;
+            $grace    = (int) $request->grace_minutes;
+            $buffer   = (int) $request->buffer_minutes;
+
+            if ($slot > 0 && $duration > 0 && $duration % $slot !== 0) {
+                $v->errors()->add('default_duration_minutes', 'Duration ต้องหารด้วย Slot Size ลงตัว');
+            }
+            if ($grace + $buffer > $duration) {
+                $v->errors()->add('buffer_minutes', 'Grace + Buffer ต้องไม่เกิน Duration');
+            }
+        });
 
         //check 
         if ($validator->fails()) {
@@ -100,17 +121,20 @@ class StoreSettingController extends Controller
         }
 
         try {
-            $setting = StoreSettingModel::first();
+            // กันเคสไม่มี record
+            $setting = StoreSettingModel::firstOrCreate([], $this->defaults());
             $setting->update([
-                'timezone' => $request->timezone,
-                'cut_off_minutes' => $request->cut_off_minutes,
-                'grace_minutes' => $request->grace_minutes,
-                'buffer_minutes' => $request->buffer_minutes,
-                'slot_granularity_minutes' => $request->slot_granularity_minutes,
-                'default_duration_minutes' => $request->default_duration_minutes,
-                'open_time' => $request->open_time,
-                'close_time' => $request->close_time,
+                'timezone'                 => $request->timezone,
+                'cut_off_minutes'          => (int) $request->cut_off_minutes,
+                'grace_minutes'            => (int) $request->grace_minutes,
+                'buffer_minutes'           => (int) $request->buffer_minutes,
+                'slot_granularity_minutes' => (int) $request->slot_granularity_minutes,
+                'default_duration_minutes' => (int) $request->default_duration_minutes,
+                // บังคับ format ให้ชัวร์
+                'open_time'                => date('H:i', strtotime($request->open_time)),
+                'close_time'               => date('H:i', strtotime($request->close_time)),
             ]);
+
             // แสดง Alert ก่อน return
             Alert::success('อัปเดตการตั้งค่าสำเร็จ');
             return redirect('/store-settings');
@@ -125,32 +149,8 @@ class StoreSettingController extends Controller
     public function reset()
     {
         try {
-            $setting = StoreSettingModel::first();
-
-            if ($setting) {
-                $setting->update([
-                    'timezone' => 'Asia/Bangkok',
-                    'cut_off_minutes' => 30,
-                    'grace_minutes' => 15,
-                    'buffer_minutes' => 10,
-                    'slot_granularity_minutes' => 15,
-                    'default_duration_minutes' => 60,
-                    'open_time' => '9:00',
-                    'close_time' => '20:00',
-                ]);
-            } else {
-                // ถ้าไม่มี record ให้สร้างใหม่
-                $setting = StoreSettingModel::create([
-                    'timezone' => 'Asia/Bangkok',
-                    'cut_off_minutes' => 30,
-                    'grace_minutes' => 15,
-                    'buffer_minutes' => 10,
-                    'slot_granularity_minutes' => 15,
-                    'default_duration_minutes' => 60,
-                    'open_time' => '9:00',
-                    'close_time' => '20:00',
-                ]);
-            }
+            $setting = StoreSettingModel::firstOrCreate([], $this->defaults());
+            $setting->update($this->defaults());
 
             Alert::success('รีเซ็ตการตั้งค่าสำเร็จ', 'กลับไปใช้ค่าตั้งต้นแล้ว');
             return redirect('/store-settings');

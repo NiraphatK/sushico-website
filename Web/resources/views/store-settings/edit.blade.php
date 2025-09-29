@@ -50,8 +50,9 @@
                         title="เวลาที่ร้านเปิดให้บริการ เช่น 09:00"></i>
                 </label>
                 <div class="col-sm-3">
-                    <input type="time" class="form-control" name="open_time"
+                    <input type="time" class="form-control" name="open_time" step="60"
                         value="{{ old('open_time', $setting->open_time) }}">
+
                     @if ($errors->has('open_time'))
                         <div class="text-danger">{{ $errors->first('open_time') }}</div>
                     @endif
@@ -66,7 +67,7 @@
                         title="เวลาที่ร้านปิดให้บริการ เช่น 20:00"></i>
                 </label>
                 <div class="col-sm-3">
-                    <input type="time" class="form-control" name="close_time"
+                    <input type="time" class="form-control" name="close_time" step="60"
                         value="{{ old('close_time', $setting->close_time) }}">
                     @if ($errors->has('close_time'))
                         <div class="text-danger">{{ $errors->first('close_time') }}</div>
