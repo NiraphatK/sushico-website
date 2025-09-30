@@ -20,7 +20,9 @@
             --grad-cta: linear-gradient(135deg, var(--brand-2), var(--brand-1));
             --fld-h: 60px;
             --icon-pad: 2.8rem;
+            --shadow-sm: 0 6px 18px rgba(2, 6, 23, .06);
             --shadow-md: 0 12px 34px rgba(2, 6, 23, .10);
+            --shadow-lg: 0 24px 64px rgba(2, 6, 23, .16);
         }
 
         body {
@@ -75,6 +77,16 @@
         .btn-ghost:hover {
             background: #ffffff2a;
             transform: translateY(-1px);
+        }
+
+        .btn-cancel:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary-soft:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
         }
 
         /* ==== Card ==== */
@@ -134,6 +146,13 @@
             padding-left: var(--icon-pad);
         }
 
+        /* focus แล้ว icon เด่นขึ้น */
+        .floating-field:focus-within>i {
+            color: var(--brand-2);
+            transform: scale(1.04);
+            opacity: 1;
+        }
+
         .floating-field>label {
             left: var(--icon-pad) !important;
             width: calc(100% - var(--icon-pad));
@@ -183,6 +202,54 @@
             color: #fff;
             border: none;
             box-shadow: var(--shadow-md);
+        }
+
+        /* ===== Switch (Active) ===== */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 54px;
+            height: 30px;
+            vertical-align: middle;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            inset: 0;
+            cursor: pointer;
+            background: #e5e7eb;
+            border-radius: 999px;
+            transition: background .2s, box-shadow .2s;
+        }
+
+        .slider:before {
+            content: "";
+            position: absolute;
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            top: 4px;
+            background: #fff;
+            border-radius: 50%;
+            transition: .2s;
+        }
+
+        .switch input:checked+.slider {
+            background: #22c55e;
+        }
+
+        .switch input:checked+.slider:before {
+            transform: translateX(24px);
+        }
+
+        .switch:hover .slider {
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, .12);
         }
     </style>
 @endsection
@@ -259,15 +326,24 @@
                 {{-- Status --}}
                 <div class="mb-3">
                     <div class="sec-title">Status</div>
-                    <select name="is_active" class="form-select">
-                        <option value="1" @if (old('is_active', $is_active) == 1) selected @endif>Active</option>
-                        <option value="0" @if (old('is_active', $is_active) == 0) selected @endif>Inactive</option>
-                    </select>
+                    <input type="hidden" name="is_active" value="0">
+
+                    <div class="d-flex align-items-center gap-3">
+                        <label class="switch m-0">
+                            <input type="checkbox" name="is_active" value="1"
+                                {{ old('is_active', (int) $is_active) == 1 ? 'checked' : '' }}>
+                            <span class="slider"></span>
+                        </label>
+                        <span class="text-muted">
+                            {{ old('is_active', (int) $is_active) == 1 ? 'Active' : 'Inactive' }}
+                        </span>
+                    </div>
                 </div>
+
 
                 <!-- Actions -->
                 <div class="actions">
-                    <a href="/users" class="btn-pill btn-cancel"><i class="bi bi-x-circle"></i> Cancel</a>
+                    <a href="/users" class="btn-pill btn-cancel btn"><i class="bi bi-x-circle"></i> Cancel</a>
                     <button type="submit" class="btn-pill btn-primary-soft"><i class="bi bi-check2-circle"></i>
                         Update</button>
                 </div>

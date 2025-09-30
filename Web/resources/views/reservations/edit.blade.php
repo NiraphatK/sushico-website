@@ -1,100 +1,379 @@
 @extends('home')
 
+@section('css_before')
+    {{-- Bootstrap Icons + Google Fonts --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #eef2ff;
+            --bg-grad: radial-gradient(1200px 600px at 10% -10%, #a5b4fc22, transparent 60%),
+                radial-gradient(900px 500px at 110% 0%, #c7d2fe22, transparent 60%);
+            --surface: #ffffff;
+            --glass: rgba(255, 255, 255, .78);
+            --line: #e6e9f0;
+            --text: #0f172a;
+            --muted: #64748b;
+            --brand-1: #7c3aed;
+            --brand-2: #2563eb;
+            --grad-cta: linear-gradient(135deg, var(--brand-2), var(--brand-1));
+            --fld-h: 60px;
+            --icon-pad: 2.8rem;
+            --shadow-sm: 0 6px 18px rgba(2, 6, 23, .06);
+            --shadow-md: 0 12px 34px rgba(2, 6, 23, .10);
+            --shadow-lg: 0 24px 64px rgba(2, 6, 23, .16);
+        }
+
+        body {
+            background: var(--bg);
+            background-image: var(--bg-grad);
+            font-family: "Inter", "Poppins", "Noto Sans Thai", system-ui, sans-serif;
+            color: var(--text);
+        }
+
+        .page-wrap {
+            max-width: 1024px;
+            margin-inline: auto;
+            margin-top: 22px;
+            padding-inline: 4px
+        }
+
+        /* Hero */
+        .hero {
+            border-radius: 26px;
+            padding: 22px;
+            color: #fff;
+            background: linear-gradient(135deg, #60a5fa, #7c3aed 55%, #4f46e5);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 18px;
+        }
+
+        .hero-title {
+            font-weight: 900;
+            font-size: clamp(1.25rem, 1rem + 1vw, 2rem);
+            margin: 0
+        }
+
+        .hero-sub {
+            opacity: .94
+        }
+
+        .btn-ghost {
+            border-radius: 999px;
+            height: 46px;
+            display: inline-flex;
+            align-items: center;
+            gap: .6rem;
+            padding: .6rem 1rem;
+            font-weight: 700;
+            color: #fff;
+            background: #ffffff1a;
+            border: 1px solid #ffffff33;
+            backdrop-filter: blur(6px);
+            transition: .2s;
+        }
+
+        .btn-ghost:hover {
+            background: #ffffff2a;
+            transform: translateY(-1px)
+        }
+
+        .btn-cancel:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary-soft:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-pill {
+            border-radius: 999px;
+            height: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: .6rem;
+            padding: .7rem 1.15rem;
+            font-weight: 900;
+            border: 1px solid var(--line);
+            transition: .25s;
+        }
+
+        .btn-cancel {
+            background: var(--surface);
+            color: var(--text)
+            transition: .25s;
+        }
+
+        .btn-primary-soft {
+            background: var(--grad-cta);
+            color: #fff;
+            border: none;
+            box-shadow: var(--shadow-md)
+            transition: .25s;
+        }
+
+        .btn-primary-soft:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg)
+        }
+
+        /* Card */
+        .glass-card {
+            background: var(--glass);
+            border: 1px solid var(--line);
+            border-radius: 26px;
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+        }
+
+        .sec-title {
+            font-weight: 800;
+            font-size: 1rem;
+            margin: 6px 0 10px
+        }
+
+        .divider {
+            height: 1px;
+            margin: 10px 0 14px;
+            border: 0;
+            background: linear-gradient(90deg, transparent, #e8ebf555 20%, #e8ebf5aa 50%, #e8ebf555 80%, transparent)
+        }
+
+        /* Floating fields */
+        .form-floating>.form-control,
+        .form-floating>.form-select {
+            height: var(--fld-h);
+            border-radius: 14px;
+            border: 1px solid var(--line);
+            background: var(--surface);
+        }
+
+        .form-floating>.form-control:focus,
+        .form-floating>.form-select:focus {
+            border-color: transparent;
+            outline: none;
+            box-shadow: 0 0 0 6px rgba(59, 130, 246, .16);
+        }
+
+        .floating-field {
+            position: relative
+        }
+
+        .floating-field>i {
+            position: absolute;
+            left: .9rem;
+            top: 0;
+            height: var(--fld-h);
+            display: flex;
+            align-items: center;
+            color: var(--muted);
+            pointer-events: none;
+        }
+
+        .floating-field .with-icon {
+            padding-left: var(--icon-pad)
+        }
+
+        .floating-field:focus-within>i {
+            color: var(--brand-2);
+            transform: scale(1.04)
+        }
+
+        .floating-field>label {
+            left: var(--icon-pad) !important;
+            width: calc(100% - var(--icon-pad))
+        }
+
+        .is-invalid {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 3px #ef44441f !important
+        }
+
+        .invalid-feedback {
+            display: block
+        }
+
+        .help {
+            font-size: .86rem;
+            color: var(--muted);
+            margin-top: .35rem
+        }
+
+        .actions {
+            display: flex;
+            gap: .6rem;
+            justify-content: flex-end;
+            margin-top: 1rem
+        }
+    </style>
+@endsection
+
 @section('content')
     @php
-        $today = \Carbon\Carbon::today()->locale('th')->translatedFormat('l j F Y');
+        $todayTh = \Carbon\Carbon::today()->locale('th')->translatedFormat('l j F Y');
     @endphp
 
-    <div class="container-fluid py-4">
-        <div class="row">
-            <div class="col-lg-6 col-md-8 col-12 mx-auto">
-
-                <div class="card shadow-sm border-0 rounded-3">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">แก้ไขการจอง (สำหรับวันนี้: {{ $today }})</h5>
-                    </div>
-
-                    <div class="card-body">
-                        <form action="{{ url('reservations/' . $reservation->reservation_id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-
-                            {{-- เลือกผู้ใช้งาน --}}
-                            <div class="mb-3">
-                                <label class="form-label">เลือกผู้ใช้งาน</label>
-                                <select name="user_id" class="form-select" required>
-                                    @foreach ($users as $u)
-                                        <option value="{{ $u->user_id }}"
-                                            {{ $reservation->user_id == $u->user_id ? 'selected' : '' }}>
-                                            {{ $u->full_name }} ({{ $u->phone }})
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            {{-- จำนวนลูกค้า --}}
-                            <div class="mb-3">
-                                <label class="form-label">จำนวนลูกค้าที่จะมา</label>
-                                <input type="number" name="party_size" class="form-control"
-                                    value="{{ $reservation->party_size }}" min="1" max="10" required>
-                            </div>
-
-                            {{-- ประเภทที่นั่ง --}}
-                            <div class="mb-3">
-                                <label class="form-label">เลือกประเภทที่นั่ง</label>
-                                <select name="seat_type" class="form-select" required>
-                                    <option value="TABLE" {{ $reservation->seat_type == 'TABLE' ? 'selected' : '' }}>
-                                        โต๊ะอาหาร</option>
-                                    <option value="BAR" {{ $reservation->seat_type == 'BAR' ? 'selected' : '' }}>
-                                        เคาน์เตอร์บาร์</option>
-                                </select>
-                            </div>
-
-                            {{-- เวลาเริ่มต้น --}}
-                            <div class="mb-3">
-                                <label class="form-label">เวลาเริ่มต้น (วันนี้)</label>
-                                <input type="time" name="start_time" class="form-control"
-                                    min="{{ $settings->open_time }}" max="{{ $settings->close_time }}"
-                                    step="{{ $settings->slot_granularity_minutes * 60 }}"
-                                    value="{{ old('start_time', \Carbon\Carbon::parse($reservation->start_at)->format('H:i')) }}"
-                                    required>
-
-                                <div class="form-text text-muted">
-                                    เวลาเปิดร้าน: {{ $settings->open_time }} – ปิดร้าน: {{ $settings->close_time }}
-                                    (เลือกได้ทีละ {{ $settings->slot_granularity_minutes }} นาที)
-                                </div>
-
-                                @error('start_time')
-                                    <small class="text-danger">** {{ $message }} </small>
-                                @enderror
-                            </div>
-
-
-                            {{-- สถานะ --}}
-                            <div class="mb-3">
-                                <label class="form-label">สถานะการจอง</label>
-                                <select name="status" class="form-select" required>
-                                    <option value="CONFIRMED" {{ $reservation->status == 'CONFIRMED' ? 'selected' : '' }}>
-                                        ยืนยันแล้ว</option>
-                                    <option value="SEATED" {{ $reservation->status == 'SEATED' ? 'selected' : '' }}>
-                                        นั่งแล้ว</option>
-                                    <option value="COMPLETED" {{ $reservation->status == 'COMPLETED' ? 'selected' : '' }}>
-                                        เสร็จสิ้น</option>
-                                    <option value="CANCELLED" {{ $reservation->status == 'CANCELLED' ? 'selected' : '' }}>
-                                        ยกเลิก</option>
-                                    <option value="NO_SHOW" {{ $reservation->status == 'NO_SHOW' ? 'selected' : '' }}>ไม่มา
-                                    </option>
-                                </select>
-                            </div>
-
-                            <div class="d-flex justify-content-end">
-                                <button type="submit" class="btn btn-success">อัปเดตการจอง</button>
-                            </div>
-                        </form>
-                    </div>
-
+    <div class="container page-wrap">
+        <!-- Hero -->
+        <div class="hero">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div>
+                    <h1 class="hero-title">Edit Reservation</h1>
+                    <div class="hero-sub">แก้ไขการจองสำหรับวันนี้ — {{ $todayTh }}</div>
                 </div>
+                <a href="{{ url('reservations') }}" class="btn-ghost btn">
+                    <i class="bi bi-arrow-left"></i> Back
+                </a>
             </div>
         </div>
+
+        <!-- Card -->
+        <div class="glass-card">
+            <form action="{{ url('reservations/' . $reservation->reservation_id) }}" method="POST" novalidate>
+                @csrf
+                @method('PUT')
+
+                <h6 class="sec-title">Reservation Details</h6>
+                <hr class="divider">
+
+                {{-- เลือกผู้ใช้งาน --}}
+                <div class="form-floating floating-field mb-3">
+                    <i class="bi bi-person-badge"></i>
+                    <select name="user_id" id="user_id"
+                        class="form-select with-icon @error('user_id') is-invalid @enderror" required>
+                        @foreach ($users as $u)
+                            <option value="{{ $u->user_id }}"
+                                {{ $reservation->user_id == $u->user_id ? 'selected' : '' }}>
+                                {{ $u->full_name }} ({{ $u->phone }})
+                            </option>
+                        @endforeach
+                    </select>
+                    <label for="user_id">เลือกผู้ใช้งาน <span class="text-danger">*</span></label>
+                    @if (isset($errors) && $errors->has('user_id'))
+                        <div class="invalid-feedback">{{ $errors->first('user_id') }}</div>
+                    @endif
+                </div>
+
+                {{-- จำนวนลูกค้า --}}
+                <div class="form-floating floating-field mb-3">
+                    <i class="bi bi-people"></i>
+                    <input type="number" min="1" max="10"
+                        class="form-control with-icon @error('party_size') is-invalid @enderror" id="party_size"
+                        name="party_size" placeholder=" " value="{{ old('party_size', $reservation->party_size) }}"
+                        required>
+                    <label for="party_size">จำนวนลูกค้าที่จะมา <span class="text-danger">*</span></label>
+                    <div class="help">กำหนดช่วง 1–10 ที่นั่ง</div>
+                    @if (isset($errors) && $errors->has('party_size'))
+                        <div class="invalid-feedback">{{ $errors->first('party_size') }}</div>
+                    @endif
+                </div>
+
+                {{-- ประเภทที่นั่ง --}}
+                <div class="form-floating floating-field mb-3">
+                    <i class="bi bi-grid-3x3-gap"></i>
+                    <select name="seat_type" id="seat_type"
+                        class="form-select with-icon @error('seat_type') is-invalid @enderror" required>
+                        <option value="TABLE" {{ $reservation->seat_type == 'TABLE' ? 'selected' : '' }}>โต๊ะอาหาร
+                        </option>
+                        <option value="BAR" {{ $reservation->seat_type == 'BAR' ? 'selected' : '' }}>เคาน์เตอร์บาร์
+                        </option>
+                    </select>
+                    <label for="seat_type">เลือกประเภทที่นั่ง <span class="text-danger">*</span></label>
+                    @if (isset($errors) && $errors->has('seat_type'))
+                        <div class="invalid-feedback">{{ $errors->first('seat_type') }}</div>
+                    @endif
+                </div>
+
+                {{-- เวลาเริ่มต้น (วันนี้) --}}
+                <div class="form-floating floating-field mb-3">
+                    <i class="bi bi-clock"></i>
+                    <input type="time" id="start_time" name="start_time"
+                        class="form-control with-icon @error('start_time') is-invalid @enderror"
+                        min="{{ $settings->open_time }}" max="{{ $settings->close_time }}"
+                        step="{{ $settings->slot_granularity_minutes * 60 }}"
+                        value="{{ old('start_time', \Carbon\Carbon::parse($reservation->start_at)->format('H:i')) }}"
+                        required>
+                    <label for="start_time">เวลาเริ่มต้น (วันนี้) <span class="text-danger">*</span></label>
+                    <div class="help">
+                        เวลาเปิด {{ $settings->open_time }} – ปิด {{ $settings->close_time }}
+                        • ช่วงเวลา {{ $settings->slot_granularity_minutes }} นาที
+                    </div>
+                    @if (isset($errors) && $errors->has('start_time'))
+                        <div class="invalid-feedback">{{ $errors->first('start_time') }}</div>
+                    @endif
+                </div>
+
+                {{-- สถานะการจอง --}}
+                <div class="form-floating floating-field mb-3">
+                    <i class="bi bi-bookmark-check"></i>
+                    <select name="status" id="status"
+                        class="form-select with-icon @error('status') is-invalid @enderror" required>
+                        <option value="CONFIRMED" {{ $reservation->status == 'CONFIRMED' ? 'selected' : '' }}>ยืนยันแล้ว
+                        </option>
+                        <option value="SEATED" {{ $reservation->status == 'SEATED' ? 'selected' : '' }}>นั่งแล้ว</option>
+                        <option value="COMPLETED" {{ $reservation->status == 'COMPLETED' ? 'selected' : '' }}>เสร็จสิ้น
+                        </option>
+                        <option value="CANCELLED" {{ $reservation->status == 'CANCELLED' ? 'selected' : '' }}>ยกเลิก
+                        </option>
+                        <option value="NO_SHOW" {{ $reservation->status == 'NO_SHOW' ? 'selected' : '' }}>ไม่มา</option>
+                    </select>
+                    <label for="status">สถานะการจอง <span class="text-danger">*</span></label>
+                    @if (isset($errors) && $errors->has('status'))
+                        <div class="invalid-feedback">{{ $errors->first('status') }}</div>
+                    @endif
+                </div>
+
+                {{-- ปุ่ม --}}
+                <div class="actions">
+                    <a href="{{ url('reservations') }}" class="btn-pill btn-cancel btn">
+                        <i class="bi bi-x-circle"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn-pill btn-primary-soft">
+                        <i class="bi bi-check2-circle"></i> Update
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
+@endsection
+
+@section('js_before')
+    <script>
+        // ถ้าต้องบังคับให้เลือกเวลาเป็น step ที่ร้านกำหนดแบบแน่นอน ให้ snap ให้ตรงช่วง
+        document.addEventListener('DOMContentLoaded', () => {
+            const time = document.getElementById('start_time');
+            const step = parseInt(time?.getAttribute('step') || '0', 10); // seconds
+            if (!time || !step) return;
+
+            const snap = (val) => {
+                // val in "HH:MM"
+                const [h, m] = (val || '00:00').split(':').map(Number);
+                let secs = h * 3600 + m * 60;
+                const snapped = Math.round(secs / step) * step;
+                const hh = Math.floor(snapped / 3600).toString().padStart(2, '0');
+                const mm = Math.floor((snapped % 3600) / 60).toString().padStart(2, '0');
+                return `${hh}:${mm}`;
+            };
+
+            time.addEventListener('change', () => {
+                time.value = snap(time.value);
+            });
+        });
+
+        // บังคับจำนวนลูกค้าให้อยู่ในช่วง 1–10
+        document.addEventListener("DOMContentLoaded", () => {
+            const partyInput = document.getElementById("party_size");
+            if (partyInput) {
+                partyInput.addEventListener("input", () => {
+                    let val = parseInt(partyInput.value, 10);
+                    if (isNaN(val)) return;
+                    if (val < 1) partyInput.value = 1;
+                    if (val > 10) partyInput.value = 10;
+                });
+            }
+        });
+    </script>
 @endsection
