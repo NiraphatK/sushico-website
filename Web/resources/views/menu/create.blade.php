@@ -439,13 +439,12 @@
                     </div>
                 </div>
 
-                <h6 class="sec-title mt-3">Detail & Media</h6>
                 <hr class="divider">
 
                 <div class="form-grid">
                     {{-- Detail (CKEditor) --}}
                     <div style="grid-column: 1 / -1;">
-                        <label class="sec-title" for="detail" style="margin-top:0">Detail (rich-text)</label>
+                        <label class="sec-title" for="detail" style="margin-top:0">Detail</label>
                         <textarea name="detail" id="detail" rows="8" class="form-control @error('detail') is-invalid @enderror"
                             placeholder="รายละเอียดเพิ่มเติม (รองรับตัวหนา/รูปแบบตัวอักษร)">{{ old('detail') }}</textarea>
                         @if (isset($errors) && $errors->has('detail'))

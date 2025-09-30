@@ -403,9 +403,9 @@
                             id="name" name="name" placeholder=" " required minlength="3"
                             value="{{ old('name', $name) }}">
                         <label for="name">Menu Name <span class="text-danger">*</span></label>
-                        @error('name')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        @if (isset($errors) && $errors->has('name'))
+                            <div class="invalid-feedback">{{ $errors->first('name') }}</div>
+                        @endif
                     </div>
 
                     {{-- Price --}}
@@ -415,9 +415,9 @@
                             id="price" name="price" placeholder=" " required min="0" step="0.01"
                             value="{{ old('price', $price) }}">
                         <label for="price">Price (THB) <span class="text-danger">*</span></label>
-                        @error('price')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        @if (isset($errors) && $errors->has('price'))
+                            <div class="invalid-feedback">{{ $errors->first('price') }}</div>
+                        @endif
                         <div class="help">ระบบจะปรับเป็นทศนิยม 2 ตำแหน่งอัตโนมัติก่อนบันทึก</div>
                     </div>
 
@@ -427,24 +427,23 @@
                         <textarea class="form-control with-icon @error('description') is-invalid @enderror" id="description" name="description"
                             placeholder=" " rows="3" style="height:var(--fld-h);">{{ old('description', $description) }}</textarea>
                         <label for="description">Short Description</label>
-                        @error('description')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        @if (isset($errors) && $errors->has('description'))
+                            <div class="invalid-feedback">{{ $errors->first('description') }}</div>
+                        @endif
                     </div>
                 </div>
 
-                <h6 class="sec-title mt-3">Detail & Media</h6>
                 <hr class="divider">
 
                 <div class="form-grid">
                     {{-- Detail (CKEditor) --}}
                     <div style="grid-column:1 / -1;">
-                        <label class="sec-title" for="detail" style="margin-top:0">Detail (rich-text)</label>
+                        <label class="sec-title" for="detail" style="margin-top:0">Detail</label>
                         <textarea name="detail" id="detail" rows="8" class="form-control @error('detail') is-invalid @enderror"
                             placeholder="รายละเอียดเพิ่มเติม (รองรับตัวหนา/รูปแบบตัวอักษร)">{{ old('detail', $detail ?? '') }}</textarea>
-                        @error('detail')
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                        @enderror
+                        @if (isset($errors) && $errors->has('detail'))
+                            <div class="invalid-feedback d-block">{{ $errors->first('detail') }}</div>
+                        @endif
                     </div>
 
                     {{-- Image: current + choose new + preview --}}
@@ -470,9 +469,9 @@
                                 <input type="file" id="image_path" name="image_path" accept="image/*"
                                     class="@error('image_path') is-invalid @enderror">
                                 <div class="help">รองรับ JPG/PNG สูงสุด 2MB</div>
-                                @error('image_path')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
+                                @if (isset($errors) && $errors->has('image_path'))
+                                    <div class="invalid-feedback d-block">{{ $errors->first('image_path') }}</div>
+                                @endif
                             </div>
                         </div>
                         {{-- keep old path if not upload --}}
@@ -494,9 +493,9 @@
                                 {{ old('is_active', (int) $is_active) == 1 ? 'Active' : 'Inactive' }}
                             </span>
                         </div>
-                        @error('is_active')
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                        @enderror
+                        @if (isset($errors) && $errors->has('is_active'))
+                            <div class="invalid-feedback d-block">{{ $errors->first('is_active') }}</div>
+                        @endif
                     </div>
                 </div>
 
