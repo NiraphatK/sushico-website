@@ -193,7 +193,8 @@ class UserController extends Controller
                 $user_id   = $user->user_id;
                 $full_name = $user->full_name;
                 $email     = $user->email;
-                return view('users.editPassword', compact('user_id', 'full_name', 'email'));
+                $phone     = $user->phone;
+                return view('users.editPassword', compact('user_id', 'full_name', 'email', 'phone'));
             }
         } catch (\Exception $e) {
             // return response()->json(['error' => $e->getMessage()], 500); //สำหรับ debug
@@ -208,6 +209,9 @@ class UserController extends Controller
             'password.required'   => 'กรุณากรอกรหัสผ่าน',
             'password.min'        => 'รหัสผ่านต้องอย่างน้อย :min ตัวอักษร',
             'password.confirmed'  => 'รหัสผ่านไม่ตรงกัน',
+
+            'password_confirmation.required' => 'กรุณากรอกยืนยันรหัสผ่าน',
+            'password_confirmation.min'      => 'ยืนยันรหัสผ่านต้องอย่างน้อย :min ตัวอักษร',
         ];
 
         //rule

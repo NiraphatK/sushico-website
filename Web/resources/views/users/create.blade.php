@@ -452,9 +452,9 @@
                         <input type="text" class="form-control with-icon @error('full_name') is-invalid @enderror"
                             id="full_name" name="full_name" placeholder=" " required value="{{ old('full_name') }}">
                         <label for="full_name">Full Name <span class="text-danger">*</span></label>
-                        @error('full_name')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        @if (isset($errors) && $errors->has('full_name'))
+                            <div class="invalid-feedback">{{ $errors->first('full_name') }}</div>
+                        @endif
                     </div>
 
                     {{-- Email --}}
@@ -463,9 +463,9 @@
                         <input type="email" class="form-control with-icon @error('email') is-invalid @enderror"
                             id="email" name="email" placeholder=" " value="{{ old('email') }}">
                         <label for="email">Email (optional)</label>
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        @if (isset($errors) && $errors->has('email'))
+                            <div class="invalid-feedback">{{ $errors->first('email') }}</div>
+                        @endif
                     </div>
 
                     {{-- Phone --}}
@@ -475,9 +475,9 @@
                             class="form-control with-icon @error('phone') is-invalid @enderror" id="phone"
                             name="phone" placeholder=" " required value="{{ old('phone') }}">
                         <label for="phone">Phone <span class="text-danger">*</span></label>
-                        @error('phone')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        @if (isset($errors) && $errors->has('phone'))
+                            <div class="invalid-feedback">{{ $errors->first('phone') }}</div>
+                        @endif
                         <div class="help">ระบบจะจัดรูปแบบ 08x-xxx-xxxx ให้อัตโนมัติ</div>
                     </div>
 
@@ -502,9 +502,9 @@
                                 <i class="bi bi-shield-lock"></i> Admin <span class="tag">Full access</span>
                             </label>
                         </div>
-                        @error('role')
-                            <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
-                        @enderror
+                        @if (isset($errors) && $errors->has('role'))
+                            <div class="invalid-feedback d-block mt-1">{{ $errors->first('role') }}</div>
+                        @endif
                     </div>
                 </div>
 
@@ -521,9 +521,9 @@
                         <button type="button" class="eye" aria-label="Toggle password" data-eye="pw">
                             <i class="bi bi-eye"></i>
                         </button>
-                        @error('password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        @if (isset($errors) && $errors->has('password'))
+                            <div class="invalid-feedback">{{ $errors->first('password') }}</div>
+                        @endif
 
                         <div class="meter mt-2" id="pwMeter" aria-hidden="true">
                             <span></span><span></span><span></span><span></span><span></span>
