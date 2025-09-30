@@ -19,5 +19,6 @@ class MenuItemModel extends Model
         'price',
         'image_path',
         'is_active',
+        'detail'
     ];
 }

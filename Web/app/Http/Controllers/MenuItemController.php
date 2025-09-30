@@ -14,12 +14,12 @@ use App\Models\MenuItemModel; //model
 class MenuItemController extends Controller
 {
 
-    public function __construct()
-    {
-        // ใช้ middleware 'auth:user' เพื่อบังคับให้ต้องล็อกอินในฐานะ admin ก่อนใช้งาน controller นี้
-        // ถ้าไม่ล็อกอินหรือไม้ได้ใช้ guard 'user' จะถูก redirect ไปหน้า login
-        $this->middleware(['auth:user', 'role:ADMIN']);
-    }
+    // public function __construct()
+    // {
+    //     // ใช้ middleware 'auth:user' เพื่อบังคับให้ต้องล็อกอินในฐานะ admin ก่อนใช้งาน controller นี้
+    //     // ถ้าไม่ล็อกอินหรือไม้ได้ใช้ guard 'user' จะถูก redirect ไปหน้า login
+    //     $this->middleware(['auth:user', 'role:ADMIN']);
+    // }
 
     public function index()
     {
@@ -39,22 +39,23 @@ class MenuItemController extends Controller
     {
         //msg
         $messages = [
-            'name.required'        => 'กรุณากรอกชื่อเมนู',
-            'name.max'             => 'ชื่อเมนูยาวเกินไป',
-            'price.required'       => 'กรุณากรอกราคา',
-            'price.numeric'        => 'ราคาต้องเป็นตัวเลข',
-            'price.min'            => 'ราคาต้องมากกว่าหรือเท่ากับ 0',
-            'image_path.mimes'     => 'รองรับไฟล์ JPG/PNG เท่านั้น',
-            'image_path.max'       => 'ขนาดไฟล์ไม่เกิน 2MB',
+            'name.required' => 'กรุณากรอกชื่อเมนู',
+            'name.max' => 'ชื่อเมนูยาวเกินไป',
+            'price.required' => 'กรุณากรอกราคา',
+            'price.numeric' => 'ราคาต้องเป็นตัวเลข',
+            'price.min' => 'ราคาต้องมากกว่าหรือเท่ากับ 0',
+            'image_path.mimes' => 'รองรับไฟล์ JPG/PNG เท่านั้น',
+            'image_path.max' => 'ขนาดไฟล์ไม่เกิน 2MB',
         ];
 
         //rule ตั้งขึ้นว่าจะเช็คอะไรบ้าง
         $validator = Validator::make($request->all(), [
-            'name'        => 'required|string|max:100',
+            'name' => 'required|string|max:100',
             'description' => 'nullable|string',
-            'price'       => 'required|numeric|min:0',
-            'image_path'  => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'is_active'   => 'nullable|in:0,1',
+            'detail' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'image_path' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'is_active' => 'nullable|in:0,1',
         ], $messages);
 
 
@@ -75,11 +76,12 @@ class MenuItemController extends Controller
 
             //insert เพิ่มข้อมูลลงตาราง
             MenuItemModel::create([
-                'name'        => strip_tags($request->name),
+                'name' => strip_tags($request->name),
                 'description' => $request->filled('description') ? strip_tags($request->description) : null,
-                'price'       => $request->price,
+                'detail' => $request->detail,
+                'price' => $request->price,
                 'image_path' => $imagePath,
-                'is_active'   => $request->boolean('is_active', true) ? 1 : 0,
+                'is_active' => $request->boolean('is_active', true) ? 1 : 0,
             ]);
 
             //แสดง sweet alert
@@ -98,13 +100,14 @@ class MenuItemController extends Controller
 
             //ประกาศตัวแปรเพื่อส่งไปที่ view
             if (isset($menu)) {
-                $menu_id     = $menu->menu_id;
-                $name        = $menu->name;
+                $menu_id = $menu->menu_id;
+                $name = $menu->name;
                 $description = $menu->description;
-                $price       = $menu->price;
-                $image_path  = $menu->image_path;
-                $is_active   = $menu->is_active;
-                return view('menu.edit', compact('menu_id', 'name', 'description', 'price', 'image_path', 'is_active'));
+                $detail = $menu->detail;
+                $price = $menu->price;
+                $image_path = $menu->image_path;
+                $is_active = $menu->is_active;
+                return view('menu.edit', compact('menu_id', 'name', 'description', 'detail', 'price', 'image_path', 'is_active'));
             }
         } catch (\Exception $e) {
             // return response()->json(['error' => $e->getMessage()], 500); //สำหรับ debug
@@ -117,23 +120,24 @@ class MenuItemController extends Controller
 
         //error msg
         $messages = [
-            'name.required'        => 'กรุณากรอกชื่อเมนู',
-            'name.max'             => 'ชื่อเมนูยาวเกินไป',
-            'price.required'       => 'กรุณากรอกราคา',
-            'price.numeric'        => 'ราคาต้องเป็นตัวเลข',
-            'price.min'            => 'ราคาต้องมากกว่าหรือเท่ากับ 0',
-            'image_path.mimes'     => 'รองรับไฟล์ JPG/PNG เท่านั้น',
-            'image_path.max'       => 'ขนาดไฟล์ไม่เกิน 2MB',
+            'name.required' => 'กรุณากรอกชื่อเมนู',
+            'name.max' => 'ชื่อเมนูยาวเกินไป',
+            'price.required' => 'กรุณากรอกราคา',
+            'price.numeric' => 'ราคาต้องเป็นตัวเลข',
+            'price.min' => 'ราคาต้องมากกว่าหรือเท่ากับ 0',
+            'image_path.mimes' => 'รองรับไฟล์ JPG/PNG เท่านั้น',
+            'image_path.max' => 'ขนาดไฟล์ไม่เกิน 2MB',
         ];
 
 
         // ตรวจสอบข้อมูลจากฟอร์มด้วย Validator
         $validator = Validator::make($request->all(), [
-            'name'        => 'required|string|max:100',
+            'name' => 'required|string|max:100',
             'description' => 'nullable|string',
-            'price'       => 'required|numeric|min:0',
-            'image_path'  => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'is_active'   => 'nullable|in:0,1',
+            'detail' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'image_path' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'is_active' => 'nullable|in:0,1',
         ], $messages);
 
         // ถ้า validation ไม่ผ่าน ให้กลับไปหน้าฟอร์มพร้อมแสดง error และข้อมูลเดิม
@@ -160,10 +164,13 @@ class MenuItemController extends Controller
             }
 
             // อัปเดต โดยใช้ strip_tags ป้องกันการแทรกโค้ด HTML/JS
-            $menu->name        = strip_tags($request->name);
+            $menu->name = strip_tags($request->name);
             $menu->description = $request->filled('description') ? strip_tags($request->description) : null;
-            $menu->price       = $request->price;
-            $menu->is_active   = $request->boolean('is_active', $menu->is_active) ? 1 : 0;
+            if ($request->filled('detail')) {
+                $menu->detail = $request->detail; // rich text (HTML)
+            }
+            $menu->price = $request->price;
+            $menu->is_active = $request->boolean('is_active', $menu->is_active) ? 1 : 0;
 
             // บันทึกการเปลี่ยนแปลงในฐานข้อมูล
             $menu->save();

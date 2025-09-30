@@ -1,6 +1,6 @@
 @extends('home')
 @section('js_before')
-    @include('sweetalert::alert')
+@include('sweetalert::alert')
 @section('header')
 @section('sidebarMenu')
 @section('content')
@@ -28,7 +28,8 @@
         <div class="form-group row mb-2">
             <label class="col-sm-2"> Description </label>
             <div class="col-sm-7">
-                <textarea name="description" class="form-control" rows="7" placeholder="Menu description">{{ old('description', $description) }}</textarea>
+                <textarea name="description" class="form-control" rows="7"
+                    placeholder="Menu description">{{ old('description', $description) }}</textarea>
                 @if (isset($errors))
                     @if ($errors->has('description'))
                         <div class="text-danger"> {{ $errors->first('description') }}</div>
@@ -38,10 +39,21 @@
         </div>
 
         <div class="form-group row mb-2">
+            <label class="col-sm-2"> Detail </label>
+            <div class="col-sm-9">
+                <textarea name="detail" id="detail" rows="8"
+                    class="form-control">{{ old('detail', $detail ?? '') }}</textarea>
+                @if ($errors->has('detail'))
+                    <div class="text-danger"> {{ $errors->first('detail') }}</div>
+                @endif
+            </div>
+        </div>
+
+        <div class="form-group row mb-2">
             <label class="col-sm-2"> Price </label>
             <div class="col-sm-6">
-                <input type="number" class="form-control" name="price" required placeholder="Price" min="0"
-                    step="0.01" value="{{ old('price', $price) }}">
+                <input type="number" class="form-control" name="price" required placeholder="Price" min="0" step="0.01"
+                    value="{{ old('price', $price) }}">
                 @if (isset($errors))
                     @if ($errors->has('price'))
                         <div class="text-danger"> {{ $errors->first('price') }}</div>
@@ -75,8 +87,7 @@
             <div class="col-sm-6">
                 <input type="hidden" name="is_active" value="0">
 
-                <input type="checkbox" name="is_active" value="1"
-                    {{ old('is_active', (int) $is_active) == 1 ? 'checked' : '' }}>
+                <input type="checkbox" name="is_active" value="1" {{ old('is_active', (int) $is_active) == 1 ? 'checked' : '' }}>
                 <small class="text-muted">ติ๊กเพื่อแสดงเมนูนี้ในฝั่งลูกค้า</small>
 
                 @if ($errors->has('is_active'))
@@ -107,4 +118,14 @@
 @endsection
 
 @section('js_before')
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            ClassicEditor
+                .create(document.querySelector('#detail'))
+                .catch(error => {
+                    console.error(error);
+                });
+        });
+    </script>
 @endsection

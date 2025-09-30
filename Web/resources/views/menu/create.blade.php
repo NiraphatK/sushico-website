@@ -30,7 +30,8 @@
         <div class="form-group row mb-2">
             <label class="col-sm-2"> Description </label>
             <div class="col-sm-7">
-                <textarea name="description" class="form-control" rows="4" placeholder="Menu description">{{ old('description') }}</textarea>
+                <textarea name="description" class="form-control" rows="4"
+                    placeholder="Menu description">{{ old('description') }}</textarea>
                 @if (isset($errors))
                     @if ($errors->has('description'))
                         <div class="text-danger"> {{ $errors->first('description') }}</div>
@@ -40,10 +41,24 @@
         </div>
 
         <div class="form-group row mb-2">
+            <label class="col-sm-2"> Detail </label>
+            <div class="col-sm-9">
+                <textarea name="detail" id="detail" rows="8" class="form-control"
+                    placeholder="รายละเอียดเพิ่มเติม (รองรับตัวหนา/รูปแบบตัวอักษร)">
+                {{ old('detail') }}</textarea>
+                @if (isset($errors))
+                    @if ($errors->has('detail'))
+                        <div class="text-danger"> {{ $errors->first('detail') }}</div>
+                    @endif
+                @endif
+            </div>
+        </div>
+
+        <div class="form-group row mb-2">
             <label class="col-sm-2"> Price </label>
             <div class="col-sm-6">
-                <input type="number" class="form-control" name="price" required placeholder="Price" min="0"
-                    step="0.01" value="{{ old('price') }}">
+                <input type="number" class="form-control" name="price" required placeholder="Price" min="0" step="0.01"
+                    value="{{ old('price') }}">
                 @if (isset($errors))
                     @if ($errors->has('price'))
                         <div class="text-danger"> {{ $errors->first('price') }}</div>
@@ -98,4 +113,15 @@
 @endsection
 
 @section('js_before')
+    {{-- CKEditor 4 (Standard) --}}
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
+
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#detail'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+
 @endsection
