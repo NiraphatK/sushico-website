@@ -9,6 +9,7 @@ use App\Http\Controllers\StoreSettingController;
 use App\Http\Controllers\MenuItemController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashboardController;
+use Illuminate\Http\Request;
 
 // Home page
 // Public Routes (ทุกคนเข้าได้)
@@ -20,12 +21,18 @@ Route::get('/contact-us', [HomeController::class, 'contact']);
 Route::get('/reservation', [HomeController::class, 'reservation']);
 
 // Authentication
-Route::get('/login', [AuthController::class, 'index'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // ทำไมต้องมี name('login') ?
 // เวลาใช้ auth middleware ถ้า user ยังไม่ login → Laravel จะ redirect ไปหา route ที่ชื่อว่า login โดยอัตโนมัติ
 // ถ้าไม่เจอ → มันก็โยน error Route [login] not defined.
+Route::get('/login', function (Request $request) {
+    $prev = url()->previous();
+    return ($prev && $prev !== url('/login'))
+        ? redirect()->to($prev)->with('showLogin', true)
+        : redirect('/')->with('showLogin', true);
+})->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
 
 // Dashboard + CRUD (เฉพาะ ADMIN)
 // login เสร็จไปหน้า Dashboard

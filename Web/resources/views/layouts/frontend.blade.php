@@ -413,7 +413,7 @@
             border-radius: 50px;
             background: linear-gradient(135deg, var(--salmon), var(--gold) 55%, var(--wasabi));
             overflow: hidden;
-            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35), 0 1px 0 rgba(255, 255, 255, .8) inset;
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35), 0 1px 0 rgba(255, 255, 255, 0) inset;
             transition: transform .15s ease, filter .2s ease, box-shadow .2s ease, background .3s ease;
         }
 
@@ -854,10 +854,6 @@
 <body>
     <!-- ===== Floating Navbar ===== -->
     <header class="floating-header" id="floatingHeader">
-        </div>
-        </div>
-        </div>
-        </div>
         <!-- Topbar Section End -->
         <div class="nav-shell">
             <nav class="navbar navbar-expand-lg navbar-light" aria-label="Floating navbar">
@@ -888,7 +884,10 @@
                                     <button type="submit" class="btn btn-ghost">ออกจากระบบ</button>
                                 </form>
                             @else
-                                <a href="/login" class="btn btn-ghost">เข้าสู่ระบบ</a>
+                                <button type="button" class="btn btn-ghost" data-bs-toggle="modal"
+                                    data-bs-target="#loginModal">
+                                    เข้าสู่ระบบ
+                                </button>
                             @endif
                             <a href="/reservation" class="btn reserve-table-btn">จองโต๊ะ</a>
                         </div>
@@ -948,8 +947,12 @@
                         $current = $pathMap[$path] ?? null;
                     }
 
-                    $bannerTitle = $bannerTitle ?? ($current && isset($routeTitles[$current]) ? $routeTitles[$current] : $defaultTitle);
-                    $bannerLead = $bannerLead ?? ($current && isset($routeLeads[$current]) ? $routeLeads[$current] : $defaultLead);
+                    $bannerTitle =
+                        $bannerTitle ??
+                        ($current && isset($routeTitles[$current]) ? $routeTitles[$current] : $defaultTitle);
+                    $bannerLead =
+                        $bannerLead ??
+                        ($current && isset($routeLeads[$current]) ? $routeLeads[$current] : $defaultLead);
                 @endphp
 
                 <h1>{{ $bannerTitle }}</h1>
@@ -1005,22 +1008,28 @@
     <!-- AOS JS -->
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
     <script>
-        AOS.init({ duration: 900, once: true, easing: 'ease-out-cubic' });
+        AOS.init({
+            duration: 900,
+            once: true,
+            easing: 'ease-out-cubic'
+        });
         window.addEventListener('load', () => AOS.refresh());
 
         // ===== Toggle floating/docked state on scroll =====
-        (function () {
+        (function() {
             const header = document.getElementById('floatingHeader');
             const onScroll = () => {
                 if (window.scrollY > 10) header.classList.add('is-scrolled');
                 else header.classList.remove('is-scrolled');
             };
             onScroll();
-            window.addEventListener('scroll', onScroll, { passive: true });
+            window.addEventListener('scroll', onScroll, {
+                passive: true
+            });
         })();
 
         // Parallax hover for menu cards (only pointer: fine)
-        (function () {
+        (function() {
             if (!window.matchMedia || !window.matchMedia('(pointer: fine)').matches) return;
             const cards = document.querySelectorAll('.menu-card.parallax .menu-thumb img, .menu-card .menu-thumb img');
             const clamp = (n, min, max) => Math.min(Math.max(n, min), max);
@@ -1041,6 +1050,8 @@
         })();
     </script>
 
+    {{-- Login Modal --}}
+    <x-auth.login-modal id="loginModal" :open-on-error="true" />
     @yield('js_before')
 </body>
 

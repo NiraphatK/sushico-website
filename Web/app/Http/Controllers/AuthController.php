@@ -20,8 +20,8 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         //vali msg
-        $request->validate([
-            'phone' => 'required|string|max:20',
+        $request->validateWithBag('login', [
+            'phone'    => 'required|string|max:20',
             'password' => 'required|string|min:6',
         ], [
             'phone.required'    => 'กรุณากรอกเบอร์โทรศัพท์',
@@ -30,9 +30,10 @@ class AuthController extends Controller
         ]);
 
         //ตรวจสอบข้อมูลที่ส่งมา
-        $credentials = $request->validate([
-            'phone' => 'required',
-            'password' => 'required',
+        // ใช้ only() แทน validate() เพื่อไม่สร้าง error ใน default bag
+        $credentials = $request->only([
+            'phone',
+            'password',
         ]);
 
 
@@ -72,9 +73,12 @@ class AuthController extends Controller
         }
 
 
-        return back()->withErrors([
-            'phone' => 'เบอร์โทรหรือรหัสผ่านไม่ถูกต้อง',
-        ])->withInput();
+        return back()
+            ->withErrors([
+                'phone' => 'เบอร์โทรหรือรหัสผ่านไม่ถูกต้อง',
+            ], 'login') // ส่ง error ไปยัง error bag ชื่อ login
+            ->with('showLogin', true) // ให้ layout เปิด modal ให้อัตโนมัติ
+            ->withInput($request->only('phone')); // คืนค่า phone ให้ฟิลด์เดิม
         // คืนค่าข้อมูล input (เช่น admin_username) กลับไปที่ฟอร์ม
         // ทำให้เวลาผู้ใช้กรอกผิด รหัสผ่านไม่ถูก แต่ username ยังโชว์อยู่
         // จะได้ไม่ต้องกรอกใหม่
