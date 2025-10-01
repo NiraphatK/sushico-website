@@ -33,7 +33,7 @@
                 width: 100%;
                 height: auto;
                 display: block;
-                object-fit: cover;
+                object-fit: contain;
                 max-height: clamp(220px, 36vw, 360px);
             }
 

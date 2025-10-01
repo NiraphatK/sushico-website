@@ -832,7 +832,7 @@
             border-radius: 0 !important;
             padding: 0 1.4rem;
             font-weight: 800;
-            color: #0b0f19;
+            color: #fff;
             background: linear-gradient(135deg, var(--salmon), var(--gold) 55%);
             box-shadow: none !important;
             transition: none !important;
@@ -842,7 +842,7 @@
         .search-btn:focus,
         .search-btn:active {
             background: linear-gradient(135deg, var(--salmon), var(--gold) 55%) !important;
-            color: #0b0f19 !important;
+            color: #fff !important;
             box-shadow: none !important;
             transform: none !important;
         }
