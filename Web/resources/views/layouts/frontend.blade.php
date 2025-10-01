@@ -27,15 +27,15 @@
             --glass: rgba(13, 21, 40, .04);
             --txt: #0b1220;
             --muted: #5b647a;
-            --salmon: #ff6f61;
-            --wasabi: #88e083;
-            --gold: #f8c94a;
+            --salmon: #1A3636;
+            --wasabi: #677D6A;
+            --gold: #40534C;
             --soy: #8b5e3c;
             --radius: 16px;
             --ring: 0 0 0 3px rgba(248, 201, 74, .3), 0 6px 30px rgba(255, 176, 97, .15);
 
             /* === NAV (ใหม่) === */
-            --nav-surface: rgba(255, 255, 255, .58);
+            --nav-surface: rgba(255, 255, 255, .75);
             /* โปร่งใสตอนอยู่บน hero */
             --nav-solid: #ffffff;
             /* ทึบเมื่อเลื่อนลง */
@@ -221,9 +221,29 @@
             overflow: hidden;
             border-bottom: 1px solid rgba(11, 18, 32, .06);
             isolation: isolate;
-            background: radial-gradient(60% 55% at 50% 35%, #ffffff 0%, #fdf7f1 45%, transparent 70%);
-            /* เผื่อพื้นที่ให้เฮดเดอร์ลอย ไม่ต้องดัน layout */
+            /* background: radial-gradient(60% 55% at 50% 35%, #ffffff 0%, #fdf7f1 45%, transparent 70%); */
             padding-top: 48px;
+        }
+
+        .banner .video-bg {
+            position: absolute;
+            inset: 0;
+            /* top:0; right:0; bottom:0; left:0 */
+            z-index: -3;
+            /* อยู่ใต้ทุกอย่างใน banner */
+            pointer-events: none;
+            background: #000;
+            /* เผื่อวิดีโอโหลดช้า */
+        }
+
+        .banner .video-bg video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* ครอบทั้งกรอบแบบ cover */
+            object-position: bottom;
+            display: block;
+            filter: saturate(105%);
         }
 
         .banner::before {
@@ -235,6 +255,7 @@
                 radial-gradient(35% 55% at 80% 20%, rgba(248, 201, 74, .18), transparent 60%),
                 radial-gradient(50% 70% at 60% 80%, rgba(136, 224, 131, .18), transparent 60%),
                 linear-gradient(180deg, transparent, transparent);
+            /* background: rgba(0, 0, 0, 0.3); */
             animation: float-bg 16s ease-in-out infinite alternate;
             filter: saturate(115%);
             z-index: -2;
@@ -254,9 +275,11 @@
             content: "";
             position: absolute;
             inset: 0;
-            pointer-events: none;
-            background: radial-gradient(60% 50% at 50% 40%, rgba(255, 255, 255, .65), transparent 65%);
             z-index: -1;
+            pointer-events: none;
+            background:
+                linear-gradient(90deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.4) 35%, rgba(0, 0, 0, 0.1) 70%, transparent 100%),
+                radial-gradient(60% 50% at 50% 40%, rgba(255, 255, 255, .40), transparent 65%);
         }
 
         .banner h1 {
@@ -264,11 +287,12 @@
             font-size: clamp(2.4rem, 4.2vw + 1rem, 4.2rem);
             line-height: 1.08;
             letter-spacing: .5px;
-            text-shadow: 0 1px 0 #fff, 0 14px 30px rgba(255, 176, 97, .25);
+            color: #ffffff;
+            /* text-shadow: 0 1px 0 #fff, 0 14px 30px rgba(255, 176, 97, .25); */
         }
 
         .banner p.lead {
-            color: var(--muted);
+            color: #ffffff;
             font-weight: 500;
         }
 
@@ -280,18 +304,35 @@
             flex-wrap: wrap;
         }
 
+        /* ผู้ใช้ที่เปิด Reduce Motion: ปิดแอนิเมชันและหยุดวิดีโอด้วย */
+        @media (prefers-reduced-motion: reduce) {
+            .banner::before {
+                animation: none !important;
+            }
+
+            .banner .video-bg video {
+                animation: none !important;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center;
+                filter: brightness(.78) contrast(1.06) saturate(112%);
+                transition: filter .6s ease;
+            }
+        }
+
         /* ---------- BUTTONS (Shine) ---------- */
         .btn-salmon {
             position: relative;
             isolation: isolate;
-            padding: .8rem 1.2rem;
+            padding: .8rem 1.8rem;
             border: none;
             border-radius: 50px;
             font-weight: 800;
             letter-spacing: .3px;
-            color: #0b0f19;
+            color: #ffffff;
             background: linear-gradient(135deg, var(--salmon), var(--gold) 55%, var(--wasabi));
-            box-shadow: 0 10px 22px rgba(255, 176, 97, .35), 0 1px 0 rgba(255, 255, 255, .8) inset;
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35), 0 1px 0 rgba(68, 68, 68, 0.5) inset;
             transition: transform .15s ease, filter .2s ease, box-shadow .2s ease;
             overflow: hidden;
         }
@@ -299,7 +340,8 @@
         .btn-salmon:hover {
             transform: translateY(-2px);
             filter: brightness(1.05);
-            box-shadow: 0 16px 36px rgba(255, 176, 97, .40);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+            color: #ffffff;
         }
 
         .btn-salmon::before {
@@ -364,13 +406,14 @@
             display: inline-block;
             position: relative;
             padding: 0.9rem 3rem 0.9rem 2rem;
+            color: #ffffff;
             border: none;
             font-weight: 800;
             text-decoration: none;
             border-radius: 50px;
             background: linear-gradient(135deg, var(--salmon), var(--gold) 55%, var(--wasabi));
             overflow: hidden;
-            box-shadow: 0 10px 22px rgba(255, 176, 97, .35), 0 1px 0 rgba(255, 255, 255, .8) inset;
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35), 0 1px 0 rgba(255, 255, 255, .8) inset;
             transition: transform .15s ease, filter .2s ease, box-shadow .2s ease, background .3s ease;
         }
 
@@ -643,6 +686,21 @@
             box-shadow: 0 -12px 30px rgba(11, 18, 32, .06);
         }
 
+        .container,
+        .container-fluid,
+        .container-lg,
+        .container-md,
+        .container-sm,
+        .container-xl,
+        .container-xxl {
+            padding-right: 15px;
+            padding-left: 15px;
+        }
+
+        .container {
+            max-width: 1300px;
+        }
+
         .container-xxl {
             max-width: 1280px;
         }
@@ -719,7 +777,7 @@
         }
 
         /* fallback for mobile (collapse) */
-        @media (max-width: 991px) {
+        @media (max-width: 1024px) {
             .nav-center-abs {
                 position: static;
                 transform: none;
@@ -794,8 +852,13 @@
 </head>
 
 <body>
-    <!-- ===== Floating Navbar (ใหม่) ===== -->
+    <!-- ===== Floating Navbar ===== -->
     <header class="floating-header" id="floatingHeader">
+        </div>
+        </div>
+        </div>
+        </div>
+        <!-- Topbar Section End -->
         <div class="nav-shell">
             <nav class="navbar navbar-expand-lg navbar-light" aria-label="Floating navbar">
                 <div class="container-xxl">
@@ -837,17 +900,25 @@
     <!-- ===== /Floating Navbar ===== -->
 
     <main>
-        <!-- Banner (navbar จะลอยทับส่วนนี้) -->
+        <!-- Banner -->
         <section class="banner">
+            <!-- ===== Video background layer ===== -->
+            <div class="video-bg" aria-hidden="true">
+                <video autoplay muted loop playsinline preload="auto"
+                    poster="{{ asset('assets/video/hero-poster.jpg') }}">
+                    <source src="{{ asset('assets/videos/banner.mp4') }}" type="video/mp4">
+                </video>
+            </div>
+
             <div class="container" data-aos="zoom-in" data-aos-delay="80">
                 @php
                     use Illuminate\Support\Facades\Route;
 
-                    $defaultTitle = 'Taste the Art of Sushi 🍣';
+                    $defaultTitle = 'Taste the Art of Sushi';
                     $defaultLead = 'วัตถุดิบสดใหม่ คัดพิเศษทุกวัน — Nigiri, Sashimi & Signature Rolls';
 
                     $routeTitles = [
-                        'home.index' => 'Taste the Art of Sushi 🍣',
+                        'home.index' => 'Taste the Art of Sushi',
                         'home.about' => 'About Us',
                         'home.contact' => 'Contact Us',
                         'menu.index' => 'Our Menu',
