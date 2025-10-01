@@ -268,7 +268,7 @@
             box-shadow: 0 20px 40px rgba(2, 6, 23, .26);
         }
 
-        .lm-primary::before {
+        [data-login-modal] .lm-primary::before {
             content: "";
             position: absolute;
             top: -120%;
@@ -281,7 +281,7 @@
             filter: blur(6px);
         }
 
-        .lm-primary:hover::before {
+        [data-login-modal] .lm-primary:hover::before {
             animation: shine 1.2s ease;
         }
 

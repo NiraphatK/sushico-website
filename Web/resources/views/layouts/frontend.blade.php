@@ -879,7 +879,7 @@
                         <div class="ms-auto d-flex align-items-center gap-2">
                             {{-- ถ้า login แล้ว → โชว์ Logout / ถ้ายังไม่ login → โชว์ Login --}}
                             @if (Auth::guard('user')->check())
-                                <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
                                     @csrf
                                     <button type="submit" class="btn btn-ghost">ออกจากระบบ</button>
                                 </form>
@@ -1048,6 +1048,116 @@
                 });
             });
         })();
+    </script>
+
+    {{-- SweetAlert2 --}}
+
+    <style>
+        /* Confirm button */
+        .swal2-styled.logout-confirm {
+            position: relative;
+            isolation: isolate;
+            border: 0;
+            border-radius: 999px;
+            padding: .75rem 1.25rem;
+            color: #fff;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--salmon, #ff7b72), var(--gold, #f59e0b));
+            box-shadow: 0 14px 30px rgba(2, 6, 23, .18);
+            transition: transform .12s ease, filter .2s ease, box-shadow .2s ease;
+            overflow: hidden;
+        }
+
+        .swal2-styled.logout-confirm:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.03);
+            box-shadow: 0 20px 40px rgba(2, 6, 23, .26);
+        }
+
+        /* Shine effect */
+        .swal2-styled.logout-confirm::before {
+            content: "";
+            position: absolute;
+            top: -120%;
+            left: -30%;
+            width: 40%;
+            height: 300%;
+            transform: rotate(25deg);
+            background: linear-gradient(to right,
+                    rgba(255, 255, 255, 0) 0%,
+                    rgba(255, 255, 255, .7) 50%,
+                    rgba(255, 255, 255, 0) 100%);
+            opacity: 0;
+            filter: blur(6px);
+        }
+
+        .swal2-styled.logout-confirm:hover::before {
+            animation: shine 1.2s ease;
+        }
+
+        @keyframes shine {
+            0% {
+                left: -30%;
+                opacity: 0
+            }
+
+            10% {
+                opacity: .2
+            }
+
+            50% {
+                left: 120%;
+                opacity: .6
+            }
+
+            100% {
+                left: 140%;
+                opacity: 0
+            }
+        }
+
+        /* Cancel button = Wasabi */
+        .swal2-styled.logout-cancel {
+            border: 0;
+            border-radius: 999px;
+            padding: .75rem 1.25rem;
+            font-weight: 500;
+            background: var(--wasabi, #22c55e);
+            color: #fff;
+            transition: transform .12s ease, filter .2s ease, box-shadow .2s ease;
+        }
+
+        .swal2-styled.logout-cancel:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(11, 18, 32, .12);
+        }
+    </style>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('logout-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: 'คุณแน่ใจหรือไม่?',
+                text: "คุณกำลังจะออกจากระบบ",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'ใช่ ออกจากระบบ',
+                cancelButtonText: 'ยกเลิก',
+                reverseButtons: true,
+                customClass: {
+                    popup: 'logout-popup',
+                    confirmButton: 'logout-confirm',
+                    cancelButton: 'logout-cancel'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    e.target.submit();
+                }
+            })
+        });
     </script>
 
     {{-- Login Modal --}}
