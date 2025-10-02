@@ -1,0 +1,259 @@
+:root {
+    /* Layout */
+    --nav-h: 64px;
+
+    /* Brand palette */
+    --salmon: #ff6a6a; /* sushi salmon */
+    --wasabi: #3bcc7a; /* wasabi green */
+    --soy: #704214; /* soy brown */
+    --ocean: #5b86e5; /* ocean blue */
+    --plum: #764ba2; /* plum purple */
+
+    /* Surface + text (light) */
+    --bg-app: linear-gradient(135deg, #f5f7fb, #e9effa);
+    --surface: #ffffff;
+    --text-1: #0f172a;
+    --text-2: #475569;
+    --muted: #94a3b8;
+    --outline: rgba(0, 0, 0, 0.06);
+    --shadow: 0 10px 26px rgba(0, 0, 0, 0.06);
+
+    /* Elevation glass */
+    --glass: rgba(255, 255, 255, 0.78);
+    --blur: blur(18px) saturate(180%);
+
+    /* Gradients */
+    --grad-primary: linear-gradient(135deg, #0d6efd, var(--ocean), var(--plum));
+    --grad-info: linear-gradient(135deg, #36d1dc, var(--ocean));
+    --grad-primary-soft: linear-gradient(135deg, #667eea, var(--plum));
+    --grad-success: linear-gradient(135deg, #11998e, #38ef7d);
+    --grad-danger: linear-gradient(135deg, #f00000, #dc281e);
+
+    /* Radii */
+    --r-lg: 20px;
+    --r-md: 14px;
+
+    /* Focus */
+    --focus: 0 0 0 3px rgba(13, 110, 253, 0.25);
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background: var(--bg-app);
+    font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto,
+        "Noto Sans Thai", sans-serif;
+    color: var(--text-1);
+    padding-top: var(--nav-h); /* keep content clear of navbar */
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Seigaiha pattern (very subtle) */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='70' viewBox='0 0 140 70'%3E%3Cdefs%3E%3Cpattern id='seigaiha' x='0' y='0' width='140' height='70' patternUnits='userSpaceOnUse'%3E%3Cpath d='M0 70c35-70 105-70 140 0M-70 70c35-70 105-70 140 0M70 70c35-70 105-70 140 0' fill='none' stroke='%2394a3b8' stroke-width='1'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23seigaiha)'/%3E%3C/svg%3E");
+    background-size: 320px 160px;
+    z-index: -2;
+}
+
+/* Film grain */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.08;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.15'/%3E%3C/svg%3E");
+    z-index: -1;
+}
+
+/* Navbar */
+.navbar {
+    height: var(--nav-h);
+    background: var(--glass);
+    backdrop-filter: var(--blur);
+    border-bottom: 1px solid var(--outline);
+    box-shadow: var(--shadow);
+}
+.navbar-brand {
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+    background: var(--grad-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-decoration: none;
+}
+
+/* Buttons */
+.btn-gradient {
+    border-radius: 14px;
+    padding: 6px 14px;
+    font-weight: 700;
+    background: var(--grad-primary);
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 3px 10px rgba(13, 110, 253, 0.18);
+    color: #fff;
+}
+.btn-gradient:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(13, 110, 253, 0.25);
+    color: #fff;
+}
+.btn-gradient:focus-visible {
+    box-shadow: var(--focus);
+    outline: none;
+}
+
+/* Sidebar */
+.sidebar {
+    background: linear-gradient(
+        180deg,
+        var(--surface),
+        color-mix(in oklab, var(--surface) 86%, #eef2ff)
+    );
+    border-right: 1px solid var(--outline);
+    height: calc(100vh - var(--nav-h));
+    position: sticky;
+    top: var(--nav-h);
+    padding: 1.25rem 1rem;
+    box-shadow: var(--shadow);
+    border-top-right-radius: var(--r-lg);
+}
+.menu-section-title {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin: 0.5rem 0 0.25rem;
+    padding: 0 0.25rem;
+    font-weight: 700;
+}
+.sidebar .nav-link,
+.offcanvas .nav-link {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    border-radius: 12px;
+    padding: 10px 12px;
+    color: var(--text-2);
+    font-weight: 600;
+    transition: transform 0.15s ease, background-color 0.15s ease,
+        color 0.15s ease;
+}
+.sidebar .nav-link i,
+.offcanvas .nav-link i {
+    opacity: 0.9;
+    transition: transform 0.15s ease;
+}
+.sidebar .nav-link:hover,
+.offcanvas .nav-link:hover {
+    background: rgba(13, 110, 253, 0.08);
+    color: #0d6efd;
+    transform: translateX(3px);
+}
+.sidebar .nav-link:hover i,
+.offcanvas .nav-link:hover i {
+    transform: translateX(2px);
+}
+.sidebar .nav-link.active,
+.offcanvas .nav-link.active {
+    background: var(--grad-primary);
+    color: #fff !important;
+    box-shadow: 0 6px 16px rgba(13, 110, 253, 0.28);
+}
+
+/* Main Content */
+main {
+    padding: clamp(1rem, 3vw, 2rem);
+}
+.page-card {
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    padding: clamp(1.25rem, 2vw, 2rem);
+    box-shadow: var(--shadow);
+    animation: fadeInUp 0.45s ease;
+    border: 1px solid color-mix(in oklab, var(--outline) 85%, transparent);
+}
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Footer */
+footer {
+    font-size: 0.9rem;
+    color: var(--muted);
+    border-top: 1px solid var(--outline);
+    background: color-mix(in oklab, var(--surface) 80%, transparent);
+    backdrop-filter: blur(10px);
+    padding: 1rem;
+    margin-top: 0.75rem;
+}
+footer a {
+    color: #0d6efd;
+    text-decoration: none;
+}
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Card utilities (if used in child views) */
+.chart-card,
+.stat-card {
+    border: none;
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    padding: clamp(1rem, 2.2vw, 1.6rem);
+    background: var(--surface);
+    height: 100%;
+    border: 1px solid color-mix(in oklab, var(--outline) 85%, transparent);
+}
+
+/* Focus visibility */
+a:focus-visible,
+button:focus-visible {
+    outline: none;
+    box-shadow: var(--focus);
+    border-radius: 10px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+
+/* Scrollbar (WebKit) - subtle */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, #64748b 30%, transparent);
+    border-radius: 8px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
