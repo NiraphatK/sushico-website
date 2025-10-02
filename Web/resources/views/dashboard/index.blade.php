@@ -773,6 +773,25 @@
             box-shadow: none !important;
             /* ให้ตัวอักษรตัดกับ seg-thumb */
         }
+
+        .section-title {
+            font-weight: 600;
+            font-size: 1.25rem;
+            color: var(--txt, #0f172a);
+        }
+
+        .icon-wrapper {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            font-size: 1.1rem;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, .15);
+        }
     </style>
 @endsection
 
@@ -887,7 +906,12 @@
             <div class="col-lg-8">
                 <div class="section-card h-100">
                     <div class="d-flex align-items-center justify-content-between">
-                        <h5 class="section-title">📈 Website Visits</h5>
+                        <h5 class="section-title d-flex align-items-center gap-2">
+                            <span class="icon-wrapper">
+                                <i class="bi bi-bar-chart-line"></i>
+                            </span>
+                            Website Visits
+                        </h5>
                         <span class="badge rounded-pill" style="background:rgba(251,146,60,.15); color:#fb923c">last
                             months</span>
                     </div>
@@ -896,7 +920,12 @@
             </div>
             <div class="col-lg-4">
                 <div class="section-card h-100">
-                    <h5 class="section-title">🍣 Reservations by Status</h5>
+                    <h5 class="section-title d-flex align-items-center gap-2">
+                        <span class="icon-wrapper">
+                            <i class="bi bi-calendar-check"></i>
+                        </span>
+                        Reservations by Status
+                    </h5>
                     <div id="reservationStatusChart" class="is-skeleton"></div>
                     <div class="d-flex flex-wrap gap-2 mt-2">
                         <span class="badge rounded-pill text-bg-light">Total:
@@ -911,13 +940,24 @@
         <div class="row g-3 g-lg-4 mt-1 card-equal">
             <div class="col-lg-6">
                 <div class="section-card h-100">
-                    <h5 class="section-title">👥 Avg Party Size / Month</h5>
+                    <h5 class="section-title d-flex align-items-center gap-2">
+                        <span class="icon-wrapper">
+                            <i class="bi bi-people"></i>
+                        </span>
+                        Avg Party Size / Month
+                    </h5>
+
                     <div id="partySizeChart" class="is-skeleton"></div>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="section-card h-100">
-                    <h5 class="section-title">📈 User Growth</h5>
+                    <h5 class="section-title d-flex align-items-center gap-2">
+                        <span class="icon-wrapper">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </span>
+                        User Growth
+                    </h5>
                     <div id="userChart" class="is-skeleton"></div>
                 </div>
             </div>
@@ -927,18 +967,33 @@
         <div class="row g-3 g-lg-4 mt-1 card-equal row-cols-1 row-cols-lg-2">
             <div class="col-lg-8">
                 <div class="section-card h-100">
-                    <h5 class="section-title">⏰ Peak Hours Heatmap (Last 8 Weeks)</h5>
+                    <h5 class="section-title d-flex align-items-center gap-2">
+                        <span class="icon-wrapper">
+                            <i class="bi bi-clock-history"></i>
+                        </span>
+                        Peak Hours Heatmap (Last 8 Weeks)
+                    </h5>
                     <div id="peakHeatmap" class="is-skeleton"></div>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="d-grid gap-3">
                     <div class="section-card">
-                        <h5 class="section-title">🚫 No-Show Rate (30d)</h5>
+                        <h5 class="section-title d-flex align-items-center gap-2">
+                            <span class="icon-wrapper">
+                                <i class="bi bi-x-octagon"></i>
+                            </span>
+                            No-Show Rate (30d)
+                        </h5>
                         <div id="noShowGauge" class="is-skeleton"></div>
                     </div>
                     <div class="section-card">
-                        <h5 class="section-title">🪑 Table Utilization (7d)</h5>
+                        <h5 class="section-title d-flex align-items-center gap-2">
+                            <span class="icon-wrapper">
+                                <i class="bi bi-grid-3x3-gap-fill"></i>
+                            </span>
+                            Table Utilization (7d)
+                        </h5>
                         <div id="utilGauge" class="is-skeleton"></div>
                     </div>
                 </div>

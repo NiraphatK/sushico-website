@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use App\Models\AdminModel;
+use App\Models\UserModel;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -16,6 +16,74 @@ class AuthController extends Controller
 
         return view('auth.login');
     }
+
+    public function register(Request $request)
+    {
+        $bag = 'register';
+
+        // (เอาเฉพาะตัวเลข)
+        $request->merge([
+            'phone' => preg_replace('/\D+/', '', (string) $request->input('phone')),
+        ]);
+
+        $rules = [
+            'full_name' => ['required', 'string', 'max:100'],
+            'phone'     => ['required', 'string', 'regex:/^[0-9]{9,10}$/', 'unique:users,phone'],
+            'email'     => ['nullable', 'email', 'max:120', 'unique:users,email'],
+            'password'  => ['required', 'string', 'min:6', 'confirmed'], // ต้องมี field password_confirmation
+            'terms'     => ['accepted'],
+        ];
+
+        $messages = [
+            'full_name.required' => 'กรุณากรอกชื่อ-สกุล',
+            'phone.required'     => 'กรุณากรอกเบอร์โทรศัพท์',
+            'phone.regex'        => 'กรุณากรอกเบอร์โทรให้เป็นตัวเลข 9-10 หลัก',
+            'phone.unique'       => 'เบอร์โทรนี้ถูกใช้ไปแล้ว',
+            'email.email'        => 'รูปแบบอีเมลไม่ถูกต้อง',
+            'email.unique'       => 'อีเมลนี้ถูกใช้ไปแล้ว',
+            'password.required'  => 'กรุณากรอกรหัสผ่าน',
+            'password.min'       => 'รหัสผ่านต้องอย่างน้อย :min ตัวอักษร',
+            'password.confirmed' => 'รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน',
+            'terms.accepted'     => 'กรุณายอมรับข้อตกลงการใช้งาน',
+        ];
+
+        // ใช้ Validator เพื่อส่ง error ไป bag 'register' และเปิด modal อัตโนมัติ
+        $v = Validator::make($request->all(), $rules, $messages);
+        if ($v->fails()) {
+            return back()
+                ->withErrors($v, $bag)
+                ->with('showRegister', true)
+                ->withInput();
+        }
+
+        // บันทึกลงฐานข้อมูล
+        $user = new UserModel();
+        $user->full_name     = $request->input('full_name');
+        $user->phone         = $request->input('phone');
+        $user->email         = $request->filled('email') ? $request->input('email') : null;
+        $user->password_hash = bcrypt($request->input('password'));
+        $user->role          = 'CUSTOMER'; // ค่าเริ่มต้น
+        $user->is_active     = 1;
+        $user->save();
+
+        // ล็อกอินอัตโนมัติ
+        Auth::guard('user')->loginUsingId($user->user_id);
+        $request->session()->regenerate();
+
+        session([
+            'user_id'   => $user->user_id,
+            'phone'     => $user->phone,
+            'full_name' => $user->full_name,
+            'role'      => $user->role,
+        ]);
+
+        // ส่งข้อความสำเร็จและ redirect ตาม role
+        if ($user->role === 'ADMIN' || $user->role === 'STAFF') {
+            return redirect()->intended('/dashboard')->with('register_message', 'สมัครสมาชิกสำเร็จ!');
+        }
+        return redirect()->intended('/')->with('register_message', 'สมัครสมาชิกสำเร็จ!');
+    }
+
 
     public function login(Request $request)
     {

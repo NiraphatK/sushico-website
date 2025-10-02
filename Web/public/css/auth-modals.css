@@ -1,0 +1,466 @@
+/* ===== Auth Modals (Login + Register) =====
+   ใช้ร่วมกันผ่านตัวเลือก [data-login-modal], [data-register-modal]
+   --------------------------------------------------------------- */
+
+/* โทนสีและตัวแปรพื้นฐาน */
+[data-login-modal],
+[data-register-modal] {
+    --lm-salmon: var(--salmon, #1a3636);
+    --lm-gold: var(--gold, #40534c);
+    --lm-wasabi: var(--wasabi, #677d6a);
+    --lm-ink: var(--txt, #0b1220);
+    --lm-muted: var(--muted, #5b647a);
+    --lm-surface: 255, 255, 255;
+    --lm-surface-dk: 17, 24, 39;
+    --lm-ring: 0 0 0 3px rgba(133, 172, 157, 0.45),
+        0 10px 30px rgba(64, 83, 76, 0.18);
+}
+
+/* ====== Shared card / header / accents ====== */
+[data-login-modal] .lm-card,
+[data-register-modal] .lm-card {
+    border: 0;
+    border-radius: 24px;
+    overflow: hidden;
+    background: radial-gradient(
+            120% 80% at 110% -10%,
+            rgba(var(--lm-surface), 0.45),
+            transparent 60%
+        ),
+        radial-gradient(
+            120% 80% at -30% 110%,
+            rgba(var(--lm-surface), 0.35),
+            transparent 60%
+        ),
+        linear-gradient(
+            180deg,
+            rgba(var(--lm-surface), 0.95),
+            rgba(var(--lm-surface), 0.88)
+        );
+    backdrop-filter: blur(14px) saturate(140%);
+    box-shadow: 0 28px 60px rgba(2, 6, 23, 0.18);
+    transform: translateY(8px) scale(0.985);
+    animation: lm-pop 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+@keyframes lm-pop {
+    to {
+        transform: translateY(0) scale(1);
+    }
+}
+
+[data-login-modal] .lm-accent,
+[data-register-modal] .lm-accent {
+    height: 4px;
+    background: linear-gradient(
+        90deg,
+        var(--lm-salmon),
+        var(--lm-gold) 50%,
+        var(--lm-wasabi)
+    );
+}
+
+[data-login-modal] .lm-header,
+[data-register-modal] .lm-header {
+    border: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(var(--lm-surface), 0.7),
+        rgba(var(--lm-surface), 0.35)
+    );
+    backdrop-filter: blur(10px) saturate(140%);
+    box-shadow: 0 1px 0 rgba(2, 6, 23, 0.06) inset;
+}
+
+[data-login-modal] .lm-title-grad,
+[data-register-modal] .lm-title-grad {
+    background: linear-gradient(
+        120deg,
+        var(--lm-salmon),
+        var(--lm-gold) 55%,
+        var(--lm-wasabi)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 900;
+    letter-spacing: 0.2px;
+}
+
+/* ====== Floating inputs ====== */
+[data-login-modal] .lm-floating,
+[data-register-modal] .lm-floating {
+    position: relative;
+}
+
+[data-login-modal] .lm-icon,
+[data-register-modal] .lm-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--lm-muted);
+    opacity: 0.85;
+    pointer-events: none;
+}
+
+[data-login-modal] .lm-eye,
+[data-register-modal] .lm-eye {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 0;
+    background: transparent;
+    padding: 0.25rem;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--lm-muted);
+}
+[data-login-modal] .lm-eye:hover,
+[data-register-modal] .lm-eye:hover {
+    color: var(--lm-ink);
+}
+
+[data-login-modal] .form-floating > .form-control,
+[data-register-modal] .form-floating > .form-control {
+    padding-left: 42px;
+}
+
+/* label transition ลื่นทั้ง focus และเมื่อมีค่า */
+[data-login-modal] .form-floating > label,
+[data-register-modal] .form-floating > label {
+    left: 42px;
+    color: var(--lm-muted);
+    opacity: 0.95;
+    transition: transform 0.22s cubic-bezier(0.2, 0.7, 0.2, 1), color 0.18s ease,
+        opacity 0.18s ease;
+}
+[data-login-modal] .form-floating > .form-control:focus ~ label,
+[data-register-modal] .form-floating > .form-control:focus ~ label {
+    transition: 0.3s;
+    color: var(--lm-ink);
+    opacity: 1;
+}
+[data-login-modal]
+    .form-floating
+    > .form-control:not(:placeholder-shown)
+    ~ label,
+[data-register-modal]
+    .form-floating
+    > .form-control:not(:placeholder-shown)
+    ~ label {
+    color: var(--lm-ink);
+    opacity: 1;
+}
+
+/* controls */
+[data-login-modal] .lm-control,
+[data-register-modal] .lm-control {
+    border-radius: 14px;
+    border: 1px solid rgba(2, 6, 23, 0.12);
+    background: rgba(var(--lm-surface), 0.95);
+    color: var(--lm-ink);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease,
+        background 0.2s ease, transform 0.06s ease;
+}
+[data-login-modal] .lm-control:hover,
+[data-register-modal] .lm-control:hover {
+    transform: translateY(-1px);
+}
+[data-login-modal] .lm-control:focus,
+[data-register-modal] .lm-control:focus {
+    box-shadow: var(--lm-ring);
+    border-color: transparent;
+    background: rgba(var(--lm-surface), 1);
+}
+[data-login-modal] .lm-control.is-invalid,
+[data-register-modal] .lm-control.is-invalid {
+    border-color: rgba(220, 53, 69, 0.55);
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.15);
+}
+
+/* ====== Buttons ====== */
+[data-login-modal] .lm-primary,
+[data-register-modal] .lm-primary {
+    position: relative;
+    isolation: isolate;
+    border: 0;
+    border-radius: 999px;
+    padding: 0.75rem 1.25rem;
+    color: #fff;
+    background: linear-gradient(
+        135deg,
+        var(--lm-salmon),
+        var(--lm-gold) 55%,
+        var(--lm-wasabi)
+    );
+    box-shadow: 0 14px 30px rgba(2, 6, 23, 0.18);
+    transition: transform 0.12s ease, filter 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden;
+}
+[data-login-modal] .lm-primary:hover,
+[data-register-modal] .lm-primary:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.03);
+    box-shadow: 0 20px 40px rgba(2, 6, 23, 0.26);
+}
+[data-login-modal] .lm-primary::before,
+[data-register-modal] .lm-primary::before {
+    content: "";
+    position: absolute;
+    top: -120%;
+    left: -30%;
+    width: 40%;
+    height: 300%;
+    transform: rotate(25deg);
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.7) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    opacity: 0;
+    filter: blur(6px);
+}
+[data-login-modal] .lm-primary:hover::before,
+[data-register-modal] .lm-primary:hover::before {
+    animation: shine 1.2s ease;
+}
+@keyframes shine {
+    0% {
+        left: -30%;
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.2;
+    }
+    50% {
+        left: 120%;
+        opacity: 0.6;
+    }
+    100% {
+        left: 140%;
+        opacity: 0;
+    }
+}
+[data-login-modal] .lm-primary.disabled,
+[data-register-modal] .lm-primary.disabled,
+[data-login-modal] .lm-primary[aria-disabled="true"],
+[data-register-modal] .lm-primary[aria-disabled="true"] {
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+
+[data-login-modal] .btn-light,
+[data-register-modal] .btn-light {
+    position: relative;
+    isolation: isolate;
+    padding: 0.8rem 1.1rem;
+    border-radius: 50px;
+    color: var(--txt);
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.95),
+        rgba(255, 255, 255, 0.7)
+    );
+    border: 1px solid rgba(11, 18, 32, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.2s ease;
+    font-weight: 700;
+}
+[data-login-modal] .btn-light:hover,
+[data-register-modal] .btn-light:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(11, 18, 32, 0.12);
+}
+
+/* invalid feedback */
+[data-login-modal] .invalid-feedback,
+[data-register-modal] .invalid-feedback {
+    font-size: 0.82rem;
+}
+
+/* reduce motion */
+@media (prefers-reduced-motion: reduce) {
+    [data-login-modal] .lm-card,
+    [data-register-modal] .lm-card {
+        animation: none;
+        transform: none;
+    }
+    [data-login-modal] .lm-control:hover,
+    [data-register-modal] .lm-control:hover {
+        transform: none;
+    }
+}
+
+/* ====== Backdrop (ใช้ body flags จากสคริปต์) ======
+   NOTE: ในไฟล์ .css เราอิง "มี attribute" ก็พอ
+   ไม่ต้องเทียบค่า = "{{ $id }}" เหมือนใน inline CSS */
+body[data-login-open] .modal-backdrop.show,
+body[data-register-open] .modal-backdrop.show {
+    opacity: 1 !important;
+    background: radial-gradient(
+            1200px 800px at -10% -20%,
+            rgba(255, 111, 97, 0.18),
+            transparent 60%
+        ),
+        radial-gradient(
+            1100px 900px at 110% 120%,
+            rgba(248, 201, 74, 0.16),
+            transparent 60%
+        ),
+        radial-gradient(
+            1000px 800px at 50% 50%,
+            rgba(103, 125, 106, 0.1),
+            transparent 65%
+        ),
+        rgba(11, 18, 32, 0.52);
+    backdrop-filter: blur(6px) saturate(120%);
+    -webkit-backdrop-filter: blur(6px) saturate(120%);
+}
+
+/* ====== Width per modal ====== */
+/* Login: 420 → 460 */
+[data-login-modal] .modal-dialog {
+    max-width: 420px;
+}
+@media (min-width: 768px) {
+    [data-login-modal] .modal-dialog {
+        max-width: 460px;
+    }
+}
+
+/* Register: 460 → 500 */
+[data-register-modal] .modal-dialog {
+    max-width: 460px;
+}
+@media (min-width: 768px) {
+    [data-register-modal] .modal-dialog {
+        max-width: 500px;
+    }
+}
+
+/* ====== Register link (อยู่ใน Login modal) ====== */
+[data-login-modal] .lm-register-link {
+    position: relative;
+    display: inline-block;
+    font-weight: 700;
+    color: var(--lm-ink, #1a3636);
+    padding: 0.25rem 0.1rem;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: color 0.25s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+[data-login-modal] .lm-register-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        var(--lm-salmon, #ff7b72),
+        var(--lm-gold, #f59e0b),
+        var(--lm-wasabi, #22c55e)
+    );
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 2px;
+}
+[data-login-modal] .lm-register-link:hover {
+    color: var(--lm-salmon, #ff7b72);
+    transform: translateY(-1px);
+}
+[data-login-modal] .lm-register-link:hover::after {
+    transform: scaleX(1);
+}
+
+/* ============ Password Needs (Guidance Panel) ============ */
+.lm-need-list {
+    --need-panel-bg: rgba(var(--lm-surface), 0.85);
+    --need-panel-bd: rgba(2, 6, 23, 0.12);
+    --need-panel-shadow: 0 10px 28px rgba(2, 6, 23, 0.08);
+
+    --need-chip-bg: rgba(var(--lm-surface), 0.92);
+    --need-chip-bd: rgba(2, 6, 23, 0.08);
+    --need-chip-fg: var(--lm-ink);
+    --need-chip-shadow: 0 2px 6px rgba(2, 6, 23, 0.06);
+
+    position: relative;
+    list-style: none;
+    padding: 0.75rem 0.75rem 0.55rem;
+    margin: 0.75rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem 0.55rem;
+    font-size: 0.85rem;
+
+    background: var(--need-panel-bg);
+    border: 1px dashed var(--need-panel-bd);
+    border-radius: 16px;
+    box-shadow: var(--need-panel-shadow);
+    backdrop-filter: saturate(160%) blur(10px);
+    -webkit-backdrop-filter: saturate(160%) blur(10px);
+}
+
+/* ซ่อนทั้งกล่องถ้าไม่มีรายการ */
+.lm-need-list:empty {
+    display: none;
+}
+
+/* หัวข้อ */
+.lm-need-list::before {
+    content: "คำแนะนำ";
+    position: absolute;
+    top: -0.7rem;
+    left: 1rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    color: var(--lm-muted);
+    background: rgba(var(--lm-surface), 1);
+    padding: 0.15rem 0.65rem;
+    border-radius: 999px;
+    border: 1px solid rgba(2, 6, 23, 0.08);
+    box-shadow: 0 2px 6px rgba(2, 6, 23, 0.06);
+}
+.lm-need-list[data-label]::before {
+    content: attr(data-label);
+}
+
+/* รายการ (ชิป) */
+.lm-need-list li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid var(--need-chip-bd);
+    background: var(--need-chip-bg);
+    color: var(--need-chip-fg);
+    font-weight: 500;
+    box-shadow: var(--need-chip-shadow);
+    transition: transform 0.12s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.lm-need-list li:hover {
+    /* transform: translateY(-1px); */
+    box-shadow: 0 10px 22px rgba(2, 6, 23, 0.12);
+}
+
+/* จุดนำหน้า */
+.lm-need-list li .dot {
+    width: 0.48rem;
+    height: 0.48rem;
+    border-radius: 50%;
+    background: linear-gradient(
+        135deg,
+        var(--lm-salmon),
+        var(--lm-gold) 50%,
+        var(--lm-wasabi)
+    );
+    opacity: 0.95;
+}

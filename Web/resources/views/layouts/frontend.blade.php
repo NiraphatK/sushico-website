@@ -97,7 +97,6 @@
         }
 
         /* ---------- FLOATING NAVBAR (ใหม่) ---------- */
-        /* ห่อ navbar ให้ลอยกลางหน้าจอ */
         .floating-header {
             position: fixed;
             inset-inline: 0;
@@ -108,13 +107,12 @@
             pointer-events: none;
             /* คลิกได้เฉพาะใน .nav-shell */
             transition: top .3s ease;
+            will-change: transform;
         }
 
         .floating-header.is-scrolled {
             top: 0;
         }
-
-        /* Dock ชิดบนเมื่อเลื่อน */
 
         .nav-shell {
             width: min(1240px, calc(100% - 32px));
@@ -128,7 +126,10 @@
             pointer-events: auto;
             transition: background .25s ease, box-shadow .25s ease, border-radius .25s ease, padding .25s ease, transform .25s ease;
             padding: .35rem .6rem;
+            -webkit-transform: translateZ(0);
+            backface-visibility: hidden;
         }
+
 
         .floating-header.is-scrolled .nav-shell {
             background: var(--nav-solid);
@@ -137,7 +138,6 @@
             padding: .15rem .4rem;
         }
 
-        /* Bootstrap navbar reset ให้เข้ากับกลาส */
         .navbar {
             padding: .35rem .6rem;
         }
@@ -154,6 +154,7 @@
             background-size: 200% 100%;
             animation: brandShimmer 8s linear infinite;
             margin-right: .25rem;
+            white-space: nowrap;
         }
 
         .navbar-nav .nav-link {
@@ -188,7 +189,6 @@
             transform: scaleX(1);
         }
 
-        /* ใช้ navbar-light เพื่อให้ toggler icon มองเห็นได้ */
         .navbar-light .navbar-toggler {
             border: 0;
             outline: 0;
@@ -208,6 +208,131 @@
             }
         }
 
+        /* === เดสก์ท็อป: ให้เมนูกลางจริงด้วย Grid 3 คอลัมน์ === */
+        @media(min-width:1025px) {
+            .nav-center-desktop {
+                margin-left: 10rem;
+            }
+        }
+
+        @media (min-width: 992px) {
+
+            /* ตัวคอนเทนเนอร์ของแถบนำทางเป็นกริด 3 คอลัมน์: โลโก้ | เมนู | ปุ่ม */
+            .navbar-grid {
+                display: grid !important;
+                grid-template-columns: auto 1fr auto;
+                align-items: center;
+                width: 100%;
+            }
+
+            /* สำคัญที่สุด: ทำ .navbar-collapse เป็น "contents" เพื่อให้ลูกด้านใน (nav-center, navbar-actions) กลายเป็น grid items ของ .navbar-grid */
+            .navbar-expand-lg .navbar-collapse {
+                display: contents !important;
+            }
+
+            .navbar-brand {
+                grid-column: 1;
+            }
+
+            /* เมนูกลาง */
+            .nav-center {
+                grid-column: 2;
+                display: flex;
+                justify-content: center;
+                gap: 1.25rem;
+                min-width: 0;
+                padding: 0 .25rem;
+            }
+
+            /* โซนปุ่มขวา */
+            .navbar-actions {
+                grid-column: 3;
+                justify-self: end;
+                display: flex;
+                align-items: center;
+                gap: .5rem;
+                margin-left: 0 !important;
+                /* กัน ms-auto ดันเกิน */
+                flex-wrap: nowrap;
+            }
+        }
+
+
+
+        /* ช่วง iPad Pro/laptop เล็ก: ลดขนาดปุ่มไม่ให้แย่งที่เมนู */
+        @media (min-width: 992px) and (max-width: 1200px) {
+            .btn-ghost {
+                padding: .55rem .9rem;
+                font-size: .95rem;
+                border-radius: 12px;
+                font-weight: 700;
+            }
+
+            .reserve-table-btn {
+                padding: .6rem 1.1rem .6rem .95rem;
+                font-size: .95rem;
+            }
+
+            .reserve-table-btn::after {
+                width: 28px;
+                height: 28px;
+                background-size: 12px 12px;
+            }
+        }
+
+        /* Mobile/Tablet (collapse): เมนู/ปุ่มเรียงลงและกึ่งกลาง */
+        @media (max-width: 991.98px) {
+
+            .nav-center {
+                width: 100%;
+                justify-content: center;
+                text-align: center;
+                gap: 1rem;
+                margin-top: .25rem;
+            }
+
+            .navbar-nav {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .navbar-actions {
+                width: 100%;
+                flex-direction: column;
+                margin-top: .25rem;
+            }
+
+            .navbar .btn-ghost,
+            .navbar .reserve-table-btn {
+                display: block;
+                width: 100%;
+                margin: 8px 0;
+                text-align: center;
+                border-radius: 12px;
+            }
+
+            #logout-form {
+                display: block !important;
+                width: 100% !important;
+            }
+
+            #logout-form .btn-ghost {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 992px) {
+            #logout-form {
+                width: auto !important;
+                display: inline-block !important;
+            }
+        }
+
+        .reserve-table-btn {
+            flex-shrink: 0;
+        }
+
+
         /* ---------- HERO BANNER (LIGHT) ---------- */
         .banner {
             position: relative;
@@ -221,26 +346,21 @@
             overflow: hidden;
             border-bottom: 1px solid rgba(11, 18, 32, .06);
             isolation: isolate;
-            /* background: radial-gradient(60% 55% at 50% 35%, #ffffff 0%, #fdf7f1 45%, transparent 70%); */
             padding-top: 48px;
         }
 
         .banner .video-bg {
             position: absolute;
             inset: 0;
-            /* top:0; right:0; bottom:0; left:0 */
             z-index: -3;
-            /* อยู่ใต้ทุกอย่างใน banner */
             pointer-events: none;
             background: #000;
-            /* เผื่อวิดีโอโหลดช้า */
         }
 
         .banner .video-bg video {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            /* ครอบทั้งกรอบแบบ cover */
             object-position: bottom;
             display: block;
             filter: saturate(105%);
@@ -255,7 +375,6 @@
                 radial-gradient(35% 55% at 80% 20%, rgba(248, 201, 74, .18), transparent 60%),
                 radial-gradient(50% 70% at 60% 80%, rgba(136, 224, 131, .18), transparent 60%),
                 linear-gradient(180deg, transparent, transparent);
-            /* background: rgba(0, 0, 0, 0.3); */
             animation: float-bg 16s ease-in-out infinite alternate;
             filter: saturate(115%);
             z-index: -2;
@@ -288,7 +407,6 @@
             line-height: 1.08;
             letter-spacing: .5px;
             color: #ffffff;
-            /* text-shadow: 0 1px 0 #fff, 0 14px 30px rgba(255, 176, 97, .25); */
         }
 
         .banner p.lead {
@@ -304,7 +422,6 @@
             flex-wrap: wrap;
         }
 
-        /* ผู้ใช้ที่เปิด Reduce Motion: ปิดแอนิเมชันและหยุดวิดีโอด้วย */
         @media (prefers-reduced-motion: reduce) {
             .banner::before {
                 animation: none !important;
@@ -417,7 +534,6 @@
             transition: transform .15s ease, filter .2s ease, box-shadow .2s ease, background .3s ease;
         }
 
-        /* วงกลม + icon */
         .reserve-table-btn::after {
             content: "";
             position: absolute;
@@ -428,16 +544,13 @@
             height: 34px;
             border-radius: 50%;
             background-color: #fff;
-            /* วงกลมขาว */
             background-image: url("/assets/icons/arrow-accent.svg");
             background-repeat: no-repeat;
             background-position: center;
             background-size: 14px 14px;
-            /* ปรับขนาดไอคอน */
             transition: transform .3s ease, background-color .3s ease;
         }
 
-        /* shine effect */
         .reserve-table-btn::before {
             content: "";
             position: absolute;
@@ -446,14 +559,10 @@
             width: 40%;
             height: 300%;
             transform: rotate(25deg);
-            background: linear-gradient(to right,
-                    rgba(255, 255, 255, 0) 0%,
-                    rgba(255, 255, 255, .7) 50%,
-                    rgba(255, 255, 255, 0) 100%);
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .7) 50%, rgba(255, 255, 255, 0) 100%);
             opacity: 0;
         }
 
-        /* Hover: ปุ่มเป็นกรมเข้ม, ลูกศรหมุนเล็กน้อย */
         .reserve-table-btn:hover {
             background: #0c0d2b;
             box-shadow: 0 16px 36px rgba(11, 18, 32, .35);
@@ -467,29 +576,6 @@
         .reserve-table-btn:hover::before {
             animation: shine 1.2s ease;
         }
-
-        @keyframes shine {
-            0% {
-                left: -30%;
-                opacity: 0;
-            }
-
-            10% {
-                opacity: .3;
-            }
-
-            50% {
-                left: 120%;
-                opacity: .7;
-            }
-
-            100% {
-                left: 140%;
-                opacity: 0;
-            }
-        }
-
-
 
         /* ---------- SPOTLIGHT / MENU CARD / FOOTER / UTIL (เดิม) ---------- */
         .spotlight {
@@ -663,7 +749,6 @@
             font-weight: 900;
             font-size: 1.12rem;
             letter-spacing: .3px;
-            color: var(--soy);
             background: linear-gradient(90deg, #b27a4d, #e7b469 50%, #b27a4d);
             -webkit-background-clip: text;
             background-clip: text;
@@ -745,10 +830,7 @@
             white-space: nowrap;
         }
 
-        /* Reduce motion */
         @media (prefers-reduced-motion: reduce) {
-
-            .banner::before,
             .navbar-brand {
                 animation: none !important;
             }
@@ -756,32 +838,6 @@
             .menu-card,
             .nav-link {
                 transition: none !important;
-            }
-        }
-
-        /* center menu inside the container on lg+ */
-        @media (min-width: 992px) {
-            .navbar .container-xxl {
-                position: relative;
-            }
-
-            /* anchor */
-            .nav-center-abs {
-                position: absolute;
-                left: 50%;
-                transform: translateX(-50%);
-                margin: 0;
-                gap: 1.25rem;
-                /* spacing between items */
-            }
-        }
-
-        /* fallback for mobile (collapse) */
-        @media (max-width: 1024px) {
-            .nav-center-abs {
-                position: static;
-                transform: none;
-                padding-left: 50px;
             }
         }
 
@@ -854,39 +910,45 @@
 <body>
     <!-- ===== Floating Navbar ===== -->
     <header class="floating-header" id="floatingHeader">
-        <!-- Topbar Section End -->
         <div class="nav-shell">
             <nav class="navbar navbar-expand-lg navbar-light" aria-label="Floating navbar">
-                <div class="container-xxl">
+                <div class="container-xxl navbar-grid">
 
+                    <!-- โลโก้ซ้าย -->
+                    <a class="navbar-brand" href="/">Sushico</a>
+
+                    <!-- toggler -->
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent" data-aos="fade-left">
-                        <a class="navbar-brand" href="/">Sushico</a>
-                        <ul class="navbar-nav nav-center-abs mb-2 mb-lg-0 text-center">
+                    <!-- collapse -->
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                        <!-- เมนูตรงกลาง -->
+                        <ul class="navbar-nav nav-center mb-2 mb-lg-0 text-center nav-center-desktop">
                             <li class="nav-item"><a class="nav-link" href="/">หน้าแรก</a></li>
                             <li class="nav-item"><a class="nav-link" href="/about-us">เกี่ยวกับเรา</a></li>
                             <li class="nav-item"><a class="nav-link" href="/menus">เมนู</a></li>
                             <li class="nav-item"><a class="nav-link" href="/contact-us">ติดต่อเรา</a></li>
-                            {{-- แสดง เฉพาะ Admin/Staff --}}
                             @if (Auth::guard('user')->check() && in_array(Auth::guard('user')->user()->role, ['ADMIN', 'STAFF']))
                                 <li class="nav-item"><a class="nav-link" href="/dashboard">จัดการหลังบ้าน</a></li>
                             @endif
                         </ul>
-                        <div class="ms-auto d-flex align-items-center gap-2">
-                            {{-- ถ้า login แล้ว → โชว์ Logout / ถ้ายังไม่ login → โชว์ Login --}}
+
+                        <!-- ปุ่มด้านขวา -->
+                        <div class="navbar-actions ms-auto d-flex align-items-center gap-2">
                             @if (Auth::guard('user')->check())
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                    class="d-block w-100 w-lg-auto">
                                     @csrf
-                                    <button type="submit" class="btn btn-ghost">ออกจากระบบ</button>
+                                    <button type="submit" class="btn btn-ghost d-lg-inline-block">ออกจากระบบ</button>
                                 </form>
                             @else
                                 <button type="button" class="btn btn-ghost" data-bs-toggle="modal"
                                     data-bs-target="#loginModal">
-                                    เข้าสู่ระบบ
+                                    เข้าสู่ระบบ/สมัครสมาชิก
                                 </button>
                             @endif
                             <a href="/reservation" class="btn reserve-table-btn">จองโต๊ะ</a>
@@ -894,6 +956,7 @@
                     </div>
                 </div>
             </nav>
+
         </div>
     </header>
     <!-- ===== /Floating Navbar ===== -->
@@ -903,8 +966,7 @@
         <section class="banner">
             <!-- ===== Video background layer ===== -->
             <div class="video-bg" aria-hidden="true">
-                <video autoplay muted loop playsinline preload="auto"
-                    poster="{{ asset('assets/video/hero-poster.jpg') }}">
+                <video autoplay muted loop playsinline preload="auto">
                     <source src="{{ asset('assets/videos/banner.mp4') }}" type="video/mp4">
                 </video>
             </div>
@@ -1074,7 +1136,6 @@
             box-shadow: 0 20px 40px rgba(2, 6, 23, .26);
         }
 
-        /* Shine effect */
         .swal2-styled.logout-confirm::before {
             content: "";
             position: absolute;
@@ -1083,37 +1144,13 @@
             width: 40%;
             height: 300%;
             transform: rotate(25deg);
-            background: linear-gradient(to right,
-                    rgba(255, 255, 255, 0) 0%,
-                    rgba(255, 255, 255, .7) 50%,
-                    rgba(255, 255, 255, 0) 100%);
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .7) 50%, rgba(255, 255, 255, 0) 100%);
             opacity: 0;
             filter: blur(6px);
         }
 
         .swal2-styled.logout-confirm:hover::before {
             animation: shine 1.2s ease;
-        }
-
-        @keyframes shine {
-            0% {
-                left: -30%;
-                opacity: 0
-            }
-
-            10% {
-                opacity: .2
-            }
-
-            50% {
-                left: 120%;
-                opacity: .6
-            }
-
-            100% {
-                left: 140%;
-                opacity: 0
-            }
         }
 
         /* Cancel button = Wasabi */
@@ -1136,33 +1173,42 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        document.getElementById('logout-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            Swal.fire({
-                title: 'คุณแน่ใจหรือไม่?',
-                text: "คุณกำลังจะออกจากระบบ",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'ใช่ ออกจากระบบ',
-                cancelButtonText: 'ยกเลิก',
-                reverseButtons: true,
-                customClass: {
-                    popup: 'logout-popup',
-                    confirmButton: 'logout-confirm',
-                    cancelButton: 'logout-cancel'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    e.target.submit();
-                }
-            })
+        document.addEventListener("DOMContentLoaded", function() {
+            const logoutForm = document.getElementById('logout-form');
+            if (logoutForm) {
+                logoutForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'คุณแน่ใจหรือไม่?',
+                        text: "คุณกำลังจะออกจากระบบ",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'ใช่ ออกจากระบบ',
+                        cancelButtonText: 'ยกเลิก',
+                        reverseButtons: true,
+                        customClass: {
+                            popup: 'logout-popup',
+                            confirmButton: 'logout-confirm',
+                            cancelButton: 'logout-cancel'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            e.target.submit();
+                        }
+                    });
+                });
+            }
         });
     </script>
 
     {{-- Login Modal --}}
     <x-auth.login-modal id="loginModal" :open-on-error="true" />
+
+    {{-- Register Modal --}}
+    <x-auth.register-modal id="registerModal" :open-on-error="true" />
+
     @yield('js_before')
+
 </body>
 
 </html>

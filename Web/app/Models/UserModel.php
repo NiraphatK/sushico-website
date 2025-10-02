@@ -23,6 +23,12 @@ class UserModel extends Authenticatable
         'is_active',
     ];
 
+    // ซ่อนฟิลด์ที่ไม่ต้องการให้แสดง
+    protected $hidden = [
+        'password_hash',
+        'remember_token',
+    ];
+
     // ระบุให้ Laravel รู้ว่าใช้ password column ไหน
     public function getAuthPassword()
     {

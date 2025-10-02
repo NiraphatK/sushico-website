@@ -33,6 +33,9 @@ Route::get('/login', function (Request $request) {
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::post('/register', [AuthController::class, 'register'])
+    ->name('register')->middleware('throttle:10,1'); // limit 10 requests per 1 minute
+
 
 // Dashboard + CRUD (เฉพาะ ADMIN)
 // login เสร็จไปหน้า Dashboard
