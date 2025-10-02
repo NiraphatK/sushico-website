@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\MenuItemModel;
+use App\Models\StoreSettingModel;
+use Carbon\Carbon;
 use Illuminate\Pagination\Paginator; //แบ่งหน้า
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request; 
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -24,7 +27,18 @@ class HomeController extends Controller
 
     public function contact()
     {
-        return view('home.contact-us'); // ติดต่อเรา
+        // cache 5 นาที เพื่อลด query
+        $setting = Cache::remember('store_setting', 300, fn() => StoreSettingModel::first());
+
+        // fallback ถ้าไม่มี record
+        $tz = $setting->timezone ?? 'Asia/Bangkok';
+        $open = $setting->open_time ?? '09:00';
+        $close = $setting->close_time ?? '20:00';
+
+        // $fmt = fn($t) => Carbon::createFromFormat('H:i', $t, $tz)->format('g:i A');
+
+        return view('home.contact-us', compact('setting','open','close'));
+
     }
 
     public function menu()
