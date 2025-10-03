@@ -34,8 +34,8 @@
                 <div class="row-gap">
                     {{-- Timezone --}}
                     <div class="form-floating floating-field">
-                        <i class="bi bi-globe2" data-bs-toggle="tooltip"
-                            title="กำหนดโซนเวลา เช่น Asia/Bangkok เพื่อใช้คำนวณเวลา"></i>
+                        <i class="bi bi-globe2" data-bs-toggle="tooltip" data-bs-placement="right"
+                            data-bs-custom-class="tt-glass" title="กำหนดโซนเวลา เช่น Asia/Bangkok เพื่อใช้คำนวณเวลา"></i>
                         <select name="timezone" id="timezone"
                             class="form-select with-icon @error('timezone') is-invalid @enderror" required>
                             @php
@@ -56,8 +56,8 @@
 
                     {{-- Slot granularity --}}
                     <div class="form-floating floating-field">
-                        <i class="bi bi-ui-checks-grid" data-bs-toggle="tooltip"
-                            title="ช่วงเวลาต่อ 1 สล็อต เช่น 15 นาที"></i>
+                        <i class="bi bi-ui-checks-grid" data-bs-toggle="tooltip" data-bs-placement="right"
+                            data-bs-custom-class="tt-glass" title="ช่วงเวลาต่อ 1 สล็อต เช่น 15 นาที"></i>
                         <input type="number" min="1"
                             class="form-control with-icon @error('slot_granularity_minutes') is-invalid @enderror"
                             id="slot_granularity_minutes" name="slot_granularity_minutes" placeholder=" "
@@ -71,7 +71,8 @@
 
                     {{-- Open time --}}
                     <div class="form-floating floating-field">
-                        <i class="bi bi-clock" data-bs-toggle="tooltip" title="เวลาร้านเปิด เช่น 09:00"></i>
+                        <i class="bi bi-clock" data-bs-toggle="tooltip" data-bs-placement="right"
+                            data-bs-custom-class="tt-glass" title="เวลาร้านเปิด เช่น 09:00"></i>
                         <input type="time" step="60"
                             class="form-control with-icon @error('open_time') is-invalid @enderror" id="open_time"
                             name="open_time" placeholder=" " value="{{ old('open_time', $setting->open_time) }}" required>
@@ -83,7 +84,8 @@
 
                     {{-- Close time --}}
                     <div class="form-floating floating-field">
-                        <i class="bi bi-clock-history" data-bs-toggle="tooltip" title="เวลาร้านปิด เช่น 20:00"></i>
+                        <i class="bi bi-clock-history" data-bs-toggle="tooltip" data-bs-placement="right"
+                            data-bs-custom-class="tt-glass" title="เวลาร้านปิด เช่น 20:00"></i>
                         <input type="time" step="60"
                             class="form-control with-icon @error('close_time') is-invalid @enderror" id="close_time"
                             name="close_time" placeholder=" " value="{{ old('close_time', $setting->close_time) }}"
@@ -103,8 +105,8 @@
                 <div class="row-gap">
                     {{-- Cut-off --}}
                     <div class="form-floating floating-field">
-                        <i class="bi bi-hourglass-split" data-bs-toggle="tooltip"
-                            title="ปิดรับการจองล่วงหน้าก่อนถึงเวลาจริง เช่น 30 นาที"></i>
+                        <i class="bi bi-hourglass-split" data-bs-toggle="tooltip" data-bs-placement="right"
+                            data-bs-custom-class="tt-glass" title="ปิดรับการจองล่วงหน้าก่อนถึงเวลาจริง เช่น 30 นาที"></i>
                         <input type="number" min="0"
                             class="form-control with-icon @error('cut_off_minutes') is-invalid @enderror"
                             id="cut_off_minutes" name="cut_off_minutes" placeholder=" "
@@ -117,8 +119,9 @@
 
                     {{-- Grace --}}
                     <div class="form-floating floating-field">
-                        <i class="bi bi-alarm" data-bs-toggle="tooltip"
-                            title="เวลาผ่อนผันเมื่อลูกค้ามาสาย ก่อนเป็น No Show เช่น 15 นาที "></i>
+                        <i class="bi bi-alarm" data-bs-toggle="tooltip" data-bs-placement="right"
+                            data-bs-custom-class="tt-glass"
+                            title="เวลาผ่อนผันเมื่อลูกค้ามาสาย ก่อนเป็น No Show เช่น 15 นาที"></i>
                         <input type="number" min="0"
                             class="form-control with-icon @error('grace_minutes') is-invalid @enderror" id="grace_minutes"
                             name="grace_minutes" placeholder=" "
@@ -131,8 +134,8 @@
 
                     {{-- Buffer --}}
                     <div class="form-floating floating-field">
-                        <i class="bi bi-arrow-clockwise" data-bs-toggle="tooltip"
-                            title="เวลาสำหรับเตรียมโต๊ะก่อนรอบถัดไป เช่น 10 นาที"></i>
+                        <i class="bi bi-arrow-clockwise" data-bs-toggle="tooltip" data-bs-placement="right"
+                            data-bs-custom-class="tt-glass" title="เวลาสำหรับเตรียมโต๊ะก่อนรอบถัดไป เช่น 10 นาที"></i>
                         <input type="number" min="0"
                             class="form-control with-icon @error('buffer_minutes') is-invalid @enderror"
                             id="buffer_minutes" name="buffer_minutes" placeholder=" "
@@ -145,8 +148,8 @@
 
                     {{-- Default duration --}}
                     <div class="form-floating floating-field">
-                        <i class="bi bi-stopwatch" data-bs-toggle="tooltip"
-                            title="เวลามาตรฐานที่ลูกค้าใช้โต๊ะ เช่น 60 นาที"></i>
+                        <i class="bi bi-stopwatch" data-bs-toggle="tooltip" data-bs-placement="right"
+                            data-bs-custom-class="tt-glass" title="เวลามาตรฐานที่ลูกค้าใช้โต๊ะ เช่น 60 นาที"></i>
                         <input type="number" min="1"
                             class="form-control with-icon @error('default_duration_minutes') is-invalid @enderror"
                             id="default_duration_minutes" name="default_duration_minutes" placeholder=" "
@@ -182,5 +185,5 @@
 
 @section('js_before')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{ asset('js/store-settings.js') }}?v=1"></script>
+    <script src="{{ asset('js/store-settings.js') }}"></script>
 @endsection

@@ -69,7 +69,7 @@
                                     เข้าสู่ระบบ/สมัครสมาชิก
                                 </button>
                             @endif
-                            <a href="/reservation" class="btn reserve-table-btn">จองโต๊ะ</a>
+                            <a href="/reserve" class="btn reserve-table-btn">จองโต๊ะ</a>
                         </div>
                     </div>
                 </div>
@@ -101,7 +101,7 @@
                         'home.about' => 'About Us',
                         'home.contact' => 'Contact Us',
                         'menu.index' => 'Our Menu',
-                        'reservation.index' => 'Reservation',
+                        'reserve.index' => 'Reservation',
                     ];
 
                     $routeLeads = [
@@ -109,7 +109,7 @@
                         'home.about' => 'จากตลาดปลา ถึงจานตรงหน้าคุณ — เรื่องเล่าจากครัวของเรา',
                         'home.contact' => 'เปิดทุกวัน • โทร 02-xxx-xxxx • Line @sushico',
                         'menu.index' => 'คัดวัตถุดิบสดใหม่ทุกวัน — Nigiri, Sashimi & Signature Rolls',
-                        'reservation.index' => 'สำรองที่นั่งล่วงหน้า เพื่อช่วงเวลาที่ลงตัว',
+                        'reserve.index' => 'สำรองที่นั่งล่วงหน้า เพื่อช่วงเวลาที่ลงตัว',
                     ];
 
                     $current = Route::currentRouteName();
@@ -122,7 +122,7 @@
                             'contact-us' => 'home.contact',
                             'menus' => 'menu.index',
                             'menus/search' => 'menu.search',
-                            'reservation' => 'reservation.index',
+                            'reserve' => 'reserve.index',
                         ];
                         $current = $pathMap[$path] ?? null;
                     }
@@ -139,7 +139,7 @@
                 <p class="lead mt-2" data-aos="fade-up" data-aos-delay="200">{{ $bannerLead }}</p>
 
                 <div class="hero-cta" data-aos="fade-up" data-aos-delay="320">
-                    <a href="/reservation" class="btn btn-salmon">จองโต๊ะ</a>
+                    <a href="/reserve" class="btn btn-salmon">จองโต๊ะ</a>
                     <a href="/about-us" class="btn btn-ghost">เรื่องราวของเรา</a>
                 </div>
 
@@ -168,9 +168,7 @@
 
         <!-- Content -->
         <div class="container-xxl mt-4 mt-md-5">
-            <div class="row g-4" data-aos="fade-up">
-                @yield('body')
-            </div>
+            @yield('body')
         </div>
     </main>
 

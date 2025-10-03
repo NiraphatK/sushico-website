@@ -324,6 +324,30 @@ body {
     outline: none;
 }
 
+/* Sticky actions (mobile) */
+.actions {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+@media (max-width: 575.98px) {
+    .actions {
+        position: sticky;
+        bottom: 0;
+        background: linear-gradient(
+            180deg,
+            transparent,
+            var(--surface) 35%,
+            var(--surface) 100%
+        );
+        padding-top: 0.35rem;
+        padding-bottom: 0.15rem;
+        z-index: 10;
+    }
+}
+
 /* Filters actions – version A: pill buttons (existing markup) */
 .filters-actions {
     display: flex;

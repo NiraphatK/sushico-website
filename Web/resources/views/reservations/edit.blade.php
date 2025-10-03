@@ -4,7 +4,7 @@
     {{-- Bootstrap Icons + Google Fonts --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/reservation.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/reservations.css') }}">
 @endsection
 
 @section('content')
@@ -137,5 +137,5 @@
 @endsection
 
 @section('js_before')
-    <script src="{{ asset('js/reservation.js') }}"></script>
+    <script src="{{ asset('js/reservations.js') }}"></script>
 @endsection

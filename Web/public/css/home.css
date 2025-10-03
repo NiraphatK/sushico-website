@@ -1,6 +1,6 @@
 /* =========================
    Sushico Home Styles
-   (About section + Menu modal + small utils)
+   (About section + Menu modal + Contact + Reserve)
    ========================= */
 
 /* -------- Design Tokens -------- */
@@ -24,29 +24,24 @@
     gap: clamp(24px, 4vw, 56px);
     align-items: center;
 }
-
 .about-media {
     position: relative;
     isolation: isolate;
 }
-
-/* Images */
 .about-media .img-xl {
     width: 100%;
     max-width: min(720px, 100%);
-    aspect-ratio: 16/11; /* ~3:2 */
+    aspect-ratio: 16/11;
     object-fit: cover;
     border-radius: 24px;
     box-shadow: 0 16px 50px rgba(11, 18, 32, 0.18);
 }
-
 .about-media .img-sm-wrap {
     position: absolute;
     bottom: clamp(-100px, -3vw, -36px);
     left: clamp(16px, 4.5vw, 100px);
     width: min(30vw, 380px);
 }
-
 .about-media .img-sm {
     width: 100%;
     aspect-ratio: 4/3;
@@ -55,8 +50,6 @@
     box-shadow: 0 14px 40px rgba(11, 18, 32, 0.2);
     border: 6px solid #fff;
 }
-
-/* Hoverable image block */
 .img-hover {
     position: relative;
     display: block;
@@ -97,8 +90,6 @@
 .img-hover:hover::before {
     animation: shine 1.2s ease;
 }
-
-/* Vertical badge */
 .repeat-vertical {
     position: absolute;
     top: 40px;
@@ -130,8 +121,6 @@
     writing-mode: vertical-rl;
     transform: rotate(180deg);
 }
-
-/* Copy / bullets / stats */
 .about-copy .eyebrow {
     color: var(--salmon);
     font-weight: 700;
@@ -147,7 +136,6 @@
 .about-copy p.lead {
     color: var(--muted);
 }
-
 .bullets {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -171,8 +159,6 @@
     background: color-mix(in srgb, var(--gold) 20%, transparent);
     border-radius: 50%;
 }
-
-/* Stats card */
 .stats-card {
     background: var(--card);
     border: 1px solid rgba(11, 18, 32, 0.08);
@@ -192,8 +178,6 @@
 .stat small {
     color: var(--muted);
 }
-
-/* Accent button (link) */
 .btn-accent {
     display: inline-block;
     position: relative;
@@ -258,8 +242,20 @@
 .btn-accent:hover::before {
     animation: shine 1.2s ease;
 }
-
-/* Shine animation (shared) */
+.text-salmon {
+    color: var(--salmon) !important;
+}
+.divider-chop {
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(11, 18, 32, 0.12) 20%,
+        rgba(11, 18, 32, 0.12) 80%,
+        transparent
+    );
+    margin: 0.6rem 0 1rem;
+}
 @keyframes shine {
     0% {
         left: -30%;
@@ -278,24 +274,7 @@
     }
 }
 
-/* -------- Utilities used on Home -------- */
-.text-salmon {
-    color: var(--salmon) !important;
-}
-.divider-chop {
-    height: 1px;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(11, 18, 32, 0.12) 20%,
-        rgba(11, 18, 32, 0.12) 80%,
-        transparent
-    );
-    margin: 0.6rem 0 1rem;
-}
-
 /* -------- SweetAlert2: Menu Detail Modal (scoped) -------- */
-/* ใช้ customClass: { popup: 'menu-detail' } ใน JS แล้วสcopeด้วยคลาสนี้ */
 .swal2-popup.menu-detail {
     width: min(720px, 92vw) !important;
     padding: 0 !important;
@@ -303,8 +282,6 @@
     overflow: hidden !important;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
 }
-
-/* close button ของ SweetAlert */
 .swal2-close {
     top: 10px !important;
     right: 10px !important;
@@ -313,8 +290,6 @@
     width: 36px;
     height: 36px;
 }
-
-/* เนื้อหาภายใน popup */
 .menu-detail .menu-hero {
     position: relative;
     background: radial-gradient(
@@ -335,7 +310,6 @@
     object-fit: contain;
     max-height: clamp(220px, 36vw, 360px);
 }
-
 .menu-detail .price-chip {
     position: absolute;
     bottom: 14px;
@@ -348,7 +322,6 @@
     font-weight: 700;
     box-shadow: 0 6px 16px rgba(255, 99, 99, 0.35);
 }
-
 .menu-detail .menu-body-wrap {
     padding: 18px 20px 20px;
 }
@@ -363,7 +336,6 @@
     color: #4b5563;
     margin-bottom: 10px;
 }
-
 .menu-detail .menu-section-title {
     font-weight: 700;
     margin: 14px 0 8px;
@@ -379,11 +351,9 @@
     background: #fb7185;
     box-shadow: 0 0 0 3px rgba(251, 113, 133, 0.25);
 }
-
 .menu-detail .menu-detail-html {
     text-align: left;
 }
-
 .menu-detail .menu-actions {
     display: grid;
     grid-template-columns: 1fr;
@@ -397,7 +367,7 @@
     padding: 10px 14px;
 }
 
-/* -------- Responsive -------- */
+/* -------- Responsive (About) -------- */
 @media (max-width: 500px) {
     .about-wrap {
         grid-template-columns: 1fr;
@@ -425,9 +395,7 @@
 /* ===============================
    Contact Us Page (scoped)
    =============================== */
-
 .page-contact {
-    /* Theme tokens เฉพาะหน้านี้ */
     --salmon: #1a3636;
     --wasabi: #677d6a;
     --gold: #40534c;
@@ -439,12 +407,9 @@
     --ring: rgba(11, 18, 32, 0.12);
     --shadow: 0 10px 30px rgba(11, 18, 32, 0.12);
     --shadow-lg: 0 18px 44px rgba(11, 18, 32, 0.16);
-
     background: var(--bg);
     color: var(--ink);
 }
-
-/* LEFT IMAGE */
 .page-contact .contact-us-image {
     position: relative;
     isolation: isolate;
@@ -464,8 +429,6 @@
     box-shadow: var(--shadow-lg);
     filter: saturate(112%);
 }
-
-/* Opening Hours Card */
 .page-contact .opening-hours-item {
     position: absolute;
     left: clamp(12px, 2vw, 22px);
@@ -522,8 +485,6 @@
         margin-bottom: 30px;
     }
 }
-
-/* RIGHT CONTENT */
 .page-contact .section-title {
     margin-bottom: 18px;
 }
@@ -544,15 +505,10 @@
     letter-spacing: 0.12em;
     font-size: 0.9rem;
 }
-.page-contact .section-title .text-anime-style-3 .split-line {
-    white-space: normal;
-}
 .page-contact .section-title p {
     color: var(--muted);
     margin: 0;
 }
-
-/* FORM */
 .page-contact .contact-us-form {
     margin-top: 14px;
 }
@@ -581,9 +537,7 @@
     min-height: 120px;
     resize: vertical;
 }
-
-/* BUTTON */
-.page-contact .btn-default {
+.btn-default {
     position: relative;
     isolation: isolate;
     padding: 0.8rem 1.8rem;
@@ -603,7 +557,7 @@
     transition: transform 0.15s ease, filter 0.2s ease, box-shadow 0.2s ease;
     overflow: hidden;
 }
-.page-contact .btn-default::before {
+.btn-default::before {
     content: "";
     position: absolute;
     top: -120%;
@@ -620,23 +574,21 @@
     opacity: 0;
     filter: blur(6px);
 }
-.page-contact .btn-default:hover {
+.btn-default:hover {
     transform: translateY(-2px);
     filter: brightness(1.05);
     box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
     color: #fff;
 }
-.page-contact .btn-default:hover::before {
+.btn-default:hover::before {
     animation: shine 1.2s ease;
 }
-
 .page-contact .wow {
     opacity: 1;
 }
 .page-contact .fadeInUp {
     animation: fadeUp 0.6s ease both;
 }
-
 @keyframes fadeUp {
     from {
         opacity: 0;
@@ -647,20 +599,1003 @@
         transform: none;
     }
 }
-@keyframes shine {
-    0% {
-        left: -30%;
-        opacity: 0;
+
+/* ===================== Reserve (scoped) ===================== */
+.reserve-page {
+    --brand: #1a3636;
+    --brand-2: #40534c;
+    --ink: #0b1220;
+    --muted: #6b7280;
+    --line: rgba(11, 18, 32, 0.12);
+    --ring: color-mix(in srgb, var(--brand) 28%, #fff);
+    --card: #fff;
+    --soft: #f6f8fb;
+    --danger: #ef4444;
+    --ok: #16a34a;
+    --radius: 20px;
+    --radius-sm: 14px;
+    --easing: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --shadow-1: 0 10px 28px rgba(2, 6, 23, 0.08);
+    --shadow-2: 0 18px 44px rgba(2, 6, 23, 0.1);
+    padding-block: 28px;
+}
+.reserve-page .hero {
+    position: relative;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px;
+    background: radial-gradient(
+            1000px 280px at 0% -20%,
+            color-mix(in srgb, var(--brand) 10%, transparent),
+            transparent
+        ),
+        radial-gradient(
+            1000px 280px at 100% -20%,
+            color-mix(in srgb, var(--brand-2) 10%, transparent),
+            transparent
+        ),
+        var(--card);
+    box-shadow: var(--shadow-1);
+    overflow: clip;
+}
+.reserve-page .hero-title {
+    margin: 0 0 6px;
+    font-weight: 900;
+    color: var(--ink);
+    letter-spacing: 0.2px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.reserve-page .chips {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.reserve-page .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.38rem 0.7rem;
+    background: linear-gradient(180deg, #fff, var(--soft));
+    color: var(--muted);
+    font-weight: 700;
+    font-size: 0.92rem;
+    box-shadow: 0 1px 0 rgba(2, 6, 23, 0.04) inset;
+}
+.reserve-page .chip b {
+    color: var(--ink);
+}
+.reserve-page .grid {
+    display: grid;
+    gap: 18px;
+}
+@media (min-width: 992px) {
+    .reserve-page .grid {
+        grid-template-columns: minmax(0, 740px) 1fr;
     }
-    10% {
-        opacity: 0.2;
+}
+.reserve-page .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-2);
+}
+.reserve-page .card-body {
+    padding: 20px;
+}
+.reserve-page .title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 4px 0 10px;
+    color: var(--ink);
+    font-weight: 900;
+}
+.reserve-page .title::before {
+    content: "";
+    inline-size: 10px;
+    block-size: 10px;
+    border-radius: 999px;
+    background: var(--brand);
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--brand) 20%, transparent);
+}
+.reserve-page .help {
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin-top: 0.35rem;
+}
+
+/* controls */
+.reserve-page .form-control,
+.reserve-page .form-select {
+    border: 1px solid rgba(11, 18, 32, 0.16);
+    border-radius: var(--radius-sm);
+    padding: 0.78rem 0.9rem;
+    background: #fff;
+    color: var(--ink);
+    transition: border-color 0.2s var(--easing), box-shadow 0.2s var(--easing),
+        transform 0.06s;
+}
+.reserve-page .form-control:hover,
+.reserve-page .form-select:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(2, 6, 23, 0.06);
+}
+.reserve-page .form-control:focus,
+.reserve-page .form-select:focus {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 0.28rem var(--ring);
+    outline: 0;
+}
+.reserve-page .is-invalid {
+    border-color: var(--danger) !important;
+}
+
+/* stepper */
+.reserve-page .stepper {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+.reserve-page .stepper .rail {
+    height: 3px;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--brand) 35%, #fff),
+        #e8ecef
+    );
+    border-radius: 999px;
+    opacity: 0.65;
+}
+.reserve-page .stepper .step {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+}
+.reserve-page .stepper .step .dot {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    border: 2px solid rgba(11, 18, 32, 0.12);
+    background: #fff;
+    font-weight: 800;
+    transition: transform 0.12s ease, box-shadow 0.2s ease,
+        border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+.reserve-page .stepper .step .label {
+    margin-top: 6px;
+    font-size: 0.88rem;
+    color: var(--muted);
+    font-weight: 700;
+}
+.reserve-page .stepper .step.is-active .dot {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 0.24rem var(--ring);
+    color: var(--ink);
+}
+.reserve-page .stepper .step.is-complete .dot {
+    background: linear-gradient(
+        135deg,
+        var(--brand),
+        color-mix(in srgb, var(--brand-2) 74%, var(--brand))
+    );
+    color: #fff;
+    border-color: transparent;
+}
+
+/* panes visibility */
+.reserve-page .step-pane {
+    display: none;
+}
+.reserve-page .step-pane.is-active {
+    display: block;
+}
+
+/* segmented (seat) */
+.reserve-page .seg {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+.reserve-page .seg-btn {
+    border: 1.5px solid rgba(11, 18, 32, 0.16);
+    border-radius: var(--radius-sm);
+    background: #fff;
+    color: var(--ink);
+    padding: 0.75rem 1rem;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    transition: border-color 0.2s var(--easing), box-shadow 0.2s var(--easing),
+        transform 0.06s;
+}
+.reserve-page .seg-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(2, 6, 23, 0.1);
+}
+.reserve-page .seg-btn .cap {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-weight: 800;
+    padding: 0.18rem 0.55rem;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #fff, var(--soft));
+    border: 1px solid rgba(11, 18, 32, 0.12);
+}
+.reserve-page .btn-check:checked + .seg-btn {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 0.3rem var(--ring), 0 10px 28px rgba(2, 6, 23, 0.1);
+    background: linear-gradient(180deg, #fff, #fdfefe);
+}
+
+/* qty */
+.reserve-page .qty {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 0.8rem;
+}
+.reserve-page .qty-btn {
+    inline-size: 46px;
+    block-size: 46px;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(11, 18, 32, 0.16);
+    background: #fff;
+    display: grid;
+    place-items: center;
+    transition: transform 0.06s, box-shadow 0.2s, border-color 0.2s;
+}
+.reserve-page .qty-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(2, 6, 23, 0.1);
+    border-color: rgba(2, 6, 23, 0.28);
+}
+.reserve-page .qty-btn[disabled] {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+.reserve-page .qty-input {
+    inline-size: 120px;
+    text-align: center;
+    font-weight: 900;
+}
+
+/* hours */
+.reserve-page .hours-wrap {
+    position: relative;
+    padding-inline: 44px;
+    margin-bottom: 0.65rem;
+}
+.reserve-page .hours {
+    display: flex;
+    gap: 0.55rem;
+    overflow: auto;
+    scrollbar-width: thin;
+    padding: 0.45rem;
+    border: 1px dashed rgba(11, 18, 32, 0.12);
+    border-radius: var(--radius-sm);
+    background: linear-gradient(180deg, #fff, #fafcff);
+    scroll-snap-type: x proximity;
+    padding-left: 14px;
+    padding-right: 14px;
+    scroll-padding-left: 18px;
+    scroll-padding-right: 18px;
+}
+.reserve-page .hours .hour:first-of-type {
+    margin-left: 6px;
+}
+.reserve-page .hour {
+    border: 1.5px solid rgba(11, 18, 32, 0.16);
+    border-radius: 12px;
+    background: #fff;
+    color: var(--ink);
+    padding: 0.5rem 0.78rem;
+    font-weight: 900;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    transition: border-color 0.2s var(--easing), box-shadow 0.2s var(--easing);
+    scroll-snap-align: start;
+}
+.reserve-page .hour small {
+    color: var(--muted);
+    font-weight: 800;
+}
+.reserve-page .btn-check:checked + .hour {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 0.26rem var(--ring);
+}
+.reserve-page .hours-fade {
+    opacity: 0.85;
+    transition: opacity 0.2s ease;
+}
+.reserve-page .hours-fade.right {
+    inset-inline-end: 0;
+    transform: scaleX(-1);
+}
+.reserve-page .hours-arrow {
+    position: absolute;
+    inset-block: 50%;
+    translate: 0 -50%;
+    inline-size: 34px;
+    block-size: 34px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: #fff;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 10px 20px rgba(2, 6, 23, 0.1);
+    transition: transform 0.06s, box-shadow 0.2s;
+    z-index: 2;
+}
+.reserve-page .hours-arrow:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 28px rgba(2, 6, 23, 0.12);
+}
+.reserve-page .hours-arrow[disabled] {
+    opacity: 0.35;
+    pointer-events: none;
+}
+.reserve-page .hours-arrow.left {
+    inset-inline-start: 6px;
+}
+.reserve-page .hours-arrow.right {
+    inset-inline-end: 6px;
+}
+
+/* slots */
+.reserve-page .slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+    gap: 0.6rem;
+}
+.reserve-page .slot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    block-size: 46px;
+    padding: 0 0.75rem;
+    border: 1.5px solid rgba(11, 18, 32, 0.16);
+    border-radius: var(--radius-sm);
+    background: #fff;
+    color: var(--ink);
+    font-weight: 900;
+    transition: border-color 0.2s var(--easing), box-shadow 0.2s var(--easing);
+}
+.reserve-page .btn-check:checked + .slot {
+    border-color: var(--brand-2);
+    box-shadow: 0 0 0 0.26rem var(--ring);
+}
+.reserve-page .slot[aria-disabled="true"] {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+.reserve-page .preview {
+    background: linear-gradient(180deg, #fff, var(--soft));
+    border: 1px dashed rgba(11, 18, 32, 0.12);
+    border-radius: 12px;
+    padding: 0.55rem 0.72rem;
+    font-weight: 900;
+    color: var(--ink);
+}
+
+/* actions */
+.reserve-page .btn-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 0.9rem 1.2rem;
+    font-weight: 900;
+    color: #fff;
+    background: linear-gradient(
+        135deg,
+        var(--brand),
+        color-mix(in srgb, var(--brand-2) 74%, var(--brand))
+    );
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.18);
+    transition: transform 0.12s, filter 0.2s, box-shadow 0.2s;
+}
+.reserve-page .btn-brand:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.03);
+    box-shadow: 0 20px 44px rgba(0, 0, 0, 0.24);
+}
+.reserve-page .btn-brand[disabled] {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+.reserve-page .btn-brand .spinner {
+    inline-size: 1rem;
+    block-size: 1rem;
+    border-radius: 999px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #fff;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
     }
-    50% {
-        left: 120%;
-        opacity: 0.6;
+}
+.reserve-page .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    border-radius: var(--radius-sm);
+    padding: 0.9rem 1.1rem;
+    font-weight: 800;
+    transition: transform 0.12s ease, box-shadow 0.2s ease;
+}
+.reserve-page .btn-ghost:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(2, 6, 23, 0.08);
+}
+.reserve-page .step-actions {
+    margin-top: 14px;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+.reserve-page .step-actions #btnNextStep[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* review & summary */
+.reserve-page .review-grid {
+    display: grid;
+    gap: 10px;
+}
+.reserve-page .review-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 0.7rem 0.2rem;
+    border-bottom: 1px dashed rgba(11, 18, 32, 0.1);
+}
+.reserve-page .review-item:last-child {
+    border-bottom: 0;
+}
+.reserve-page .review-item .muted {
+    color: var(--muted);
+}
+.reserve-page .summary-h {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    font-weight: 900;
+}
+.reserve-page .summary-b {
+    padding: 16px;
+    display: grid;
+    gap: 12px;
+}
+.reserve-page .sumrow {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0.6rem 0.2rem;
+    border-bottom: 1px dashed rgba(11, 18, 32, 0.1);
+}
+.reserve-page .sumrow:last-child {
+    border-bottom: 0;
+}
+@media (min-width: 992px) {
+    .reserve-page .card.sticky {
+        position: sticky;
+        top: 18px;
     }
-    100% {
-        left: 140%;
-        opacity: 0;
+}
+
+/* mobile CTA (desktop hidden) */
+.reserve-page .mobile-cta {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    background: #fff;
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -10px 24px rgba(0, 0, 0, 0.08);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.reserve-page .mobile-cta .mini {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 10px;
+    row-gap: 4px;
+    align-items: center;
+    color: var(--muted);
+    font-weight: 800;
+}
+.reserve-page .mobile-cta .mini b {
+    color: var(--ink);
+}
+.reserve-page .mobile-cta .btn-brand {
+    padding: 0.8rem 1.1rem;
+    border-radius: 12px;
+}
+@media (min-width: 992px) {
+    .reserve-page .mobile-cta {
+        display: none !important;
+    }
+}
+.reserve-page #mobileCta[hidden] {
+    display: none !important;
+}
+
+/* focus scope */
+.reserve-page :focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 0.3rem var(--ring) !important;
+    border-color: var(--brand) !important;
+}
+
+/* ===== Mobile CTA: gutters + safe-area + hide top buttons/footer ===== */
+:root {
+    --cta-h: 72px;
+    --cta-gap: 22px;
+}
+@media (max-width: 991.98px) {
+    /* กันโดน CTA ทับ + เพิ่มช่องว่างเหนือ CTA */
+    .reserve-page {
+        padding-bottom: calc(
+            var(--cta-h) + var(--cta-gap) + env(safe-area-inset-bottom, 0px)
+        );
+    }
+    .reserve-page .grid > .card:last-of-type {
+        margin-bottom: var(--cta-gap);
+    }
+
+    /* CTA layout 3 คอลัมน์ */
+    .reserve-page .mobile-cta {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 50;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 12px;
+        height: var(--cta-h);
+        padding: 10px 14px;
+        padding-left: max(14px, env(safe-area-inset-left, 0px));
+        padding-right: max(14px, env(safe-area-inset-right, 0px));
+    }
+    .reserve-page .mobile-cta::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -16px;
+        height: 16px;
+        pointer-events: none;
+        background: linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0),
+            #fff 80%
+        );
+    }
+    .reserve-page .mobile-cta .icon-btn {
+        width: 40px;
+        height: 40px;
+        display: grid;
+        place-items: center;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: #fff;
+        box-shadow: 0 6px 18px rgba(2, 6, 23, 0.08);
+    }
+    .reserve-page .mobile-cta .mini {
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        gap: 8px;
+        overflow: hidden;
+    }
+    .reserve-page .mobile-cta .mini span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0.35rem 0.6rem;
+        background: linear-gradient(180deg, #fff, #fafcff);
+        border: 1px dashed rgba(11, 18, 32, 0.12);
+        border-radius: 999px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+    .reserve-page .mobile-cta .mini span b {
+        max-width: 7ch;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+    .reserve-page .mobile-cta .btn-brand {
+        flex-shrink: 0;
+    }
+
+    /* ซ่อนปุ่ม step-actions ด้านบนในมือถือ */
+    .reserve-page .step-actions,
+    .reserve-page #btnPrevStep,
+    .reserve-page #btnNextStep,
+    .reserve-page #btnSubmit {
+        display: none !important;
+    }
+
+    /* ซ่อน footer เฉพาะหน้าจองบนมือถือ */
+    body:has(.reserve-page) footer {
+        display: none !important;
+    }
+}
+
+/* Hour bar: ใช้ mask กันการ์ดแรกชิดและปิด fade overlay */
+.reserve-page .hours {
+    -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        #000 24px,
+        #000 calc(100% - 24px),
+        transparent 100%
+    );
+    mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        #000 24px,
+        #000 calc(100% - 24px),
+        transparent 100%
+    );
+}
+.reserve-page .hours-fade {
+    display: none !important;
+}
+.reserve-page .hours {
+    padding-left: 14px;
+    padding-right: 14px;
+    scroll-padding: 18px;
+}
+.reserve-page .hours .hour:first-of-type {
+    margin-left: 6px;
+}
+.reserve-page .hours .hour:last-of-type {
+    margin-right: 6px;
+}
+.reserve-page .qty-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.7rem 0 0;
+}
+
+/* ===== Reservation – compact mobile overrides ===== */
+@media (max-width: 767.98px) {
+    .reserve-page {
+        padding-top: 12px;
+    }
+    .reserve-page .card-body {
+        padding: 16px;
+    }
+    .reserve-page .stepper {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+    .reserve-page .stepper .rail {
+        display: none;
+    }
+    .reserve-page .stepper .step .dot {
+        width: 36px;
+        height: 36px;
+    }
+    .reserve-page .stepper .step .label {
+        font-size: 0.8rem;
+    }
+    .reserve-page .seg {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    .reserve-page .seg-btn {
+        width: 100%;
+        justify-content: space-between;
+        min-height: 56px;
+    }
+    .reserve-page .qty {
+        gap: 10px;
+        margin-top: 0.6rem;
+    }
+    .reserve-page .qty-btn {
+        inline-size: 44px;
+        block-size: 44px;
+    }
+    .reserve-page .qty-input {
+        inline-size: 84px;
+        font-size: 1.05rem;
+    }
+    .reserve-page .hours-wrap {
+        padding-inline: 40px;
+    }
+    .reserve-page .hours {
+        padding-inline: 12px;
+        scroll-padding: 18px;
+        -webkit-mask-image: linear-gradient(
+            to right,
+            transparent 0,
+            #000 18px,
+            #000 calc(100% - 18px),
+            transparent 100%
+        );
+        mask-image: linear-gradient(
+            to right,
+            transparent 0,
+            #000 18px,
+            #000 calc(100% - 18px),
+            transparent 100%
+        );
+    }
+    .reserve-page .hours .hour {
+        padding: 0.55rem 0.8rem;
+        font-size: 1rem;
+    }
+    .reserve-page .hours-arrow {
+        inline-size: 32px;
+        block-size: 32px;
+    }
+    .reserve-page .slots {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+    .reserve-page .slot {
+        block-size: 44px;
+    }
+    .reserve-page .btn-ghost {
+        padding: 0.7rem 0.9rem;
+    }
+    .reserve-page .btn-brand {
+        padding: 0.8rem 1rem;
+    }
+}
+@media (max-width: 340px) {
+    .reserve-page .slots {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ==== HOTFIX ==== */
+
+/* ป้องกันปุ่ม/อินพุตโดนรีเซ็ตจนกลายเป็นกรอบดำ */
+.reserve-page .pill,
+.reserve-page .seg-btn,
+.reserve-page .slot,
+.reserve-page .hour,
+.reserve-page .btn-ghost,
+.reserve-page .btn-brand,
+.reserve-page .qty-btn,
+.reserve-page .link-edit {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+/* pill (ชิปตัวเลขคน) กลม + เส้นจาง */
+.reserve-page .pill {
+    border: 1px solid var(--line, #e5e7eb) !important;
+    border-radius: 999px !important;
+    background: #fff !important;
+    color: var(--ink, #0b1220) !important;
+    font-weight: 800 !important;
+    padding: 0.35rem 0.75rem !important;
+}
+
+/* ปุ่มลิงก์ “แก้ไข” ให้เป็นลิงก์จริง ไม่ใช่ปุ่มกรอบ */
+.reserve-page .link-edit {
+    background: transparent !important;
+    border: 0 !important;
+    padding: 0 !important;
+    color: var(--brand, #1a3636) !important;
+    text-decoration: underline !important;
+    font-weight: 800 !important;
+    cursor: pointer !important;
+}
+
+/* ปุ่มเซกเมนต์ที่นั่ง */
+.reserve-page .seg-btn {
+    border: 1.5px solid var(--line, #e5e7eb) !important;
+    border-radius: 14px !important;
+    background: #fff !important;
+    color: var(--ink, #0b1220) !important;
+}
+.reserve-page .btn-check:checked + .seg-btn {
+    border-color: var(--brand, #1a3636) !important;
+    box-shadow: 0 0 0 0.3rem color-mix(in srgb, var(--brand, #1a3636) 28%, #fff) !important;
+}
+
+/* การ์ดชั่วโมง/สลอตเวลา */
+.reserve-page .hour,
+.reserve-page .slot {
+    border: 1.5px solid var(--line, #e5e7eb) !important;
+    border-radius: 12px !important;
+    background: #fff !important;
+    color: var(--ink, #0b1220) !important;
+}
+.reserve-page .btn-check:checked + .hour {
+    border-color: var(--brand, #1a3636) !important;
+}
+.reserve-page .btn-check:checked + .slot {
+    border-color: var(--brand-2, #40534c) !important;
+}
+
+/* กันชิป/การ์ดชั่วโมงชิดขอบด้านซ้ายในมือถือ */
+@media (max-width: 991.98px) {
+    .reserve-page .hours {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+        scroll-padding-left: 16px !important;
+        scroll-padding-right: 16px !important;
+    }
+    .reserve-page .hours .hour:first-of-type {
+        margin-left: 6px !important;
+    }
+    .reserve-page .hours .hour:last-of-type {
+        margin-right: 6px !important;
+    }
+
+    /* ซ่อน step actions ด้านบน ให้ใช้ CTA ล่างอันเดียว */
+    .reserve-page .step-actions {
+        display: none !important;
+    }
+    body:has(.reserve-page) footer {
+        display: none !important;
+    } /* ซ่อนฟุตเตอร์บนมือถือ */
+}
+
+/* ====== Reserve – Mobile CTA alignment fix ====== */
+@media (max-width: 991.98px) {
+    /* ลดความสูงแถบ + เผื่อ safe area */
+    .reserve-page {
+        --cta-h: 64px;
+        padding-bottom: calc(var(--cta-h) + env(safe-area-inset-bottom, 0px));
+    }
+
+    .reserve-page .mobile-cta {
+        display: grid;
+        grid-template-columns: auto 1fr auto; /* back | summary | next */
+        align-items: center;
+        gap: 14px; /* ระยะห่างระหว่าง back/summary/next */
+        height: var(--cta-h);
+        padding: 8px 12px;
+        padding-left: max(12px, env(safe-area-inset-left, 0px));
+        padding-right: max(12px, env(safe-area-inset-right, 0px));
+        box-sizing: border-box;
+    }
+
+    /* ปุ่มย้อน & ปุ่มถัดไป ให้สูงเท่ากันพอดี */
+    .reserve-page .mobile-cta .icon-btn,
+    .reserve-page .mobile-cta .btn-brand {
+        block-size: 44px; /* ความสูงจริงของปุ่ม */
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .reserve-page .mobile-cta .icon-btn {
+        inline-size: 44px; /* ทำเป็นสี่เหลี่ยมจัตุรัส */
+        border: 1px solid var(--line);
+        background: #fff;
+        box-shadow: 0 6px 18px rgba(2, 6, 23, 0.08);
+    }
+
+    /* ปุ่มถัดไปเลิกใช้ padding บน/ล่าง ให้ fit ความสูงแถบแบบเนียน */
+    .reserve-page .mobile-cta .btn-brand {
+        padding: 0 16px; /* แนวนอนเท่านั้น */
+        line-height: 1;
+        min-width: 96px; /* ไม่ให้ปุ่มเล็กเกิน */
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+    }
+}
+
+/* === Mobile CTA – balanced, scrollable chips, no overlap === */
+@media (max-width: 991.98px) {
+    .reserve-page .mobile-cta {
+        container-type: inline-size;
+        grid-template-columns: auto minmax(0, 1fr) auto; /* back | chips | next */
+        gap: 12px;
+        height: var(--cta-h, 64px);
+        padding: 10px clamp(12px, 3vw, 16px);
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: saturate(160%) blur(12px);
+        -webkit-backdrop-filter: saturate(160%) blur(12px);
+    }
+
+    /* ปุ่มซ้าย/ขวาให้สัดส่วนเท่ากัน */
+    .reserve-page .mobile-cta .icon-btn,
+    .reserve-page .mobile-cta .btn-brand {
+        block-size: 44px;
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .reserve-page .mobile-cta .icon-btn {
+        inline-size: 44px;
+    }
+    .reserve-page .mobile-cta .btn-brand {
+        padding: 0 16px; /* แนวนอนเท่านั้น เพื่อ fit แถบ */
+        min-width: 96px;
+        line-height: 1;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+    }
+
+    /* คอลัมน์ชิปตรงกลาง: มี padding ข้าง, เลื่อนข้างได้, ซ่อนสกอร์ลบาร์, ทำขอบเฟด */
+    .reserve-page .mobile-cta .mini {
+        min-width: 0;
+        display: flex;
+        gap: 8px;
+        white-space: nowrap;
+        overflow-x: auto; /* แทน hidden */
+        overflow-y: hidden;
+        padding-inline: 8px; /* เว้นห่างจากปุ่มขวา/ซ้าย */
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        -webkit-mask-image: linear-gradient(
+            90deg,
+            transparent 0,
+            #000 12px,
+            #000 calc(100% - 12px),
+            transparent 100%
+        );
+        mask-image: linear-gradient(
+            90deg,
+            transparent 0,
+            #000 12px,
+            #000 calc(100% - 12px),
+            transparent 100%
+        );
+    }
+    .reserve-page .mobile-cta .mini::-webkit-scrollbar {
+        display: none;
+    }
+
+    .reserve-page .mobile-cta .mini span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0.35rem 0.6rem;
+        background: linear-gradient(180deg, #fff, #fafcff);
+        border: 1px dashed rgba(11, 18, 32, 0.12);
+        border-radius: 999px;
+        font-weight: 800;
+    }
+    .reserve-page .mobile-cta .mini span b {
+        max-width: 8ch; /* ป้องกันข้อความดันชนปุ่ม */
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* จอแคบมาก: ลดขนาดชิปอีกนิด */
+    @container (max-width: 360px) {
+        .reserve-page .mobile-cta .mini span {
+            font-size: 0.9rem;
+            padding: 0.3rem 0.5rem;
+        }
     }
 }

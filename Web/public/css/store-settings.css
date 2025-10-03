@@ -248,3 +248,44 @@ body {
         justify-content: center;
     }
 }
+
+@media (hover: hover) {
+    .floating-field > i {
+        pointer-events: auto;
+        cursor: help;
+        user-select: none;
+    }
+}
+
+/* ===== Tooltip – Glass Theme ===== */
+.tt-glass .tooltip-inner {
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--text, #0b1220);
+    border: 1px solid rgba(2, 6, 23, 0.1);
+    backdrop-filter: saturate(160%) blur(10px);
+    -webkit-backdrop-filter: saturate(160%) blur(10px);
+    box-shadow: 0 10px 28px rgba(2, 6, 23, 0.1);
+    padding: 0.55rem 0.7rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+}
+
+/* ลูกศรทุกทิศทาง */
+.tt-glass[data-popper-placement^="top"] .tooltip-arrow::before {
+    border-top-color: rgba(255, 255, 255, 0.95) !important;
+}
+.tt-glass[data-popper-placement^="bottom"] .tooltip-arrow::before {
+    border-bottom-color: rgba(255, 255, 255, 0.95) !important;
+}
+.tt-glass[data-popper-placement^="left"] .tooltip-arrow::before {
+    border-left-color: rgba(255, 255, 255, 0.95) !important;
+}
+.tt-glass[data-popper-placement^="right"] .tooltip-arrow::before {
+    border-right-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+html[data-bs-theme="dark"] .tt-glass .tooltip-inner {
+    background: rgba(17, 25, 40, 0.92);
+    color: #e5e7eb;
+    border-color: rgba(255, 255, 255, 0.1);
+}

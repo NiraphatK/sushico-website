@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FrontReservationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TableController;
@@ -18,7 +19,12 @@ Route::get('/about-us', [HomeController::class, 'about']);
 Route::get('/menus', [HomeController::class, 'menu'])->name('menu.index');
 Route::get('/menus/search', [HomeController::class, 'searchMenu'])->name('menu.search');
 Route::get('/contact-us', [HomeController::class, 'contact']);
-Route::get('/reservation', [HomeController::class, 'reservation']);
+
+Route::middleware(['auth:user'])->group(function () {
+    Route::get('/reserve', [FrontReservationController::class, 'form'])->name('reserve.form');
+    Route::post('/reserve', [FrontReservationController::class, 'create'])->name('reserve.create');
+});
+
 
 // Authentication
 // ทำไมต้องมี name('login') ?
