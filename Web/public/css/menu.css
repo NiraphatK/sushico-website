@@ -125,7 +125,7 @@ body {
     gap: 0.6rem;
     padding: 0.6rem 1rem;
     font-weight: 700;
-    /* color: #fff; */
+    color: #fff;
     background: #ffffff1a;
     border: 1px solid #ffffff33;
     backdrop-filter: blur(6px);
