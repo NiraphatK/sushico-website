@@ -73,7 +73,7 @@
                     {{-- EMAIL (optional) --}}
                     <div class="form-floating lm-floating mb-3">
                         <input id="{{ $id }}-email" type="email" name="email"
-                            placeholder="อีเมล (ไม่บังคับ)"
+                            placeholder="อีเมล (ไม่บังคับ)" autocomplete="email"
                             class="form-control lm-control @error('email', 'register') is-invalid @enderror"
                             value="{{ old('email') }}"
                             aria-invalid="@error('email', 'register') true @else false @enderror"

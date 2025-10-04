@@ -98,7 +98,6 @@
 
 /* ---------- Buttons ---------- */
 .btn-brand,
-.btn-ghost,
 .btn-cancel {
     --ring: 0 0 0 0 rgba(26, 54, 54, 0.25);
     display: inline-flex;
@@ -123,16 +122,6 @@
 }
 .btn-brand:active {
     transform: translateY(0);
-}
-
-.btn-ghost {
-    background: #fff;
-    border-color: var(--line);
-    color: var(--brand);
-}
-.btn-ghost:hover {
-    background: var(--brand-soft);
-    border-color: rgba(26, 54, 54, 0.18);
 }
 
 .btn-cancel {
@@ -468,133 +457,52 @@ details.filter-compact[open] summary {
     opacity: 0.9;
 }
 
-/* === Soft-but-rich Gradient Status Chips (lighter than before) === */
-.st {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    padding: 0.38rem 0.56rem;
-    border-radius: 12px;
-    font-weight: 800;
-    letter-spacing: 0.2px;
-    color: var(--ink); /* กลับมาใช้อักษรโทนเข้ม อ่านง่ายบนพื้นอ่อน */
-    border: 1px solid transparent;
-    box-shadow: 0 6px 14px rgba(2, 6, 23, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.6);
-    transition: background 0.25s ease, border-color 0.2s ease,
-        transform 0.06s ease;
+
+/* ===== Base chip ===== */
+.chip-row{ display:flex; gap:.5rem .75rem; flex-wrap:wrap; }
+.st-chip{
+  --bd: rgba(2,6,23,.14);            /* เส้นขอบอ่อน */
+  --fg: #111827;                      /* ตัวอักษร */
+  --hover: rgba(2,6,23,.04);          /* สีโฮเวอร์กลาง */
+  display:inline-flex; align-items:center; gap:.45rem;
+  padding:.45rem .85rem;
+  border:1px solid var(--bd);
+  border-radius:999px;
+  background:#fff; color:var(--fg);
+  font-weight:500; line-height:1; white-space:nowrap;
+  transition: background .2s ease, border-color .2s ease, transform .06s;
 }
-.st i {
-    opacity: 0.9;
+.st-chip i{ font-size:1rem; line-height:1; opacity:.9; }
+.st-chip:hover{ background:var(--hover); border-color:rgba(2,6,23,.2); }
+.st-chip:active{ transform:translateY(1px); }
+
+/* ===== Variants (โทนกลาง เหมือนในภาพ แต่มีสีตอนโฮเวอร์/โฟกัสเล็กน้อย) ===== */
+.st-confirmed{ --hover: rgba(30,58,138,.08); }  /* indigo */
+.st-seated   { --hover: rgba(91,33,182,.08); }  /* violet */
+.st-completed{ --hover: rgba(22,101,52,.08); }  /* green  */
+.st-cancelled{ --hover: rgba(127,29,29,.08); }  /* red    */
+.st-noshow   { --hover: rgba(120,53,15,.08); }  /* amber  */
+
+/* ถ้าอยากให้ “สีเส้น/ไอคอน” เปลี่ยนตามสถานะนิดเดียว (ยังคงโทนสุภาพ) */
+.st-confirmed:hover i{ color:var(--indigo); }
+.st-seated:hover    i{ color:var(--violet); }
+.st-completed:hover i{ color:var(--green); }
+.st-cancelled:hover i{ color:var(--red); }
+.st-noshow:hover    i{ color:var(--amber); }
+
+/* ตัวเลือก: โหมด compact */
+.st-chip.is-compact{ padding:.38rem .7rem; font-weight:600; }
+
+
+/* (ออปชัน) โฮเวอร์เบา ๆ ให้ขอบคมขึ้นแต่ยังคงโทนอ่อน */
+.st-confirmed:hover,
+.st-seated:hover,
+.st-completed:hover,
+.st-cancelled:hover,
+.st-noshow:hover{
+  border-color: rgba(2,6,23,.25);
 }
 
-/* Confirmed — Blue (soft) */
-.st-confirmed {
-    background: radial-gradient(
-            140% 180% at 0% -40%,
-            rgba(255, 255, 255, 0.7) 0%,
-            transparent 60%
-        ),
-        linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-    border-color: #c7d2fe;
-    color: #1e3a8a;
-}
-.st-confirmed:hover {
-    background: radial-gradient(
-            140% 180% at 0% -40%,
-            rgba(255, 255, 255, 0.78) 0%,
-            transparent 60%
-        ),
-        linear-gradient(135deg, #eaf2ff 0%, #d3e3ff 100%);
-}
-
-/* Seated — Violet (soft) */
-.st-seated {
-    background: radial-gradient(
-            140% 180% at 0% -40%,
-            rgba(255, 255, 255, 0.7) 0%,
-            transparent 60%
-        ),
-        linear-gradient(135deg, #f5f3ff 0%, #e9d5ff 100%);
-    border-color: #d8b4fe;
-    color: #5b21b6;
-}
-.st-seated:hover {
-    background: radial-gradient(
-            140% 180% at 0% -40%,
-            rgba(255, 255, 255, 0.78) 0%,
-            transparent 60%
-        ),
-        linear-gradient(135deg, #f3edff 0%, #ddcfff 100%);
-}
-
-/* Completed — Green (soft) */
-.st-completed {
-    background: radial-gradient(
-            140% 180% at 0% -40%,
-            rgba(255, 255, 255, 0.7) 0%,
-            transparent 60%
-        ),
-        linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-    border-color: #a7f3d0;
-    color: #166534;
-}
-.st-completed:hover {
-    background: radial-gradient(
-            140% 180% at 0% -40%,
-            rgba(255, 255, 255, 0.78) 0%,
-            transparent 60%
-        ),
-        linear-gradient(135deg, #eaf7ee 0%, #cff0e0 100%);
-}
-
-/* Cancelled — Red (soft) */
-.st-cancelled {
-    background: radial-gradient(
-            140% 180% at 0% -40%,
-            rgba(255, 255, 255, 0.7) 0%,
-            transparent 60%
-        ),
-        linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
-    border-color: #fca5a5;
-    color: #991b1b;
-}
-.st-cancelled:hover {
-    background: radial-gradient(
-            140% 180% at 0% -40%,
-            rgba(255, 255, 255, 0.78) 0%,
-            transparent 60%
-        ),
-        linear-gradient(135deg, #fdecec 0%, #f5d0d0 100%);
-}
-
-/* No Show — Amber (soft) */
-.st-noshow {
-    background: radial-gradient(
-            140% 180% at 0% -40%,
-            rgba(255, 255, 255, 0.7) 0%,
-            transparent 60%
-        ),
-        linear-gradient(135deg, #fffbeb 0%, #fde68a 100%);
-    border-color: #fcd34d;
-    color: #92400e;
-}
-.st-noshow:hover {
-    background: radial-gradient(
-            140% 180% at 0% -40%,
-            rgba(255, 255, 255, 0.78) 0%,
-            transparent 60%
-        ),
-        linear-gradient(135deg, #fff6ea 0%, #f9e2a2 100%);
-}
-
-/* จอเล็ก ขยับ padding นิดหน่อยให้กระชับ */
-@media (max-width: 480px) {
-    .st {
-        padding: 0.34rem 0.5rem;
-        border-radius: 10px;
-    }
-}
 
 /* (ไม่บังคับ) ถ้าอยากให้อนิเมชันลื่นขึ้นตอน hover */
 .st-confirmed,

@@ -302,12 +302,12 @@
         if (!window.Swal) return;
         Swal.fire({
             title: "ยืนยันยกเลิกการจอง?",
-            html: `คุณต้องการยกเลิกการจองเวลา <b>${labelTime}</b> ใช่หรือไม่`,
+            html: `คุณต้องการยกเลิกการจองวันที่ <b>${labelTime}</b> ใช่หรือไม่`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#1A3636",
             cancelButtonColor: "#6b7280",
-            confirmButtonText: "ใช่, ยกเลิกเลย",
+            confirmButtonText: "ใช่ ยกเลิกเลย",
             cancelButtonText: "ไม่เอา",
             reverseButtons: true,
         }).then((res) => {

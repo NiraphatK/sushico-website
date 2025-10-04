@@ -320,8 +320,8 @@
                                                         @if (!$cancellable) disabled @endif
                                                         data-bs-toggle="tooltip"
                                                         data-bs-title="{{ $cancellable ? 'ยกเลิกการจอง' : 'เลยกำหนดยกเลิก หรือสถานะนี้ยกเลิกไม่ได้' }}"
-                                                        onclick="confirmCancel({{ $res->reservation_id }}, '{{ $start->format('d/m H:i') }}', this)">
-                                                        <i class="bi bi-x-octagon" aria-hidden="true"></i> ยกเลิก
+                                                        onclick="confirmCancel({{ $res->reservation_id }},'{{ $start->locale('th')->translatedFormat('j F เวลา H:i') }}',this)"
+                                                        <i class="bi bi-x-octagon"></i> ยกเลิก
                                                     </button>
                                                 </form>
                                             </div>
@@ -336,7 +336,7 @@
                         </div>
                     @endif
 
-                    {{-- ✅ empty state สำหรับกรองแบบ client ถ้ากรองจนไม่เหลือ --}}
+                    {{-- empty state สำหรับกรองแบบ client ถ้ากรองจนไม่เหลือ --}}
                     <section class="empty empty-client" aria-label="ไม่มีรายการ (กรองในหน้า)" hidden>
                         <div class="mb-1"><i class="bi bi-search" style="font-size:1.35rem" aria-hidden="true"></i>
                         </div>
