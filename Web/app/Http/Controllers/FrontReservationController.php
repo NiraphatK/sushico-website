@@ -11,30 +11,74 @@ use Carbon\Carbon;
 
 class FrontReservationController extends Controller
 {
-    // หน้าแบบฟอร์ม
+    /** ---------- Helpers: รูปแบบ Alert ---------- */
+
+    /**
+     * แสดง Error เป็น SweetAlert (modal) พร้อม bullet-list ที่อ่านง่าย
+     * Usage: return $this->errorModal('หัวข้อ', ['บรรทัด1', 'บรรทัด2']);
+     */
+    private function errorModal(string $title, array $lines)
+    {
+        $html = '<ul style="text-align:left;margin:.4rem 0 0;padding-left:1.1rem">';
+        foreach ($lines as $line) {
+            $html .= '<li>' . $line . '</li>';
+        }
+        $html .= '</ul>';
+
+        Alert::html($title, $html, 'error')
+            ->showCloseButton()
+            ->showConfirmButton('ตกลง', '#1A3636');
+
+        return back()->withInput();
+    }
+
+    /**
+     * แสดง Toast สำเร็จ (มุมขวาบน พร้อม progress bar)
+     * Usage: $this->successToast('จองสำเร็จ ', 'ระบบยืนยันการจองของคุณแล้ว');
+     */
+    private function successToast(string $title, ?string $subtitle = null): void
+    {
+        $text = $subtitle ? ' — ' . $subtitle : '';
+        Alert::toast($title . $text, 'success')
+            ->position('top-end')
+            ->autoClose(4000)
+            ->timerProgressBar();
+    }
+
+    /**
+     * สร้าง time slots ให้จบก่อนเวลาปิด
+     */
+    private function buildSlots(Carbon $openAt, Carbon $closeAt, int $duration, int $gran): array
+    {
+        $slots = [];
+        $lastStart = $closeAt->copy()->subMinutes($duration);
+        for ($t = $openAt->copy(); $t->lte($lastStart); $t->addMinutes($gran)) {
+            $slots[] = $t->format('H:i');
+        }
+        return $slots;
+    }
+
+    /** ---------- หน้าแบบฟอร์ม ---------- */
     public function form()
     {
         $settings = StoreSettingModel::firstOrFail();
         $tz       = $settings->timezone ?: 'Asia/Bangkok';
 
         $today   = Carbon::today($tz)->format('Y-m-d');
-        $openAt  = Carbon::parse($today . ' ' . $settings->open_time, $tz);
-        $closeAt = Carbon::parse($today . ' ' . $settings->close_time, $tz);
+        $openAt  = Carbon::parse("$today {$settings->open_time}", $tz);
+        $closeAt = Carbon::parse("$today {$settings->close_time}", $tz);
 
-        $duration = (int) $settings->default_duration_minutes;
-        $gran     = (int) $settings->slot_granularity_minutes;
-
-        // สร้าง time slots แบบง่าย ๆ (ให้จบก่อนเวลาปิด)
-        $slots = [];
-        $lastStart = $closeAt->copy()->subMinutes($duration);
-        for ($t = $openAt->copy(); $t->lte($lastStart); $t->addMinutes($gran)) {
-            $slots[] = $t->format('H:i');
-        }
+        $slots = $this->buildSlots(
+            $openAt,
+            $closeAt,
+            (int) $settings->default_duration_minutes,
+            (int) $settings->slot_granularity_minutes
+        );
 
         return view('home.reserve', compact('settings', 'slots'));
     }
 
-    // บันทึกการจอง (วันนี้)
+    /** ---------- บันทึกการจอง (วันนี้) ---------- */
     public function create(Request $request)
     {
         $request->validate([
@@ -47,71 +91,62 @@ class FrontReservationController extends Controller
         $tz       = $settings->timezone ?: 'Asia/Bangkok';
 
         $today    = Carbon::today($tz)->format('Y-m-d');
-        $startAt  = Carbon::parse($today . ' ' . $request->start_time, $tz);
+        $startAt  = Carbon::parse("$today {$request->start_time}", $tz);
         $endAt    = $startAt->copy()->addMinutes($settings->default_duration_minutes);
-        $openAt   = Carbon::parse($today . ' ' . $settings->open_time, $tz);
-        $closeAt  = Carbon::parse($today . ' ' . $settings->close_time, $tz);
+        $openAt   = Carbon::parse("$today {$settings->open_time}", $tz);
+        $closeAt  = Carbon::parse("$today {$settings->close_time}", $tz);
         $now      = Carbon::now($tz);
 
-        // ==== เช็กเหมือนฝั่งแอดมิน ====
-        // เช็กจำนวนคนตามประเภทที่นั่ง
+        // Capacity ตามประเภทที่นั่ง
         $maxBySeat = ['BAR' => 1, 'TABLE' => 10];
         $seat = $request->seat_type;
         $max  = $maxBySeat[$seat] ?? 10;
 
         if ((int)$request->party_size > $max) {
-            Alert::error(
-                'ไม่สามารถจองได้',
-                "ที่นั่ง {$seat} รองรับสูงสุด {$max} คน"
-            );
-            return back()->withInput();
+            return $this->errorModal('ไม่สามารถจองได้', [
+                "ที่นั่ง <b>{$seat}</b> รองรับสูงสุด <b>{$max}</b> คน",
+                'กรุณาลดจำนวนคนหรือเปลี่ยนประเภทที่นั่ง',
+            ]);
         }
 
         // ก่อนร้านเปิด
         if ($startAt->lt($openAt)) {
-            Alert::error('ไม่สามารถจองได้', 'เวลาที่เลือกก่อนเวลาเปิดร้าน (' . $settings->open_time . ')');
-            return back()->withInput();
+            return $this->errorModal('ไม่สามารถจองได้', [
+                'เวลาที่เลือกอยู่ก่อนเวลาเปิดร้าน',
+                'เวลาเปิดวันนี้: <b>' . $settings->open_time . '</b>',
+            ]);
         }
 
-        // เกินเวลาปิด (ต้องจบก่อนปิด)
+        // ต้องจบก่อนเวลาปิด
         if ($endAt->gt($closeAt)) {
-            Alert::error(
-                'ไม่สามารถจองได้',
-                'เวลาที่เลือกเกินเวลาปิดร้าน (' . $settings->close_time . ') ' .
-                    '(กรุณาจองให้เสร็จสิ้นก่อนเวลาปิดร้าน และต้องจองล่วงหน้าอย่างน้อย ' . $settings->cut_off_minutes . ' นาที)'
-            );
-            return back()->withInput();
+            return $this->errorModal('ไม่สามารถจองได้', [
+                'เวลาที่เลือกทำให้สิ้นสุดเกินเวลาปิดร้าน',
+                'เวลาปิดวันนี้: <b>' . $settings->close_time . '</b>',
+                'โปรดเลือกเวลาให้การรับประทานจบก่อนร้านปิด',
+            ]);
         }
 
-        // ผ่านไปแล้ว/ใกล้เกินไป (cut-off)
-        if ($startAt->lt($now->copy()->addMinutes($settings->cut_off_minutes))) {
-            $nextAvailable = $now->copy()->addMinutes($settings->cut_off_minutes)->format('H:i');
-            Alert::error(
-                'ไม่สามารถจองได้',
-                'เวลาที่เลือกผ่านไปแล้วหรือใกล้เกินไป (กรุณาจองเวลาหลัง ' . $nextAvailable . ')'
-            );
-            return back()->withInput();
+        // Cut-off (ใกล้เกินไป)
+        $cutoffLimit = $now->copy()->addMinutes($settings->cut_off_minutes);
+        if ($startAt->lt($cutoffLimit)) {
+            return $this->errorModal('ไม่สามารถจองได้', [
+                'เวลาที่เลือกผ่านไปแล้วหรือใกล้เกินไป',
+                'คุณต้องจองล่วงหน้าอย่างน้อย <b>' . $settings->cut_off_minutes . '</b> นาที',
+                'เลือกเวลาหลัง <b>' . $cutoffLimit->format('H:i') . '</b> เป็นต้นไป',
+            ]);
         }
 
-        // ย้ำให้อยู่ในช่วงเปิด–ปิด (เหมือนหลังบ้านมีเช็กซ้ำ)
-        if ($startAt->lt($openAt) || $endAt->gt($closeAt)) {
-            Alert::error(
-                'ไม่สามารถจองได้',
-                'กรุณาเลือกเวลาภายในช่วง ' . $settings->open_time . ' - ' . $settings->close_time .
-                    ' และต้องจองล่วงหน้าอย่างน้อย ' . $settings->cut_off_minutes . ' นาที'
-            );
-            return back()->withInput();
-        }
-
-        // กันการจองซ้ำของผู้ใช้คนเดิมในวันนี้ (เหมือนหลังบ้าน)
+        // ป้องกันการจองซ้ำในวันนี้
         $hasActive = ReservationModel::where('user_id', Auth::user()->user_id)
             ->whereDate('start_at', $today)
             ->whereIn('status', ['CONFIRMED', 'SEATED'])
             ->exists();
 
         if ($hasActive) {
-            Alert::error('ไม่สามารถจองได้', 'คุณมีการจองที่ยังไม่เสร็จสิ้นอยู่แล้ว');
-            return back()->withInput();
+            return $this->errorModal('ไม่สามารถจองได้', [
+                'คุณมีการจองที่ยังไม่เสร็จสิ้นอยู่แล้วในวันนี้',
+                'หากต้องการจองเพิ่ม โปรดติดต่อพนักงาน',
+            ]);
         }
 
         // บันทึก
@@ -119,13 +154,15 @@ class FrontReservationController extends Controller
             'user_id'    => Auth::user()->user_id,
             'table_id'   => null,
             'party_size' => (int) $request->party_size,
-            'seat_type'  => $request->seat_type,
+            'seat_type'  => $seat,
             'start_at'   => $startAt,
             'end_at'     => $endAt,
             'status'     => 'CONFIRMED',
         ]);
 
-        Alert::success('จองสำเร็จ', 'ระบบยืนยันการจองของคุณแล้ว');
+        // Toast สำเร็จ
+        $this->successToast('จองสำเร็จ ', 'ระบบยืนยันการจองของคุณแล้ว');
+
         return redirect()->route('reserve.form');
     }
 }

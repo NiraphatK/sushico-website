@@ -188,6 +188,18 @@ body::after {
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
 }
 
+/* โชว์เส้นตอนเป็นหน้า active (ทั้ง .active และ .is-active) */
+.navbar-nav .nav-link.active::after,
+.navbar-nav .nav-link.is-active::after {
+    transform: scaleX(1);
+}
+
+/* ถ้าอยากเน้นสีตัวอักษรตอน active นิดหน่อย */
+.navbar-nav .nav-link.active,
+.navbar-nav .nav-link.is-active {
+    color: var(--salmon);
+}
+
 /* เดสก์ท็อป: grid 3 คอลัมน์ */
 @media (min-width: 992px) {
     .navbar-grid {

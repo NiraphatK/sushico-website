@@ -14,12 +14,12 @@ use App\Models\MenuItemModel; //model
 class MenuItemController extends Controller
 {
 
-    // public function __construct()
-    // {
-    //     // ใช้ middleware 'auth:user' เพื่อบังคับให้ต้องล็อกอินในฐานะ admin ก่อนใช้งาน controller นี้
-    //     // ถ้าไม่ล็อกอินหรือไม้ได้ใช้ guard 'user' จะถูก redirect ไปหน้า login
-    //     $this->middleware(['auth:user', 'role:ADMIN']);
-    // }
+    public function __construct()
+    {
+        // ใช้ middleware 'auth:user' เพื่อบังคับให้ต้องล็อกอินในฐานะ admin ก่อนใช้งาน controller นี้
+        // ถ้าไม่ล็อกอินหรือไม้ได้ใช้ guard 'user' จะถูก redirect ไปหน้า login
+        $this->middleware(['auth:user', 'role:ADMIN']);
+    }
 
     public function index()
     {
@@ -69,7 +69,16 @@ class MenuItemController extends Controller
 
         //ถ้ามีการอัพโหลดไฟล์เข้ามา ให้อัพโหลดไปเก็บยังโฟลเดอร์ uploads/product
         try {
-            $imagePath = null;
+            /*************  ✨ Windsurf Command ⭐  *************/
+            /**
+             * Create a new menu item.
+             *
+             * @param  \Illuminate\Http\Request  $request
+             * @return \Illuminate\Http\RedirectResponse
+             *
+             * @throws \Exception
+             */
+            /*******  96fa8842-f7ae-4358-9416-5df6054bf779  *******/            $imagePath = null;
             if ($request->hasFile('image_path')) {
                 $imagePath = $request->file('image_path')->store('uploads/menu', 'public');
             }

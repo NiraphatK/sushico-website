@@ -22,6 +22,10 @@
     <!-- App CSS -->
     <link rel="stylesheet" href="{{ asset('css/frontend.css') }}">
 
+    <!-- SweetAlert2 CSS -->
+    @include('sweetalert::alert')
+    <link rel="stylesheet" href="{{ asset('css/swal-sushico.css') }}">
+
     @yield('css_before')
 </head>
 
@@ -46,14 +50,33 @@
 
                         <!-- เมนูตรงกลาง -->
                         <ul class="navbar-nav nav-center mb-2 mb-lg-0 text-center nav-center-desktop">
-                            <li class="nav-item"><a class="nav-link" href="/">หน้าแรก</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/about-us">เกี่ยวกับเรา</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/menus">เมนู</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/contact-us">ติดต่อเรา</a></li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ url()->current() === url('/') ? 'active' : '' }}" href="/"
+                                    @if (url()->current() === url('/')) aria-current="page" @endif>หน้าแรก</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->is('about-us*') ? 'active' : '' }}" href="/about-us"
+                                    @if (request()->is('about-us*')) aria-current="page" @endif>เกี่ยวกับเรา</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->is('menus*') ? 'active' : '' }}" href="/menus"
+                                    @if (request()->is('menus*')) aria-current="page" @endif>เมนู</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->is('contact-us*') ? 'active' : '' }}"
+                                    href="/contact-us"
+                                    @if (request()->is('contact-us*')) aria-current="page" @endif>ติดต่อเรา</a>
+                            </li>
+
                             @if (Auth::guard('user')->check() && in_array(Auth::guard('user')->user()->role, ['ADMIN', 'STAFF']))
-                                <li class="nav-item"><a class="nav-link" href="/dashboard">จัดการหลังบ้าน</a></li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->is('dashboard*') ? 'active' : '' }}"
+                                        href="/dashboard"
+                                        @if (request()->is('dashboard*')) aria-current="page" @endif>จัดการหลังบ้าน</a>
+                                </li>
                             @endif
                         </ul>
+
 
                         <!-- ปุ่มด้านขวา -->
                         <div class="navbar-actions ms-auto d-flex align-items-center gap-2">
