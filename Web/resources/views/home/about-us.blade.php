@@ -1,7 +1,6 @@
 @extends('frontend')
 @section('css_before')
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-@section('css_before')
     <link rel="stylesheet" href="{{ asset('css/home.css') }}">
 @endsection
 
@@ -60,8 +59,6 @@
             </div>
         </div>
     </section>
-@endsection
-
 @endsection
 
 @section('footer')
