@@ -81,17 +81,87 @@
                         <!-- ปุ่มด้านขวา -->
                         <div class="navbar-actions ms-auto d-flex align-items-center gap-2">
                             @if (Auth::guard('user')->check())
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                    class="d-block w-100 w-lg-auto">
-                                    @csrf
-                                    <button type="submit" class="btn btn-ghost d-lg-inline-block">ออกจากระบบ</button>
-                                </form>
+                                @php
+                                    $u = Auth::guard('user')->user();
+                                    $displayName = $u->full_name ?? ($u->phone ?? 'บัญชีของฉัน');
+                                @endphp
+
+                                @php
+                                    $u = Auth::guard('user')->user();
+                                    $displayName = $u->full_name ?? ($u->phone ?? 'บัญชีของฉัน');
+                                    $initial = function_exists('mb_substr')
+                                        ? mb_substr($displayName, 0, 1, 'UTF-8')
+                                        : substr($displayName, 0, 1);
+                                    $role = $u->role ?? '';
+                                @endphp
+
+                                <div class="dropdown w-100 account-menu" data-bs-display="static">
+                                    <button
+                                        class="btn btn-ghost w-100 d-flex align-items-center justify-content-center gap-2"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-person-circle flex-shrink-0"></i>
+                                        <span class="username d-block text-truncate" style="min-width:0;">
+                                            {{ \Illuminate\Support\Str::limit($displayName, 10) }}
+                                        </span>
+                                        <i class="bi bi-chevron-down small opacity-75 flex-shrink-0"></i>
+                                    </button>
+
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm account-dropdown">
+                                        {{-- Header --}}
+                                        <li class="px-3 pt-3 pb-2">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="avatar-blob">{{ $initial }}</span>
+                                                <div class="min-w-0">
+                                                    <div class="fw-bold text-truncate">
+                                                        {{ \Illuminate\Support\Str::limit($displayName, 10) }}</div>
+                                                    @if ($role)
+                                                        <div class="role-chip text-uppercase">{{ $role }}</div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                        <li>
+                                            <hr class="dropdown-divider my-2">
+                                        </li>
+
+                                        {{-- Items --}}
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center gap-2" href="/">
+                                                <i class="bi bi-person"></i><span>ข้อมูลบัญชี</span>
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center gap-2"
+                                                href="{{ route('reservations.history') }}">
+                                                <i class="bi bi-clock-history"></i><span>ประวัติการจอง</span>
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <hr class="dropdown-divider my-2">
+                                        </li>
+
+                                        <li>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                                class="m-0">
+                                                @csrf
+                                                <button type="submit"
+                                                    class="dropdown-item text-danger d-flex align-items-center gap-2">
+                                                    <i class="bi bi-box-arrow-right"></i><span>ออกจากระบบ</span>
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
                             @else
                                 <button type="button" class="btn btn-ghost" data-bs-toggle="modal"
                                     data-bs-target="#loginModal">
                                     เข้าสู่ระบบ/สมัครสมาชิก
                                 </button>
                             @endif
+
                             <a href="/reserve" class="btn reserve-table-btn">จองโต๊ะ</a>
                         </div>
                     </div>

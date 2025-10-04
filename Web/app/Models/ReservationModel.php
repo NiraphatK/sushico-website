@@ -22,6 +22,18 @@ class ReservationModel extends Model
         'status',
     ];
 
+    // แปลงค่าเป็น datetime object อัตโนมัติ
+    protected $casts = [
+        'start_at' => 'datetime',
+        'end_at'   => 'datetime',
+    ];
+
+    // ช่วยกรองของ user ปัจจุบันเวลา query
+    public function scopeOfUser($q, $userId)
+    {
+        return $q->where('user_id', $userId);
+    }
+
     public function user()
     {
         return $this->belongsTo(UserModel::class, 'user_id');

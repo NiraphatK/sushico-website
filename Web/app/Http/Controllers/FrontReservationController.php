@@ -8,6 +8,7 @@ use App\Models\ReservationModel;
 use App\Models\StoreSettingModel;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
+use Illuminate\Pagination\Paginator;
 
 class FrontReservationController extends Controller
 {
@@ -164,5 +165,76 @@ class FrontReservationController extends Controller
         $this->successToast('จองสำเร็จ ', 'ระบบยืนยันการจองของคุณแล้ว');
 
         return redirect()->route('reserve.form');
+    }
+
+    public function history(Request $request)
+    {
+        Paginator::useBootstrap();
+
+        $userId   = Auth::guard('user')->id();
+        $settings = StoreSettingModel::first();
+        $tz       = $settings->timezone ?? 'Asia/Bangkok';
+
+        // ฟิลเตอร์
+        $status    = $request->string('status')->trim()->value();      // CONFIRMED/SEATED/COMPLETED/CANCELLED/NO_SHOW
+        $seatType  = $request->string('seat_type')->trim()->value();   // BAR/TABLE
+        $dateFrom  = $request->date('from');                           // YYYY-MM-DD
+        $dateTo    = $request->date('to');                             // YYYY-MM-DD
+
+        $q = ReservationModel::query()
+            ->where('user_id', $userId)
+            ->when($status, fn($qq) => $qq->where('status', $status))
+            ->when($seatType, fn($qq) => $qq->where('seat_type', $seatType))
+            ->when($dateFrom, fn($qq) => $qq->whereDate('start_at', '>=', $dateFrom))
+            ->when($dateTo,   fn($qq) => $qq->whereDate('start_at', '<=', $dateTo))
+            ->orderBy('start_at', 'desc');
+
+        $reservations = $q->paginate(10)->withQueryString();
+
+        // ส่งค่าที่จำเป็นสำหรับ UI
+        return view('account.reservations-history', [
+            'reservations' => $reservations,
+            'filters' => [
+                'status'   => $status,
+                'seatType' => $seatType,
+                'from'     => $dateFrom?->format('Y-m-d'),
+                'to'       => $dateTo?->format('Y-m-d'),
+            ],
+            'tz' => $tz,
+            'cutoff' => (int)($settings->cut_off_minutes ?? 30),
+        ]);
+    }
+
+    public function cancel($id, Request $request)
+    {
+        $userId   = Auth::guard('user')->id();
+        $settings = StoreSettingModel::first();
+        $tz       = $settings->timezone ?? 'Asia/Bangkok';
+        $cutOff   = (int)($settings->cut_off_minutes ?? 30);
+
+        $res = ReservationModel::where('reservation_id', $id)
+            ->where('user_id', $userId)
+            ->firstOrFail();
+
+        // เงื่อนไขยกเลิก: ต้องยังเป็น CONFIRMED และยังไม่เกิน cut-off
+        $now            = Carbon::now($tz);
+        $startAtLocal   = Carbon::parse($res->start_at, $tz);
+        $cancelDeadline = $startAtLocal->copy()->subMinutes($cutOff);
+
+        if ($res->status !== 'CONFIRMED') {
+            Alert::error('ยกเลิกไม่ได้', 'การจองนี้ไม่อยู่ในสถานะที่ยกเลิกได้');
+            return back();
+        }
+
+        if ($now->gte($cancelDeadline)) {
+            Alert::error('เลยกำหนดเวลา', "ยกเลิกได้ถึงก่อนเวลาเริ่ม $cutOff นาที");
+            return back();
+        }
+
+        $res->status = 'CANCELLED';
+        $res->save();
+
+        Alert::success('ยกเลิกแล้ว', 'เราได้ยกเลิกการจองของคุณเรียบร้อย');
+        return redirect()->route('reservations.history');
     }
 }

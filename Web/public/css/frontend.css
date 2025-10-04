@@ -295,7 +295,7 @@ body::after {
 @media (min-width: 992px) {
     #logout-form {
         width: auto !important;
-        display: inline-block !important;
+        /* display: inline-block !important; */
     }
 }
 .reserve-table-btn {
@@ -950,4 +950,143 @@ footer {
 .swal2-styled.logout-cancel:hover {
     transform: translateY(-1px);
     box-shadow: 0 8px 20px rgba(11, 18, 32, 0.12);
+}
+
+/* ---------- NAVBAR ACTIONS (ใหม่) ---------- */
+/* ==== Navbar button sizing (make equal height) ==== */
+.navbar-actions {
+    --nav-btn-h: 42px; /* ความสูงปุ่มมาตรฐาน (มือถือ/แท็บเล็ต) */
+    --nav-btn-px: 14px; /* padding ซ้าย-ขวา */
+    --nav-pill-radius: 999px;
+}
+/* ให้ชื่อไม่ล้นและยัง truncate ได้บนมือถือ */
+.navbar-actions .username {
+    max-width: 60vw; /* จอเล็ก */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+@media (min-width: 576px) {
+    .navbar-actions .username {
+        max-width: 220px;
+    }
+}
+
+/* ดรอปดาวน์ให้พอดีกับปุ่มบนมือถือ (ถ้าต้องการเต็มความกว้าง) */
+@media (max-width: 576px) {
+    .navbar-actions .dropdown.w-100 .dropdown-menu {
+        width: 100%;
+        left: 0 !important;
+        right: 0 !important;
+    }
+}
+
+/* ===== Account Dropdown (Glass + Animate) ===== */
+.account-dropdown {
+    --glass-bg: rgba(255, 255, 255, 0.88);
+    --glass-bd: rgba(11, 18, 32, 0.1);
+    --blur: 12px;
+
+    border: 1px solid var(--glass-bd);
+    border-radius: 16px;
+    padding: 6px;
+    background: var(--glass-bg);
+    backdrop-filter: saturate(140%) blur(var(--blur));
+    -webkit-backdrop-filter: saturate(140%) blur(var(--blur));
+    transform-origin: top right;
+    animation: adrop-enter 0.16s ease-out;
+}
+@keyframes adrop-enter {
+    from {
+        opacity: 0;
+        transform: translateY(-6px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Arrow เล็ก ๆ บนเมนู */
+.account-dropdown::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    right: 18px;
+    width: 14px;
+    height: 14px;
+    transform: rotate(45deg);
+    background: var(--glass-bg);
+    border-left: 1px solid rgba(11, 18, 32, 0.1);
+    border-top: 1px solid rgba(11, 18, 32, 0.1);
+}
+
+/* Header */
+.avatar-blob {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    color: var(--txt);
+    background: linear-gradient(135deg, #eef2ff, #ffffff);
+    border: 1px solid rgba(11, 18, 32, 0.1);
+}
+.role-chip {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.18rem 0.5rem;
+    border-radius: 999px;
+    letter-spacing: 0.4px;
+    background: #fff7ef;
+    border: 1px solid rgba(11, 18, 32, 0.1);
+    color: var(--soy, #8b5e3c);
+}
+
+/* Items + hover effect */
+.account-dropdown .dropdown-item {
+    border-radius: 12px;
+    padding: 0.6rem 0.7rem;
+    font-weight: 600;
+    position: relative;
+    transition: background 0.18s ease, transform 0.12s ease;
+}
+.account-dropdown .dropdown-item i {
+    transition: transform 0.15s ease, opacity 0.2s ease;
+    opacity: 0.9;
+}
+.account-dropdown .dropdown-item:hover {
+    background: linear-gradient(90deg, rgba(26, 54, 54, 0.06), transparent 60%),
+        #ffffff;
+}
+.account-dropdown .dropdown-item:hover i {
+    transform: translateX(2px);
+    opacity: 1;
+}
+
+/* Danger item */
+.account-dropdown .dropdown-item.text-danger {
+    color: #9f1239 !important;
+}
+.account-dropdown .dropdown-item.text-danger:hover {
+    background: #fff1f2;
+}
+
+/* Trigger username (มือถือไม่ล้น) */
+.navbar-actions .username {
+    max-width: 60vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ทำให้เมนูเต็มปุ่มบนมือถือ */
+@media (max-width: 576px) {
+    .account-menu .dropdown-menu {
+        width: 100%;
+        left: 0 !important;
+        right: 0 !important;
+    }
 }

@@ -1,0 +1,739 @@
+/* =========================================================
+   Reservations History (Light Theme)
+   File: public/css/reservations-history.css
+   ========================================================= */
+
+/* ---------- Design Tokens (Light) ---------- */
+:root {
+    /* Brand palette — ปรับให้สว่าง ใช้งานบนพื้นขาวได้ดี */
+    --salmon: #1a3636; /* brand deep green */
+    --gold: #40534c; /* deep teal */
+    --wasabi: #677d6a; /* desaturated green */
+
+    /* Neutrals & surfaces */
+    --bg: #f7fafc; /* page background */
+    --surface: #ffffff; /* card surface */
+    --surface-2: #f9fafb; /* subtle sections */
+    --line: rgba(2, 6, 23, 0.08); /* separators */
+    --shadow: 0 10px 30px rgba(2, 6, 23, 0.06);
+
+    /* Text */
+    --ink: #0b1220;
+    --muted: #5b647a;
+
+    /* Accents */
+    --brand: var(--salmon); /* main accent */
+    --brand-2: var(--gold);
+    --brand-soft: rgba(26, 54, 54, 0.06);
+
+    /* Status colors */
+    --ok: #16a34a; /* completed */
+    --warn: #f59e0b; /* no show / warning */
+    --danger: #dc2626; /* cancelled */
+    --info: #2563eb; /* confirmed */
+    --seat: #7c3aed; /* seated */
+
+    /* Rounding / spacing */
+    --radius-lg: 22px;
+    --radius-md: 16px;
+    --radius-sm: 12px;
+}
+
+/* ---------- Page shell ---------- */
+.history-page {
+    /* background:
+    radial-gradient(1000px 600px at 10% -20%, rgba(64,83,76,.08), transparent 60%),
+    radial-gradient(900px 520px at 110% 0%, rgba(103,125,106,.08), transparent 60%),
+    var(--bg); */
+    min-height: 100dvh;
+    color: var(--ink);
+}
+
+.history-page .shell {
+    width: min(1200px, calc(100% - 32px));
+    margin-inline: auto;
+    padding: 28px 0 40px;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+    background: linear-gradient(180deg, #fff, #ffffffee 60%, #ffffffcc 100%);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: clamp(16px, 2.5vw, 22px);
+}
+
+.hero-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.hero-title {
+    font-size: clamp(1.1rem, 2.2vw, 1.35rem);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--brand);
+}
+
+.hero-sub {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+.hero-sub .muted {
+    opacity: 0.9;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* ---------- Buttons ---------- */
+.btn-brand,
+.btn-ghost,
+.btn-cancel {
+    --ring: 0 0 0 0 rgba(26, 54, 54, 0.25);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 0.9rem;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    font-weight: 600;
+    transition: transform 0.06s ease, box-shadow 0.2s ease,
+        background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+    text-decoration: none;
+    cursor: pointer;
+}
+.btn-brand {
+    background: var(--brand);
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(26, 54, 54, 0.18);
+}
+.btn-brand:hover {
+    transform: translateY(-1px);
+}
+.btn-brand:active {
+    transform: translateY(0);
+}
+
+.btn-ghost {
+    background: #fff;
+    border-color: var(--line);
+    color: var(--brand);
+}
+.btn-ghost:hover {
+    background: var(--brand-soft);
+    border-color: rgba(26, 54, 54, 0.18);
+}
+
+.btn-cancel {
+    background: #fff;
+    color: var(--danger);
+    border-color: rgba(220, 38, 38, 0.15);
+}
+.btn-cancel[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.btn-cancel:not([disabled]):hover {
+    background: rgba(220, 38, 38, 0.06);
+    border-color: rgba(220, 38, 38, 0.25);
+}
+
+.btn-pill {
+    border-radius: 999px;
+    height: 50px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.7rem 1.15rem;
+    font-weight: 900;
+    border: 1px solid #e6e9f0;
+    transition: 0.25s;
+}
+.btn-pill:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* ---------- Segmented quick filters ---------- */
+.seg {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    overflow: auto hidden;
+    scrollbar-width: thin;
+    padding-bottom: 2px;
+}
+.seg-pill {
+    --seg-bg: #fff;
+    --seg-fg: var(--ink);
+    --seg-bd: var(--line);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--seg-bg);
+    color: var(--seg-fg);
+    border: 1px solid var(--seg-bd);
+    border-radius: 999px;
+    text-decoration: none;
+    white-space: nowrap;
+    font-weight: 600;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease,
+        transform 0.06s ease;
+}
+.seg-pill:hover {
+    transform: translateY(-1px);
+}
+.seg-pill.active {
+    --seg-bg: var(--brand);
+    --seg-fg: #fff;
+    --seg-bd: var(--brand);
+}
+
+/* ---------- Layout ---------- */
+.grid {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 18px;
+    margin-top: 18px;
+}
+@media (max-width: 992px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ---------- Sidebar Filters ---------- */
+.filters .filter-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: 14px;
+}
+details.filter-compact summary {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.4rem 0.6rem 0.4rem 0.2rem;
+    border-radius: 10px;
+}
+details.filter-compact[open] summary {
+    background: var(--surface-2);
+}
+.filter-grid {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: 1fr 1fr;
+}
+.filter-grid .w-100 {
+    grid-column: 1/-1;
+}
+@media (max-width: 576px) {
+    .filter-grid {
+        grid-template-columns: 1fr;
+    }
+}
+.filters .form-label {
+    font-weight: 600;
+    color: var(--muted);
+}
+.filters .form-select,
+.filters .form-control {
+    border-radius: 12px;
+    border: 1px solid var(--line);
+}
+.preset-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+.client-toggles {
+    display: grid;
+    gap: 8px;
+    margin-top: 10px;
+}
+.chk {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--muted);
+}
+.filter-actions {
+    display: grid;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+/* ---------- Timeline List ---------- */
+.list {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: clamp(10px, 2vw, 16px);
+}
+
+/* Date Group */
+.date-group {
+    position: relative;
+    padding-top: 8px;
+}
+.date-head {
+    position: sticky;
+    top: -1px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(180deg, #fff, #ffffffef);
+    border-bottom: 1px solid var(--line);
+    padding: 8px 6px;
+}
+.date-head.is-stuck {
+    box-shadow: 0 8px 18px rgba(2, 6, 23, 0.05);
+}
+.date-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 0.35rem 0.6rem;
+    border-radius: 999px;
+    font-weight: 700;
+}
+.badge-day {
+    font-size: 0.75rem;
+    background: var(--brand-soft);
+    color: var(--brand);
+    border: 1px dashed rgba(26, 54, 54, 0.25);
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+    font-weight: 700;
+}
+.date-count {
+    margin-left: auto;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+/* Items */
+.timeline {
+    display: grid;
+    gap: 10px;
+    padding: 12px 2px 2px;
+}
+
+/* Reservation Card */
+.res-card {
+    --card-bd: var(--line);
+    display: grid;
+    grid-template-columns: 220px 1fr 180px 140px;
+    align-items: center;
+    gap: 12px;
+    background: #fff;
+    border: 1px solid var(--card-bd);
+    border-radius: var(--radius-md);
+    padding: 12px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease,
+        transform 0.06s ease, background 0.2s ease, opacity 0.2s ease;
+}
+.res-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(2, 6, 23, 0.06);
+    --card-bd: rgba(2, 6, 23, 0.14);
+}
+.res-card.is-hidden {
+    display: none !important;
+}
+
+/* Columns */
+.res-left {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 12px;
+    align-items: center;
+}
+.res-time {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    text-align: center;
+}
+.res-time small {
+    color: var(--muted);
+}
+.res-time b {
+    font-size: 1.05rem;
+    letter-spacing: 0.2px;
+    color: var(--brand);
+}
+
+.meta-title {
+    font-weight: 700;
+    color: var(--ink);
+}
+.meta-sub {
+    color: var(--muted);
+    font-size: 0.92rem;
+}
+
+/* ===== Mono Pills (no vivid colors) ===== */
+.res-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.38rem 0.6rem;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--ink);
+    border: 1px solid var(--line);
+    font-weight: 600;
+    font-size: 0.92rem;
+    box-shadow: 0 1px 0 rgba(2, 6, 23, 0.03) inset;
+    transition: border-color 0.2s ease, transform 0.06s ease;
+}
+.pill i {
+    opacity: 0.85;
+}
+.pill:hover {
+    border-color: rgba(2, 6, 23, 0.18);
+    transform: translateY(-1px);
+} /* Seat type: แยกด้วยเส้นซ้ายคนละน้ำหนัก (ยังคงขาว/เทา) */
+.pill-seat-bar,
+.pill-seat-table,
+.pill-party,
+.pill-table {
+    background: #fff;
+    color: var(--ink);
+    border-color: var(--line);
+} /* BAR = เส้นซ้ายบางกว่า / TABLE = เข้มกว่าเล็กน้อย */
+
+.pill-party,
+.pill-table {
+    background: var(--surface-2, #f9fafb);
+} /* โฟกัสด้วยคีย์บอร์ด */
+.pill:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(2, 6, 23, 0.12);
+}
+
+/* ===== Soft-Tinted Status Chips ===== */
+.res-status {
+    display: grid;
+    gap: 6px;
+    justify-items: start;
+}
+
+.st {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.38rem 0.56rem;
+    border-radius: 10px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+    background: #fff;
+    color: var(--ink);
+    border: 1px solid var(--line);
+    box-shadow: 0 1px 0 rgba(2, 6, 23, 0.03) inset;
+}
+.st i {
+    opacity: 0.9;
+}
+
+/* === Soft-but-rich Gradient Status Chips (lighter than before) === */
+.st {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.38rem 0.56rem;
+    border-radius: 12px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+    color: var(--ink); /* กลับมาใช้อักษรโทนเข้ม อ่านง่ายบนพื้นอ่อน */
+    border: 1px solid transparent;
+    box-shadow: 0 6px 14px rgba(2, 6, 23, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    transition: background 0.25s ease, border-color 0.2s ease,
+        transform 0.06s ease;
+}
+.st i {
+    opacity: 0.9;
+}
+
+/* Confirmed — Blue (soft) */
+.st-confirmed {
+    background: radial-gradient(
+            140% 180% at 0% -40%,
+            rgba(255, 255, 255, 0.7) 0%,
+            transparent 60%
+        ),
+        linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border-color: #c7d2fe;
+    color: #1e3a8a;
+}
+.st-confirmed:hover {
+    background: radial-gradient(
+            140% 180% at 0% -40%,
+            rgba(255, 255, 255, 0.78) 0%,
+            transparent 60%
+        ),
+        linear-gradient(135deg, #eaf2ff 0%, #d3e3ff 100%);
+}
+
+/* Seated — Violet (soft) */
+.st-seated {
+    background: radial-gradient(
+            140% 180% at 0% -40%,
+            rgba(255, 255, 255, 0.7) 0%,
+            transparent 60%
+        ),
+        linear-gradient(135deg, #f5f3ff 0%, #e9d5ff 100%);
+    border-color: #d8b4fe;
+    color: #5b21b6;
+}
+.st-seated:hover {
+    background: radial-gradient(
+            140% 180% at 0% -40%,
+            rgba(255, 255, 255, 0.78) 0%,
+            transparent 60%
+        ),
+        linear-gradient(135deg, #f3edff 0%, #ddcfff 100%);
+}
+
+/* Completed — Green (soft) */
+.st-completed {
+    background: radial-gradient(
+            140% 180% at 0% -40%,
+            rgba(255, 255, 255, 0.7) 0%,
+            transparent 60%
+        ),
+        linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border-color: #a7f3d0;
+    color: #166534;
+}
+.st-completed:hover {
+    background: radial-gradient(
+            140% 180% at 0% -40%,
+            rgba(255, 255, 255, 0.78) 0%,
+            transparent 60%
+        ),
+        linear-gradient(135deg, #eaf7ee 0%, #cff0e0 100%);
+}
+
+/* Cancelled — Red (soft) */
+.st-cancelled {
+    background: radial-gradient(
+            140% 180% at 0% -40%,
+            rgba(255, 255, 255, 0.7) 0%,
+            transparent 60%
+        ),
+        linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+    border-color: #fca5a5;
+    color: #991b1b;
+}
+.st-cancelled:hover {
+    background: radial-gradient(
+            140% 180% at 0% -40%,
+            rgba(255, 255, 255, 0.78) 0%,
+            transparent 60%
+        ),
+        linear-gradient(135deg, #fdecec 0%, #f5d0d0 100%);
+}
+
+/* No Show — Amber (soft) */
+.st-noshow {
+    background: radial-gradient(
+            140% 180% at 0% -40%,
+            rgba(255, 255, 255, 0.7) 0%,
+            transparent 60%
+        ),
+        linear-gradient(135deg, #fffbeb 0%, #fde68a 100%);
+    border-color: #fcd34d;
+    color: #92400e;
+}
+.st-noshow:hover {
+    background: radial-gradient(
+            140% 180% at 0% -40%,
+            rgba(255, 255, 255, 0.78) 0%,
+            transparent 60%
+        ),
+        linear-gradient(135deg, #fff6ea 0%, #f9e2a2 100%);
+}
+
+/* จอเล็ก ขยับ padding นิดหน่อยให้กระชับ */
+@media (max-width: 480px) {
+    .st {
+        padding: 0.34rem 0.5rem;
+        border-radius: 10px;
+    }
+}
+
+/* (ไม่บังคับ) ถ้าอยากให้อนิเมชันลื่นขึ้นตอน hover */
+.st-confirmed,
+.st-seated,
+.st-completed,
+.st-cancelled,
+.st-noshow {
+    transition: background 0.25s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.deadline-hint {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+/* Actions (right column) */
+.res-action {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Empty state */
+.empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 40px 10px;
+}
+.empty .btn-brand {
+    margin-top: 8px;
+}
+
+/* Pagination */
+.pagination-wrap {
+    display: grid;
+    place-items: center;
+}
+.pagination {
+    --bs-pagination-border-color: var(--line);
+    --bs-pagination-bg: #fff;
+    --bs-pagination-hover-bg: var(--surface-2);
+    --bs-pagination-color: var(--ink);
+    --bs-pagination-active-bg: var(--brand);
+    --bs-pagination-active-border-color: var(--brand);
+    --bs-pagination-focus-box-shadow: 0 0 0 0.2rem rgba(26, 54, 54, 0.15);
+}
+
+/* Sticky date head shadow (mobile helper) */
+@media (max-width: 576px) {
+    .date-head {
+        top: 56px;
+    } /* เผื่อ navbar สูง */
+}
+
+/* ---------- Responsive adjustments ---------- */
+@media (max-width: 1100px) {
+    .res-card {
+        grid-template-columns: 200px 1fr 160px 120px;
+    }
+}
+@media (max-width: 992px) {
+    .res-card {
+        grid-template-columns: 1fr;
+        align-items: start;
+    }
+    .res-left {
+        grid-template-columns: 56px 1fr;
+    }
+    .res-time {
+        width: 56px;
+        height: 56px;
+    }
+    .res-status {
+        justify-items: start;
+    }
+    .res-action {
+        justify-content: start;
+    }
+}
+@media (hover: hover) {
+    .seg::-webkit-scrollbar {
+        height: 6px;
+    }
+    .seg::-webkit-scrollbar-thumb {
+        background: rgba(2, 6, 23, 0.16);
+        border-radius: 8px;
+    }
+}
+
+/* ---------- Bootstrap tooltip align (light) ---------- */
+.tooltip {
+    --bs-tooltip-bg: #111827;
+    --bs-tooltip-color: #fff;
+    font-weight: 500;
+}
+
+/* ---------- Utility ---------- */
+.muted {
+    color: var(--muted);
+}
+.sticky-date {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+/* รีเซ็ต checkbox เดิม */
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(2, 6, 23, 0.25);
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+/* เมื่อ hover */
+input[type="checkbox"]:hover {
+    border-color: var(--brand);
+}
+
+/* เมื่อถูกเลือก */
+input[type="checkbox"]:checked {
+    background: var(--brand);
+    border-color: var(--brand);
+}
+
+/* ไอคอนเครื่องหมายถูก */
+input[type="checkbox"]:checked::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}

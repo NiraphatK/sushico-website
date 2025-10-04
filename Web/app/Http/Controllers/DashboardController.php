@@ -81,6 +81,18 @@ class DashboardController extends Controller
             // return view('errors.404');
         }
     }
+    private function tz(): string
+    {
+        // ถ้ามีตั้งค่า timezone ในตาราง store_settings ก็ใช้ค่านั้น
+        try {
+            $s = StoreSettingModel::first();
+            if ($s && !empty($s->timezone)) return $s->timezone;
+        } catch (\Throwable $e) { /* ignore */
+        }
+
+        return 'Asia/Bangkok';
+    }
+
     private function getTopKpis(): array
     {
         $countReservation = ReservationModel::count();
@@ -92,26 +104,34 @@ class DashboardController extends Controller
     }
     private function getMonthsWindow(): array
     {
-        $end   = Carbon::now()->endOfMonth();
-        $start = (clone $end)->subMonths(11)->startOfMonth();
+        $tz = $this->tz(); // หรือ 'Asia/Bangkok'
 
+        // ปิดปลายแบบ exclusive ที่ "ต้นเดือนถัดไป"
+        $end   = Carbon::now($tz)->startOfMonth()->addMonth(); // 1st of next month (exclusive)
+        $start = (clone $end)->subMonths(12);                  // 12 เดือนพอดี (รวมเดือนปัจจุบัน)
+
+        // รายชื่อเดือน: start .. end-1 เดือน  (ได้ 12 ตัว รวมเดือนปัจจุบัน)
         $months = collect(range(0, 11))
             ->map(fn(int $i) => (clone $start)->addMonths($i));
 
         $label  = $months->map(fn(Carbon $m) => $m->format('M-Y'))->values();
 
-        return [$months, $label, $start, $end];
+        return [$months, $label, $start, $end]; // $end = exclusive boundary
     }
+
+
     private function getVisitsSeries(Collection $months, Carbon $start, Carbon $end): Collection
     {
         $visitsByYm = DB::table('counter')
             ->selectRaw('DATE_FORMAT(c_date, "%Y-%m") as ym, COUNT(*) as total')
-            ->whereBetween('c_date', [$start, $end])
+            ->where('c_date', '>=', $start)
+            ->where('c_date', '<',  $end) // exclusive
             ->groupBy('ym')
             ->pluck('total', 'ym');
 
         return $months->map(fn(Carbon $m) => (int) ($visitsByYm[$m->format('Y-m')] ?? 0))->values();
     }
+
     private function getReservationStatusData(): Collection
     {
         $wanted = ['CONFIRMED', 'SEATED', 'COMPLETED', 'CANCELLED', 'NO_SHOW'];
@@ -125,18 +145,20 @@ class DashboardController extends Controller
     private function getReservationTrendSeries(Collection $months, Collection $label, Carbon $start, Carbon $end): array
     {
         $resByYm = ReservationModel::selectRaw('DATE_FORMAT(start_at, "%Y-%m") as ym, COUNT(*) as total')
-            ->whereBetween('start_at', [$start, $end])
+            ->where('start_at', '>=', $start)
+            ->where('start_at', '<',  $end) // exclusive
             ->groupBy('ym')
             ->pluck('total', 'ym');
 
         $data = $months->map(fn(Carbon $m) => (int) ($resByYm[$m->format('Y-m')] ?? 0))->values();
-
         return [$label, $data];
     }
+
     private function getAvgPartySizeSeries(Collection $months, Collection $label, Carbon $start, Carbon $end): array
     {
         $partyByYm = ReservationModel::selectRaw('DATE_FORMAT(start_at, "%Y-%m") as ym, AVG(party_size) as avg_size')
-            ->whereBetween('start_at', [$start, $end])
+            ->where('start_at', '>=', $start)
+            ->where('start_at', '<',  $end) // exclusive
             ->groupBy('ym')
             ->pluck('avg_size', 'ym');
 
@@ -146,17 +168,19 @@ class DashboardController extends Controller
 
         return [$label, $data];
     }
+
     private function getUserGrowthSeries(Collection $months, Collection $label, Carbon $start, Carbon $end): array
     {
         $userByYm = UserModel::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as ym, COUNT(*) as total')
-            ->whereBetween('created_at', [$start, $end])
+            ->where('created_at', '>=', $start)
+            ->where('created_at', '<',  $end) // exclusive
             ->groupBy('ym')
             ->pluck('total', 'ym');
 
         $data = $months->map(fn(Carbon $m) => (int) ($userByYm[$m->format('Y-m')] ?? 0))->values();
-
         return [$label, $data];
     }
+
     private function getPeakHoursHeatmap(): Collection
     {
         $heatStart = Carbon::now()->subWeeks(8)->startOfWeek();

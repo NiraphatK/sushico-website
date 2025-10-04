@@ -23,6 +23,14 @@ Route::get('/contact-us', [HomeController::class, 'contact']);
 Route::middleware(['auth:user'])->group(function () {
     Route::get('/reserve', [FrontReservationController::class, 'form'])->name('reserve.form');
     Route::post('/reserve', [FrontReservationController::class, 'create'])->name('reserve.create');
+
+    // ประวัติการจอง
+    Route::get('/my/reservations', [FrontReservationController::class, 'history'])
+        ->name('reservations.history');
+
+    // ยกเลิกการจอง
+    Route::delete('/my/reservations/{id}', [FrontReservationController::class, 'cancel'])
+        ->name('reservations.cancel');
 });
 
 
