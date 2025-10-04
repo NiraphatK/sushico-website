@@ -203,7 +203,7 @@
                     $routeLeads = [
                         'home.index' => $defaultLead,
                         'home.about' => 'จากตลาดปลา ถึงจานตรงหน้าคุณ — เรื่องเล่าจากครัวของเรา',
-                        'home.contact' => 'เปิดทุกวัน • โทร 02-xxx-xxxx • Line @sushico',
+                        'home.contact' => 'เปิดทุกวัน • โทร 02-387-1830 • Line @sushico',
                         'menu.index' => 'คัดวัตถุดิบสดใหม่ทุกวัน — Nigiri, Sashimi & Signature Rolls',
                         'reserve.index' => 'สำรองที่นั่งล่วงหน้า เพื่อช่วงเวลาที่ลงตัว',
                         'reserve.form' => 'สำรองที่นั่งล่วงหน้า เพื่อช่วงเวลาที่ลงตัว',
