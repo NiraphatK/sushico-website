@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="{{ asset('css/backend.css') }}">
 
     <!-- SweetAlert2 CSS -->
-    <link rel="stylesheet" href="{{ asset('css/swal-sushico.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/swal-backend.css') }}">
     @yield('css_before')
 </head>
 
