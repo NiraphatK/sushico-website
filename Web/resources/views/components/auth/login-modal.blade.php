@@ -87,7 +87,7 @@
                             </div>
                         @endif
 
-                        <div id="{{ $id }}-caps" class="form-text small text-danger d-none mt-1">Caps Lock
+                        <div id="{{ $id }}-caps" class="form-text small text-danger d-none mt-1 caps-hint">Caps Lock
                             เปิดอยู่</div>
                     </div>
 

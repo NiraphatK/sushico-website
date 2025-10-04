@@ -464,3 +464,99 @@ body[data-register-open] .modal-backdrop.show {
     );
     opacity: 0.95;
 }
+
+[data-login-modal] .lm-floating:has(.invalid-feedback),
+[data-register-modal] .lm-floating:has(.invalid-feedback) {
+    padding-bottom: 0.5rem; /* หรือค่าที่ต้องการ */
+}
+
+/* Caps Lock hint */
+[data-login-modal] .caps-hint,
+[data-register-modal] .caps-hint {
+    position: absolute;
+    right: 12px;
+    bottom: 0.15rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    opacity: 0.95;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* ===== Fix: keep icon centered even when error shows ===== */
+
+/* 1) ประกาศความสูงช่องกรอกมาตรฐานของ .form-floating ใน Bootstrap 5 */
+[data-login-modal],
+[data-register-modal] {
+    --lm-field-h: calc(
+        3.5rem + 2px
+    ); /* เท่ากับค่า height ปกติของ .form-floating > .form-control */
+}
+
+/* 2) จัดไอคอนให้อยู่กลาง "field" ไม่ใช่กลาง container */
+[data-login-modal] .lm-floating {
+    position: relative;
+}
+[data-register-modal] .lm-floating {
+    position: relative;
+}
+
+[data-login-modal] .lm-floating .lm-icon,
+[data-register-modal] .lm-floating .lm-icon {
+    position: absolute;
+    left: 12px;
+    top: calc(var(--lm-field-h) / 2); /* ยึดกลาง field คงที่ */
+    transform: translateY(-50%);
+    color: var(--lm-muted);
+    opacity: 0.85;
+    pointer-events: none;
+}
+
+/* ถ้ามีเวอร์ชัน .lm-icon-half ก็ใช้ตำแหน่งเดียวกัน */
+[data-login-modal] .lm-floating .lm-icon-half,
+[data-register-modal] .lm-floating .lm-icon-half {
+    top: calc(var(--lm-field-h) / 2);
+    transform: translateY(-50%);
+}
+
+/* 3) วาง invalid-feedback แบบ absolute ใต้ field เพื่อไม่ดันความสูง "ครึ่งกล่อง" */
+[data-login-modal] .lm-floating .form-floating {
+    position: relative;
+}
+[data-register-modal] .lm-floating .form-floating {
+    position: relative;
+}
+
+[data-login-modal] .lm-floating .invalid-feedback,
+[data-register-modal] .lm-floating .invalid-feedback {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(var(--lm-field-h) + 0.35rem); /* ใต้ขอบล่างช่องเล็กน้อย */
+    margin: 0;
+}
+
+/* 4) กันพื้นที่ด้านล่างไว้เล็กน้อยเวลา error โผล่ (รองรับเบราว์เซอร์ที่ไม่มี :has ด้วย) */
+@supports selector(:has(*)) {
+    [data-login-modal] .lm-floating:has(.invalid-feedback),
+    [data-register-modal] .lm-floating:has(.invalid-feedback) {
+        padding-bottom: 1.4rem; /* ปรับตามยาวข้อความ */
+    }
+}
+@supports not (selector(:has(*))) {
+    /* fallback: กันพื้นที่ไว้ตลอดนิดหน่อย */
+    [data-login-modal] .lm-floating,
+    [data-register-modal] .lm-floating {
+        padding-bottom: 1rem;
+    }
+}
+
+/* 5) เผื่อฟอร์มมีขนาดอื่น (ไม่ค่อยใช้ใน modal) */
+[data-login-modal] .form-floating > .form-control.form-control-lg,
+[data-register-modal] .form-floating > .form-control.form-control-lg {
+    --lm-field-h: calc(4rem + 2px);
+}
+[data-login-modal] .form-floating > .form-control.form-control-sm,
+[data-register-modal] .form-floating > .form-control.form-control-sm {
+    --lm-field-h: calc(2.5rem + 2px);
+}

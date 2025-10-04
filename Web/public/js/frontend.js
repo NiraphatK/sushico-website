@@ -45,31 +45,62 @@
 
 // Logout confirm (SweetAlert2)
 (function () {
-    document.addEventListener("DOMContentLoaded", function () {
-        const logoutForm = document.getElementById("logout-form");
-        if (!logoutForm) return;
+    const init = () => {
+        // รองรับหลายฟอร์ม (ถ้ามี) หรือจะใช้ '#logout-form' ตรงๆ ก็ได้
+        const forms = document.querySelectorAll(
+            '#logout-form, form[action*="logout"]'
+        );
+        if (!forms.length) return;
 
-        logoutForm.addEventListener("submit", function (e) {
-            if (typeof Swal === "undefined") return; // fallback: submit normally
-            e.preventDefault();
-            Swal.fire({
-                title: "คุณแน่ใจหรือไม่?",
-                text: "คุณกำลังจะออกจากระบบ",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "ใช่ ออกจากระบบ",
-                cancelButtonText: "ยกเลิก",
-                reverseButtons: true,
-                customClass: {
-                    popup: "logout-popup",
-                    confirmButton: "logout-confirm",
-                    cancelButton: "logout-cancel",
-                },
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    e.target.submit();
-                }
+        forms.forEach((form) => {
+            if (form.__logoutBound) return; // กันผูกซ้ำ
+            form.__logoutBound = true;
+
+            form.addEventListener("submit", (e) => {
+                // ถ้ายังไม่มี Swal ให้ปล่อย submit ปกติ (ไม่ block ผู้ใช้)
+                if (typeof Swal === "undefined") return;
+
+                e.preventDefault();
+                Swal.fire({
+                    title: "คุณแน่ใจหรือไม่?",
+                    text: "คุณกำลังจะออกจากระบบ",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "ใช่ ออกจากระบบ",
+                    cancelButtonText: "ยกเลิก",
+                    reverseButtons: true,
+                    customClass: {
+                        popup: "logout-popup",
+                        confirmButton: "logout-confirm",
+                        cancelButton: "logout-cancel",
+                    },
+                }).then((res) => {
+                    if (res.isConfirmed) form.submit();
+                });
             });
         });
-    });
+    };
+
+    // รันทันทีถ้า DOM โหลดแล้ว ไม่งั้นค่อยรอ
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init, { once: true });
+    } else {
+        init();
+    }
 })();
+
+// ===== Fix ARIA focus-in-hidden element =====
+document.addEventListener("hide.bs.modal", (e) => {
+    const modal = e.target;
+    // ถ้า element ที่โฟกัสอยู่เป็นลูกของโมดัล ให้ blur ออกก่อน
+    if (document.activeElement && modal.contains(document.activeElement)) {
+        document.activeElement.blur();
+    }
+    // กันโฟกัสหลุดเข้ามาอีกระหว่าง transition
+    modal.setAttribute("inert", "");
+});
+
+document.addEventListener("hidden.bs.modal", (e) => {
+    // เอา inert ออกหลังปิดสนิท
+    e.target.removeAttribute("inert");
+});

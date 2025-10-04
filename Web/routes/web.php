@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FrontReservationController;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,7 @@ Route::get('/menus/search', [HomeController::class, 'searchMenu'])->name('menu.s
 Route::get('/contact-us', [HomeController::class, 'contact']);
 
 Route::middleware(['auth:user'])->group(function () {
+    // จองโต๊ะ
     Route::get('/reserve', [FrontReservationController::class, 'form'])->name('reserve.form');
     Route::post('/reserve', [FrontReservationController::class, 'create'])->name('reserve.create');
 
@@ -31,6 +33,13 @@ Route::middleware(['auth:user'])->group(function () {
     // ยกเลิกการจอง
     Route::delete('/my/reservations/{id}', [FrontReservationController::class, 'cancel'])
         ->name('reservations.cancel');
+
+    // Profile
+    Route::put('/account/profile', [AccountController::class, 'updateProfile'])
+        ->name('account.update');
+
+    Route::put('/account/password', [AccountController::class, 'updatePassword'])
+        ->name('account.password');
 });
 
 

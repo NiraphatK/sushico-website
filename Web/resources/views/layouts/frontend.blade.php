@@ -23,7 +23,6 @@
     <link rel="stylesheet" href="{{ asset('css/frontend.css') }}">
 
     <!-- SweetAlert2 CSS -->
-    @include('sweetalert::alert')
     <link rel="stylesheet" href="{{ asset('css/swal-sushico.css') }}">
 
     @yield('css_before')
@@ -127,10 +126,13 @@
 
                                         {{-- Items --}}
                                         <li>
-                                            <a class="dropdown-item d-flex align-items-center gap-2" href="/">
-                                                <i class="bi bi-person"></i><span>ข้อมูลบัญชี</span>
+                                            <a class="dropdown-item d-flex align-items-center gap-2" href="#"
+                                                data-bs-toggle="modal" data-bs-target="#accountModal">
+                                                <i class="bi bi-person"></i>
+                                                <span>ข้อมูลบัญชี</span>
                                             </a>
                                         </li>
+
 
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center gap-2"
@@ -195,6 +197,7 @@
                         'home.contact' => 'Contact Us',
                         'menu.index' => 'Our Menu',
                         'reserve.index' => 'Reservation',
+                        'reserve.form' => 'Reservation',
                     ];
 
                     $routeLeads = [
@@ -203,6 +206,7 @@
                         'home.contact' => 'เปิดทุกวัน • โทร 02-xxx-xxxx • Line @sushico',
                         'menu.index' => 'คัดวัตถุดิบสดใหม่ทุกวัน — Nigiri, Sashimi & Signature Rolls',
                         'reserve.index' => 'สำรองที่นั่งล่วงหน้า เพื่อช่วงเวลาที่ลงตัว',
+                        'reserve.form' => 'สำรองที่นั่งล่วงหน้า เพื่อช่วงเวลาที่ลงตัว',
                     ];
 
                     $current = Route::currentRouteName();
@@ -281,12 +285,17 @@
     <!-- App JS -->
     <script src="{{ asset('js/frontend.js') }}"></script>
 
+    {{--    Account Modal --}}
+    <x-account-modal :openOnError="true" />
+
     {{-- Login Modal --}}
     <x-auth.login-modal id="loginModal" :open-on-error="true" />
 
     {{-- Register Modal --}}
     <x-auth.register-modal id="registerModal" :open-on-error="true" />
 
+    @include('sweetalert::alert')
+    
     @yield('js_before')
 </body>
 

@@ -1,0 +1,330 @@
+/* โทนสีและตัวแปรพื้นฐาน (fallback) */
+[data-account-modal] {
+    --lm-salmon: var(--salmon, #1a3636);
+    --lm-gold: var(--gold, #40534c);
+    --lm-wasabi: var(--wasabi, #677d6a);
+    --lm-ink: var(--txt, #0b1220);
+    --lm-muted: var(--muted, #5b647a);
+    --lm-surface: 255, 255, 255;
+    --lm-surface-dk: 17, 24, 39;
+    --lm-ring: 0 0 0 3px rgba(133, 172, 157, 0.45),
+        0 10px 30px rgba(64, 83, 76, 0.18);
+}
+
+/* ===== Card / Header / Accent ===== */
+[data-account-modal] .lm-card {
+    border: 0;
+    border-radius: 24px;
+    overflow: hidden;
+    background: radial-gradient(
+            120% 80% at 110% -10%,
+            rgba(var(--lm-surface), 0.45),
+            transparent 60%
+        ),
+        radial-gradient(
+            120% 80% at -30% 110%,
+            rgba(var(--lm-surface), 0.35),
+            transparent 60%
+        ),
+        linear-gradient(
+            180deg,
+            rgba(var(--lm-surface), 0.95),
+            rgba(var(--lm-surface), 0.88)
+        );
+    backdrop-filter: blur(14px) saturate(140%);
+    box-shadow: 0 28px 60px rgba(2, 6, 23, 0.18);
+    transform: translateY(8px) scale(0.985);
+    animation: acc-pop 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+@keyframes acc-pop {
+    to {
+        transform: translateY(0) scale(1);
+    }
+}
+
+[data-account-modal] .lm-accent {
+    height: 4px;
+    background: linear-gradient(
+        90deg,
+        var(--lm-salmon),
+        var(--lm-gold) 50%,
+        var(--lm-wasabi)
+    );
+}
+
+[data-account-modal] .lm-header {
+    border: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(var(--lm-surface), 0.7),
+        rgba(var(--lm-surface), 0.35)
+    );
+    backdrop-filter: blur(10px) saturate(140%);
+    box-shadow: 0 1px 0 rgba(2, 6, 23, 0.06) inset;
+}
+
+/* กันไอคอนหัวข้อหายเพราะ gradient text */
+[data-account-modal] .modal-title .bi {
+    color: var(--lm-ink) !important;
+    -webkit-text-fill-color: var(--lm-ink) !important;
+}
+
+[data-account-modal] .lm-title-grad {
+    background: linear-gradient(
+        120deg,
+        var(--lm-salmon),
+        var(--lm-gold) 55%,
+        var(--lm-wasabi)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 900;
+    letter-spacing: 0.2px;
+}
+
+/* ===== Floating inputs ===== */
+[data-account-modal] .lm-floating {
+    position: relative;
+}
+
+[data-account-modal] .lm-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    color: var(--lm-muted);
+    opacity: 0.9;
+    pointer-events: none;
+    font-size: 1.05rem;
+    line-height: 1;
+}
+/* ใช้เมื่ออยากขยับไอคอนอีกนิด (กรณีครึ่งคอลัมน์) */
+[data-account-modal] .lm-icon-half {
+    padding-left: 0.5rem;
+}
+
+/* ช่องกรอกเว้นซ้ายให้พอสำหรับไอคอน */
+[data-account-modal] .form-floating > .form-control {
+    padding-left: 44px;
+}
+
+/* ปุ่มตา show/hide password */
+[data-account-modal] .lm-eye {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 0;
+    background: transparent;
+    padding: 0.25rem;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--lm-muted);
+}
+[data-account-modal] .lm-eye:hover {
+    color: var(--lm-ink);
+}
+
+/* label transition */
+[data-account-modal] .form-floating > label {
+    left: 44px;
+    color: var(--lm-muted);
+    opacity: 0.95;
+    transition: transform 0.22s cubic-bezier(0.2, 0.7, 0.2, 1), color 0.18s ease,
+        opacity 0.18s ease;
+}
+[data-account-modal] .form-floating > .form-control:focus ~ label {
+    transition: 0.3s;
+    color: var(--lm-ink);
+    opacity: 1;
+}
+[data-account-modal]
+    .form-floating
+    > .form-control:not(:placeholder-shown)
+    ~ label {
+    color: var(--lm-ink);
+    opacity: 1;
+}
+
+/* controls */
+[data-account-modal] .lm-control {
+    border-radius: 14px;
+    border: 1px solid rgba(2, 6, 23, 0.12);
+    background: rgba(var(--lm-surface), 0.95);
+    color: var(--lm-ink);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease,
+        background 0.2s ease, transform 0.06s ease;
+}
+[data-account-modal] .lm-control:hover {
+    transform: translateY(-1px);
+}
+[data-account-modal] .lm-control:focus {
+    box-shadow: var(--lm-ring);
+    border-color: transparent;
+    background: rgba(var(--lm-surface), 1);
+}
+[data-account-modal] .lm-control.is-invalid {
+    border-color: rgba(220, 53, 69, 0.55);
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.15);
+}
+
+/* invalid feedback */
+[data-account-modal] .invalid-feedback {
+    font-size: 0.82rem;
+}
+
+/* ===== Primary Button ===== */
+[data-account-modal] .lm-primary {
+    position: relative;
+    isolation: isolate;
+    border: 0;
+    border-radius: 999px;
+    padding: 0.75rem 1.25rem;
+    color: #fff;
+    background: linear-gradient(
+        135deg,
+        var(--lm-salmon),
+        var(--lm-gold) 55%,
+        var(--lm-wasabi)
+    );
+    box-shadow: 0 14px 30px rgba(2, 6, 23, 0.18);
+    transition: transform 0.12s ease, filter 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden;
+}
+[data-account-modal] .lm-primary:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.03);
+    box-shadow: 0 20px 40px rgba(2, 6, 23, 0.26);
+}
+[data-account-modal] .lm-primary::before {
+    content: "";
+    position: absolute;
+    top: -120%;
+    left: -30%;
+    width: 40%;
+    height: 300%;
+    transform: rotate(25deg);
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.7) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    opacity: 0;
+    filter: blur(6px);
+}
+[data-account-modal] .lm-primary:hover::before {
+    animation: acc-shine 1.2s ease;
+}
+@keyframes acc-shine {
+    0% {
+        left: -30%;
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.2;
+    }
+    50% {
+        left: 120%;
+        opacity: 0.6;
+    }
+    100% {
+        left: 140%;
+        opacity: 0;
+    }
+}
+[data-account-modal] .lm-primary.disabled,
+[data-account-modal] .lm-primary[aria-disabled="true"] {
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+
+/* ===== Tabs ===== */
+[data-account-modal] .nav-tabs .nav-link.active {
+    color: var(--lm-salmon);
+    position: relative;
+}
+[data-account-modal] .nav-tabs .nav-link.active::after {
+    content: "";
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: -1px;
+    height: 3px;
+    border-radius: 3px;
+    background: linear-gradient(
+        90deg,
+        var(--lm-salmon),
+        var(--lm-gold) 50%,
+        var(--lm-wasabi)
+    );
+}
+
+/* ===== Backdrop เฉพาะโมดัลนี้ ===== */
+body[data-account-open] .modal-backdrop.show {
+    opacity: 1 !important;
+    background: radial-gradient(
+            1200px 800px at -10% -20%,
+            rgba(255, 111, 97, 0.18),
+            transparent 60%
+        ),
+        radial-gradient(
+            1100px 900px at 110% 120%,
+            rgba(248, 201, 74, 0.16),
+            transparent 60%
+        ),
+        radial-gradient(
+            1000px 800px at 50% 50%,
+            rgba(103, 125, 106, 0.1),
+            transparent 65%
+        ),
+        rgba(11, 18, 32, 0.52);
+    backdrop-filter: blur(6px) saturate(120%);
+    -webkit-backdrop-filter: blur(6px) saturate(120%);
+}
+
+/* ===== Modal width ===== */
+@media (min-width: 768px) {
+    [data-account-modal] .modal-dialog {
+        max-width: 500px;
+    }
+}
+
+/* ===== Reduce motion ===== */
+@media (prefers-reduced-motion: reduce) {
+    [data-account-modal] .lm-card {
+        animation: none;
+        transform: none;
+    }
+    [data-account-modal] .lm-control:hover {
+        transform: none;
+    }
+}
+
+[data-account-modal] .lm-floating:has(.invalid-feedback) {
+    padding-top: 1.5rem; /* ปรับตามความยาวข้อความได้ */
+}
+
+/* Caps Lock hint */
+[data-account-modal] .caps-hint {
+    position: absolute;
+    right: 12px;
+    bottom: 0.15rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    opacity: 0.95;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* สีปกติของแท็บ */
+[data-account-modal] .nav-tabs .nav-link {
+    color: #40534c;
+}
+
+/* สีตอน hover */
+[data-account-modal] .nav-tabs .nav-link:hover {
+    color: #1a3636;
+}
