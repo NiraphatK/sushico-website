@@ -984,7 +984,7 @@ p.header-text {
     border: 1px solid var(--line);
     border-radius: var(--radius);
     padding: 22px;
-    background: radial-gradient(
+    /* background: radial-gradient(
             1000px 280px at 0% -20%,
             color-mix(in srgb, var(--brand) 10%, transparent),
             transparent
@@ -994,7 +994,8 @@ p.header-text {
             color-mix(in srgb, var(--brand-2) 10%, transparent),
             transparent
         ),
-        var(--card);
+        var(--card); */
+        background-color: var(--card);
     box-shadow: var(--shadow-1);
     overflow: clip;
 }
