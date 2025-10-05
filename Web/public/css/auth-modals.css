@@ -5,6 +5,7 @@
 /* โทนสีและตัวแปรพื้นฐาน */
 [data-login-modal],
 [data-register-modal] {
+    --brand: var(--salmon);
     --lm-salmon: var(--salmon, #1a3636);
     --lm-gold: var(--gold, #40534c);
     --lm-wasabi: var(--wasabi, #677d6a);
@@ -559,4 +560,51 @@ body[data-register-open] .modal-backdrop.show {
 [data-login-modal] .form-floating > .form-control.form-control-sm,
 [data-register-modal] .form-floating > .form-control.form-control-sm {
     --lm-field-h: calc(2.5rem + 2px);
+}
+
+[data-register-modal] input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(2, 6, 23, 0.25);
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--muted);
+}
+/* เมื่อ hover */
+[data-register-modal] input[type="checkbox"]:hover {
+    border-color: var(--brand);
+}
+
+/* เมื่อถูกเลือก */
+[data-register-modal] input[type="checkbox"]:checked {
+    background: var(--brand);
+    border-color: var(--brand);
+}
+
+/* ไอคอนเครื่องหมายถูก */
+[data-register-modal] input[type="checkbox"]:checked::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* ไม่มี ring เลย (focus แล้วไม่เรืองแสง) */
+[data-register-modal] .form-check-input:focus,
+[data-register-modal] .form-check-input:focus-visible {
+    outline: none;
+    box-shadow: none;
 }

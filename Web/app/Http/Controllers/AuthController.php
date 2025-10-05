@@ -82,7 +82,10 @@ class AuthController extends Controller
         if ($user->role === 'ADMIN' || $user->role === 'STAFF') {
             return redirect()->intended('/dashboard')->with('register_message', 'สมัครสมาชิกสำเร็จ!');
         }
-        return redirect()->intended('/')->with('register_message', 'สมัครสมาชิกสำเร็จ!');
+        
+        Alert::toast('สมัครสมาชิกสำเร็จ', 'success')
+            ->position('top-end')->timerProgressBar()->autoClose(2200);
+        return redirect()->intended('/');
     }
 
 
