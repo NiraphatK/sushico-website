@@ -891,17 +891,7 @@ p.header-text {
     border: 1px solid var(--line);
     border-radius: var(--radius);
     padding: 22px;
-    background: radial-gradient(
-            1000px 280px at 0% -20%,
-            color-mix(in srgb, var(--brand) 10%, transparent),
-            transparent
-        ),
-        radial-gradient(
-            1000px 280px at 100% -20%,
-            color-mix(in srgb, var(--brand-2) 10%, transparent),
-            transparent
-        ),
-        var(--card);
+    background: linear-gradient(180deg, #fff, #ffffffee 60%, #ffffffcc 100%);
     box-shadow: var(--shadow-1);
     overflow: clip;
 }
@@ -1865,4 +1855,18 @@ p.header-text {
             padding: 0.3rem 0.5rem;
         }
     }
+}
+/* ระบุบริบทให้เฉพาะเจาะจงกว่า + กันโดนไฟล์อื่นทับ */
+.reserve-page .hero .chips {
+    display: flex; /* เผื่อโดนรีเซ็ต */
+    justify-content: flex-start !important;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+/* กันชิปตัวเดียวถูกดันให้ดูเหมือนอยู่กลาง */
+.reserve-page .hero .chip {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
 }
