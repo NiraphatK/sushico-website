@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sushico Back Office</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('assets/icons/logo-sushico.svg') }}">
 
     <!-- Bootstrap & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -112,8 +113,7 @@
             <div class="menu-section-title">Main</div>
             <nav class="nav flex-column">
                 {{-- ทุก role ใช้ได้ --}}
-                <a href="/" class="nav-link {{ request()->is('/') ? 'active' : '' }}"
-                    data-bs-dismiss="offcanvas">
+                <a href="/" class="nav-link {{ request()->is('/') ? 'active' : '' }}" data-bs-dismiss="offcanvas">
                     <i class="bi bi-house-door"></i><span>Home</span>
                 </a>
                 <a href="/dashboard" class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}"
