@@ -7,6 +7,7 @@
     <title>Sushico</title>
     <meta name="theme-color" content="#ffffff">
     <meta name="description" content="Sushico — Taste the Art of Sushi. ซูชิโค่ คัดวัตถุดิบสดใหม่ทุกวัน">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('assets/icons/logo-sushico.svg') }}">
 
     <!-- Google Fonts -->
     <link
