@@ -66,19 +66,8 @@ class MenuItemController extends Controller
                 ->withInput();
         }
 
-
-        //ถ้ามีการอัพโหลดไฟล์เข้ามา ให้อัพโหลดไปเก็บยังโฟลเดอร์ uploads/product
         try {
-            /*************  ✨ Windsurf Command ⭐  *************/
-            /**
-             * Create a new menu item.
-             *
-             * @param  \Illuminate\Http\Request  $request
-             * @return \Illuminate\Http\RedirectResponse
-             *
-             * @throws \Exception
-             */
-            /*******  96fa8842-f7ae-4358-9416-5df6054bf779  *******/            $imagePath = null;
+            $imagePath = null;
             if ($request->hasFile('image_path')) {
                 $imagePath = $request->file('image_path')->store('uploads/menu', 'public');
             }
