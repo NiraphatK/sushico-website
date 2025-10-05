@@ -48,10 +48,16 @@ Route::middleware(['auth:user'])->group(function () {
 // เวลาใช้ auth middleware ถ้า user ยังไม่ login → Laravel จะ redirect ไปหา route ที่ชื่อว่า login โดยอัตโนมัติ
 // ถ้าไม่เจอ → มันก็โยน error Route [login] not defined.
 Route::get('/login', function (Request $request) {
-    $prev = url()->previous();
-    return ($prev && $prev !== url('/login'))
-        ? redirect()->to($prev)->with('showLogin', true)
-        : redirect('/')->with('showLogin', true);
+    // ถ้ามี intended url (หน้าที่ตั้งใจจะไปก่อนถูก redirect)
+    $intended = $request->session()->get('url.intended');
+    if ($intended && $intended !== url('/login')) {
+        return redirect('/')->with([
+            'showLogin' => true,
+            'intended' => $intended
+        ]);
+    }
+    // ถ้าไม่มี intended url
+    return redirect('/')->with('showLogin', true);
 })->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
