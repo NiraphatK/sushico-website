@@ -634,99 +634,6 @@ p.header-text {
     }
 }
 
-/* -------- SweetAlert2: Menu Detail Modal (scoped) -------- */
-.swal2-popup.menu-detail {
-    width: min(720px, 92vw) !important;
-    padding: 0 !important;
-    border-radius: 20px !important;
-    overflow: hidden !important;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
-}
-.swal2-close {
-    top: 10px !important;
-    right: 10px !important;
-    background: rgba(255, 255, 255, 0.85) !important;
-    border-radius: 999px !important;
-    width: 36px;
-    height: 36px;
-}
-.menu-detail .menu-hero {
-    position: relative;
-    background: radial-gradient(
-            1200px 300px at 50% -40%,
-            rgba(255, 255, 255, 0.45),
-            transparent
-        ),
-        linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.5),
-            rgba(255, 255, 255, 0)
-        );
-}
-.menu-detail .menu-hero img {
-    width: 100%;
-    height: auto;
-    display: block;
-    object-fit: contain;
-    max-height: clamp(220px, 36vw, 360px);
-}
-.menu-detail .price-chip {
-    position: absolute;
-    bottom: 14px;
-    left: 14px;
-    backdrop-filter: blur(6px);
-    background: rgba(255, 99, 99, 0.88);
-    color: #fff;
-    padding: 8px 14px;
-    border-radius: 999px;
-    font-weight: 700;
-    box-shadow: 0 6px 16px rgba(255, 99, 99, 0.35);
-}
-.menu-detail .menu-body-wrap {
-    padding: 18px 20px 20px;
-}
-.menu-detail .menu-title-xxl {
-    font-size: clamp(1.2rem, 2.2vw, 1.6rem);
-    font-weight: 800;
-    line-height: 1.25;
-    margin: 2px 0 6px;
-    letter-spacing: 0.2px;
-}
-.menu-detail .menu-desc {
-    color: #4b5563;
-    margin-bottom: 10px;
-}
-.menu-detail .menu-section-title {
-    font-weight: 700;
-    margin: 14px 0 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.menu-detail .menu-section-title::before {
-    content: "";
-    width: 6px;
-    height: 6px;
-    border-radius: 999px;
-    background: #fb7185;
-    box-shadow: 0 0 0 3px rgba(251, 113, 133, 0.25);
-}
-.menu-detail .menu-detail-html {
-    text-align: left;
-}
-.menu-detail .menu-actions {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-    margin-top: 14px;
-}
-.menu-detail .btn-outline-dark.round {
-    border-radius: 12px;
-    font-weight: 600;
-    border-width: 2px;
-    padding: 10px 14px;
-}
-
 /* -------- Responsive (About) -------- */
 @media (max-width: 500px) {
     .about-wrap {
@@ -984,7 +891,7 @@ p.header-text {
     border: 1px solid var(--line);
     border-radius: var(--radius);
     padding: 22px;
-    /* background: radial-gradient(
+    background: radial-gradient(
             1000px 280px at 0% -20%,
             color-mix(in srgb, var(--brand) 10%, transparent),
             transparent
@@ -994,8 +901,7 @@ p.header-text {
             color-mix(in srgb, var(--brand-2) 10%, transparent),
             transparent
         ),
-        var(--card); */
-        background-color: var(--card);
+        var(--card);
     box-shadow: var(--shadow-1);
     overflow: clip;
 }

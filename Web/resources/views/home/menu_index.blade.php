@@ -2,12 +2,12 @@
 
 @section('css_before')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/menu-detail.css') }}">
 @endsection
 
 @section('js_before')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{ asset('js/home.js') }}" defer></script>
+    <script src="{{ asset('js/menu-detail.js') }}" defer></script>
 @endsection
 
 @section('body')

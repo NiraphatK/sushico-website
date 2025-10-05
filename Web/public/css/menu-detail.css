@@ -1,0 +1,355 @@
+/* ===========================================================
+   Sushico — Menu Detail (SweetAlert2) : Neo-Zen v7
+   - เรียบหรู โปร่งตา เน้นตัวหนังสือสวย
+   - มือถือ 1 คอลัมน์ / เดสก์ท็อป 2 คอลัมน์
+   - ปุ่ม "ปิด" ลอยขวาล่าง (safe-area พร้อม)
+   =========================================================== */
+
+/* ---------- Tokens ---------- */
+:root {
+    --brand: var(--salmon, #1a3636);
+    --brand-ink: #fff;
+    --ink: #0b1220;
+    --muted: #6b7280;
+    --surface-rgb: 255, 255, 255;
+    --ring: rgba(2, 6, 23, 0.1);
+    --radius: 22px;
+    --shadow-xl: 0 28px 90px rgba(2, 6, 23, 0.28);
+}
+
+/* ---------- จัด popup เฉพาะนี้ให้ชิดบน ---------- */
+.menu-detail-container {
+    align-items: flex-start !important;
+    padding-top: 4vh !important;
+    padding-bottom: 4vh !important;
+}
+
+/* ---------- Popup ---------- */
+.swal2-popup.menu-detail {
+    width: min(980px, 96vw) !important;
+    padding: 0 !important;
+    border-radius: var(--radius) !important;
+    background: linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.965),
+            rgba(255, 255, 255, 0.94)
+        ),
+        rgba(var(--surface-rgb), 1);
+    border: 1px solid var(--ring);
+    box-shadow: var(--shadow-xl);
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    overflow: hidden;
+    position: relative;
+    margin: 0 auto !important;
+}
+
+/* ขอบนิ่งนุ่ม */
+.swal2-popup.menu-detail::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: var(--radius);
+    box-shadow: inset 0 0 0 1px rgba(2, 6, 23, 0.08),
+        inset 0 0 38px rgba(64, 83, 76, 0.06);
+}
+
+/* ---------- Layout ---------- */
+.menu-wrap {
+    display: grid;
+    grid-template-columns: 1fr;
+    max-height: min(82vh, 860px);
+}
+@media (min-width: 980px) {
+    .menu-wrap {
+        grid-template-columns: 1.08fr 1fr;
+    }
+}
+
+/* ---------- Hero ---------- */
+.menu-hero {
+    position: relative;
+    isolation: isolate;
+    min-height: 260px;
+    aspect-ratio: 4/3;
+    background: radial-gradient(
+            120% 110% at 50% 30%,
+            rgba(2, 6, 23, 0.05),
+            rgba(2, 6, 23, 0.02) 60%,
+            transparent 100%
+        ),
+        #f6f7f9;
+    overflow: hidden;
+}
+@media (min-width: 980px) {
+    .menu-hero {
+        aspect-ratio: auto;
+        min-height: 100%;
+    }
+}
+.menu-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 12px 22px rgba(2, 6, 23, 0.1));
+    opacity: 0;
+    transform: scale(1.01);
+    transition: opacity 0.35s ease,
+        transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.menu-hero img.loaded {
+    opacity: 1;
+    transform: none;
+}
+
+/* ราคา */
+.price-chip {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    z-index: 2;
+    padding: 0.46rem 0.82rem;
+    font-weight: 700;
+    font-size: 0.96rem;
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(2, 6, 23, 0.1);
+    border-radius: 999px;
+    box-shadow: 0 10px 24px rgba(2, 6, 23, 0.14);
+}
+
+/* ---------- Content ---------- */
+.menu-body-wrap {
+    --float-btn-h: 48px;
+    --float-btn-gap: 22px;
+    position: relative;
+    padding: clamp(18px, 2.4vw, 28px) clamp(18px, 3vw, 34px)
+        calc(
+            var(--float-btn-h) + var(--float-btn-gap) +
+                env(safe-area-inset-bottom, 0px)
+        );
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+.menu-body-scroll {
+    position: relative;
+    overflow: auto;
+    padding-right: 2px;
+    max-width: 68ch; /* measure ที่อ่านสบาย */
+    margin-inline: auto;
+    scrollbar-gutter: stable both-edges;
+}
+
+/* เงาบอกสกอลล์ */
+.menu-scroll-shadow {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 18px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+.menu-shadow-top {
+    top: 0;
+    background: linear-gradient(180deg, rgba(2, 6, 23, 0.1), rgba(2, 6, 23, 0));
+}
+.menu-shadow-bottom {
+    bottom: calc(var(--float-btn-h) + var(--float-btn-gap));
+    background: linear-gradient(0deg, rgba(2, 6, 23, 0.1), rgba(2, 6, 23, 0));
+}
+.menu-body-wrap.has-top .menu-shadow-top {
+    opacity: 0.6;
+}
+.menu-body-wrap.has-bottom .menu-shadow-bottom {
+    opacity: 0.6;
+}
+
+/* ---------- Typography ---------- */
+.swal2-popup.menu-detail {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-variant-numeric: lining-nums;
+}
+.menu-title-xxl {
+    font-family: var(--display, "Poppins", "Noto Sans Thai", system-ui);
+    font-size: clamp(1.36rem, 2.6vw, 2rem);
+    font-weight: 800;
+    line-height: 1.18;
+    color: var(--ink);
+    letter-spacing: 0.15px;
+    margin: 0.1rem 0 0.2rem;
+    text-align: center;
+}
+.menu-subtitle {
+    margin-top: 0.15rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+    letter-spacing: 0.28px;
+    text-transform: uppercase;
+}
+.menu-desc {
+    color: var(--muted);
+    font-size: 0.99rem;
+    line-height: 1.82;
+    margin: 0.45rem 0 0.95rem;
+}
+
+/* section heading + divider */
+.menu-section-title {
+    position: relative;
+    color: var(--ink);
+    font-weight: 800;
+    font-size: 1.02rem;
+    letter-spacing: 0.1px;
+    padding-top: 0.6rem;
+    margin: 1rem 0 0.5rem;
+    text-align: start;
+}
+.menu-section-title::before {
+    content: "";
+    display: block;
+    height: 1px;
+    margin-bottom: 0.65rem;
+    background: linear-gradient(
+        90deg,
+        rgba(2, 6, 23, 0.12),
+        rgba(2, 6, 23, 0.05)
+    );
+    border-radius: 1px;
+}
+
+/* detail text */
+.menu-detail-html {
+    color: var(--ink);
+    font-size: 1rem;
+    line-height: 1.84;
+}
+.menu-detail-html :is(p, ul, ol) {
+    margin: 0.55rem 0 0.75rem;
+    text-align: start !important;
+}
+.menu-detail-html p:first-of-type {
+    font-size: 1.03rem;
+    color: color-mix(in oklab, var(--ink), white 6%);
+    font-weight: 500;
+}
+
+/* bullets แบบ marker สวย */
+.menu-detail-html ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+}
+.menu-detail-html li {
+    margin: 0.38rem 0 0.42rem;
+}
+.menu-detail-html li::marker {
+    color: rgba(2, 6, 23, 0.45);
+    font-size: 0.86em;
+}
+
+/* strong ต้นประโยค (เช่น "รสชาติ", "เหมาะสำหรับ") */
+.menu-detail-html p > strong:first-child {
+    display: inline-block;
+    margin-right: 0.35rem;
+    padding: 0.06rem 0.5rem 0.12rem;
+    border-radius: 0.5rem;
+    background: rgba(64, 83, 76, 0.08);
+    color: color-mix(in oklab, var(--ink), black 6%);
+    font-weight: 700;
+    line-height: 1;
+}
+
+/* แท็ก */
+.menu-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin: 0.2rem 0 0.65rem;
+}
+.menu-tag {
+    font-size: 0.8rem;
+    padding: 0.28rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid rgba(2, 6, 23, 0.12);
+    background: #fff;
+    color: #1f2937;
+}
+
+/* ---------- Floating Close ---------- */
+.menu-float-close {
+    position: absolute;
+    right: max(22px, env(safe-area-inset-right, 0px));
+    bottom: max(18px, env(safe-area-inset-bottom, 0px));
+    z-index: 30;
+}
+.menu-float-close button {
+    min-height: var(--float-btn-h);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.42rem;
+    padding: 0.78rem 1.28rem;
+    border: 0;
+    border-radius: 999px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    color: var(--brand-ink);
+    background: linear-gradient(
+        135deg,
+        color-mix(in oklab, var(--brand), white 6%),
+        var(--brand)
+    );
+    box-shadow: 0 16px 34px rgba(26, 54, 54, 0.28),
+        0 2px 0 rgba(255, 255, 255, 0.14) inset;
+    transition: transform 0.08s ease, box-shadow 0.25s ease, filter 0.2s ease;
+}
+.menu-float-close button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+}
+.menu-float-close button:focus-visible {
+    outline: 2px solid color-mix(in oklab, var(--brand), white 32%);
+    outline-offset: 2px;
+}
+
+/* ---------- X มุมบนขวา ---------- */
+.swal2-close {
+    width: 42px !important;
+    height: 42px !important;
+    right: 10px !important;
+    top: 10px !important;
+    color: var(--ink) !important;
+    /* background: rgba(255, 255, 255, 0.96) !important; */
+    /* border: 1px solid rgba(2, 6, 23, 0.08) !important; */
+    /* border-radius: 999px !important; */
+    /* box-shadow: 0 8px 18px rgba(2, 6, 23, 0.12) !important; */
+}
+
+/* ---------- Scrollbar เนียน ---------- */
+.menu-body-scroll::-webkit-scrollbar {
+    width: 10px;
+}
+.menu-body-scroll::-webkit-scrollbar-thumb {
+    background: rgba(2, 6, 23, 0.16);
+    border-radius: 999px;
+}
+.menu-body-scroll:hover::-webkit-scrollbar-thumb {
+    background: rgba(2, 6, 23, 0.26);
+}
+@supports (scrollbar-color: auto) {
+    .menu-body-scroll {
+        scrollbar-color: rgba(2, 6, 23, 0.26) transparent;
+        scrollbar-width: thin;
+    }
+}
+
+/* ---------- Motion Safety ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .menu-hero img {
+        transition: none !important;
+    }
+}
