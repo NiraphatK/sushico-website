@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\UserModel;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class AuthController extends Controller
 {
@@ -128,6 +129,9 @@ class AuthController extends Controller
             ]);
 
 
+            Alert::toast('เข้าสู่ระบบสำเร็จ', 'success')
+                ->position('top-end')->timerProgressBar()->autoClose(2200);
+
             // หลัง login สำเร็จ ส่งผู้ใช้ไปที่ /dashboard
             // หรือถ้าก่อนหน้านี้ผู้ใช้กดลิงก์ไปหน้าที่ต้อง login ก่อน
             // Laravel จะพา redirect ไปหน้าที่ intended แทน
@@ -161,6 +165,9 @@ class AuthController extends Controller
         $request->session()->invalidate();
         // สร้าง CSRF token ใหม่ ป้องกันการโจมตีแบบ CSRF 
         $request->session()->regenerateToken();
+
+        Alert::toast('ออกจากระบบแล้ว', 'info')
+            ->position('top-end')->timerProgressBar()->autoClose(1800);
         // เปลี่ยนเส้นทางผู้ใช้ไปยังหน้าแรกหลัง logout
         return redirect('/');
     }
