@@ -7,7 +7,6 @@
     <title>Sushico</title>
     <meta name="theme-color" content="#ffffff">
     <meta name="description" content="Sushico — Taste the Art of Sushi. ซูชิโค่ คัดวัตถุดิบสดใหม่ทุกวัน">
-    <link rel="icon" type="image/svg+xml" href="{{ asset('assets/icons/logo-sushico.svg') }}">
 
     <!-- Google Fonts -->
     <link
@@ -274,9 +273,39 @@
     @yield('footer')
 
     <!-- Footer -->
-    <footer class="mt-5">
-        <div>Sushico © 2025 — Crafted Daily • Tokyo-inspired • Bangkok</div>
+    <footer class="site-footer mt-5">
+        <div class="footer-sheen"></div>
+
+        <div class="footer-inner container">
+            <!-- Row: Brand + Tagline -->
+            <div class="footer-head">
+                <div class="brand">
+                    <img src="{{ asset('assets/icons/logo-sushico.svg') }}" alt="Sushico Logo" draggable="false">
+                    <span>Sushico</span>
+                </div>
+                <p class="tagline">Taste the Art of Sushi — Crafted Daily in Bangkok</p>
+
+                <ul class="chips">
+                    {{-- เอาค่าจาก StoreSetting --}}
+                    <li><i class="bi bi-clock"></i> เปิดทุกวัน</li>
+                    <li><i class="bi bi-geo-alt"></i> Bangkok</li>
+                    <li><i class="bi bi-flower1"></i> Tokyo-inspired</li>
+                </ul>
+            </div>
+
+            <!-- Divider -->
+            <div class="footer-divider"></div>
+
+            <!-- Bottom bar -->
+            <div class="footer-bottom">
+                <span>© 2025 Sushico.</span>
+                <span class="dot">•</span>
+                <span>All rights reserved.</span>
+            </div>
+        </div>
     </footer>
+
+
 
     <!-- Vendor JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
@@ -296,7 +325,7 @@
     <x-auth.register-modal id="registerModal" :open-on-error="true" />
 
     @include('sweetalert::alert')
-    
+
     @yield('js_before')
 </body>
 
