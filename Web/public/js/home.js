@@ -172,6 +172,21 @@
             preview && (preview.textContent = `${start} – ${end}`);
         }
 
+        function sanitizeTimeSelection() {
+            const chosen = qs('input[name="start_time"]:checked');
+            if (!chosen) return;
+
+            const invalid =
+                chosen.disabled ||
+                chosen.classList.contains("d-none") ||
+                chosen.value <= allowAfter;
+
+            if (invalid) {
+                chosen.checked = false; // บังคับให้เลือกใหม่
+                setPreviewEmpty(); // เคลียร์สรุป
+            }
+        }
+
         // qty stepper & chips
         minusBtn?.addEventListener("click", () => {
             qty.value = clamp(
@@ -226,6 +241,18 @@
             const usable = visible
                 .filter((r) => !r.disabled && r.value > allowAfter)
                 .sort((a, b) => a.value.localeCompare(b.value));
+
+            // ถ้า radio ที่เช็คอยู่ไม่ใช้งาน/ถูกซ่อน ให้ยกเลิกการเลือก
+            const anyChecked = qs('input[name="start_time"]:checked');
+            if (
+                anyChecked &&
+                (anyChecked.classList.contains("d-none") ||
+                    anyChecked.disabled ||
+                    anyChecked.value <= allowAfter)
+            ) {
+                anyChecked.checked = false;
+            }
+
             const checked = visible.find(
                 (r) =>
                     r.checked &&
@@ -241,11 +268,9 @@
             }
             noSlotsHour?.classList.add("d-none");
 
-            // ไม่ auto-pick ถ้าไม่มีที่ผู้ใช้เลือกเอง
             if (checked) {
                 updateTime(checked.value);
-                const label = qs(`label[for="${checked.id}"]`);
-                label?.scrollIntoView({
+                qs(`label[for="${checked.id}"]`)?.scrollIntoView({
                     behavior: "smooth",
                     block: "nearest",
                     inline: "center",
@@ -311,6 +336,15 @@
                 else s.removeAttribute("aria-current");
             });
 
+            if (stepIndex === 2) {
+                sanitizeTimeSelection(); // ⬅️ สำคัญ
+                // โฟกัสไปยัง list เวลาให้ผู้ใช้เห็น
+                qs("#slots")?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                });
+            }
+
             if (stepIndex < 3) {
                 btnNextStep?.classList.remove("d-none");
                 btnSubmit?.classList.add("d-none");
@@ -324,7 +358,6 @@
                 const span = btnMobilePrimary?.querySelector(".btn-text");
                 if (span) span.textContent = stepIndex < 3 ? "ถัดไป" : "ยืนยัน";
             }
-
             btnPrevStep?.toggleAttribute("disabled", stepIndex === 0);
         }
 
@@ -352,22 +385,41 @@
             }
             if (stepIndex === 2) {
                 const chosen = qs('input[name="start_time"]:checked');
-                return !!chosen && chosen.dataset.autoselect !== "1";
+                const ok =
+                    !!chosen &&
+                    !chosen.disabled &&
+                    !chosen.classList.contains("d-none") &&
+                    chosen.value > allowAfter &&
+                    chosen.dataset.autoselect !== "1";
+                return ok;
             }
             return true;
         }
 
         function nextStep() {
-            if (!validateCurrentStep()) {
+            const valid = validateCurrentStep();
+            if (!valid) {
                 if (window.Swal) {
+                    const cfg =
+                        stepIndex === 2
+                            ? {
+                                  title: "กรุณาเลือกเวลา",
+                                  text: "โปรดเลือกช่วงเวลาเริ่มก่อนดำเนินการต่อ",
+                                  icon: "warning",
+                              }
+                            : {
+                                  title: "กรอกข้อมูลให้ครบถ้วน",
+                                  text: "โปรดตรวจสอบข้อมูลในขั้นตอนนี้ก่อนดำเนินการต่อ",
+                                  icon: "warning",
+                              };
                     Swal.fire({
-                        title: "กรอกข้อมูลให้ครบถ้วน",
-                        text: "โปรดตรวจสอบข้อมูลในขั้นตอนนี้ก่อนดำเนินการต่อ",
-                        icon: "warning",
+                        ...cfg,
                         confirmButtonText: "ตกลง",
                         customClass: { confirmButton: "btn-default" },
                     });
                 }
+                // โฟกัสโซนเวลาเมื่อเป็น Step 3
+                if (stepIndex === 2) qs("#slots")?.focus?.();
                 return;
             }
             if (stepIndex < 3) stepIndex += 1;

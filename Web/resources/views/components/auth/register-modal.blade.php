@@ -90,56 +90,67 @@
                         $registerBag = $errors->hasBag('register') ? $errors->getBag('register') : null;
                     @endphp
 
-                    {{-- PASSWORD --}}
-                    <div class="form-floating lm-floating mb-2">
-                        <input id="{{ $id }}-password" type="password" name="password"
-                            autocomplete="new-password" placeholder="รหัสผ่าน"
-                            class="form-control lm-control {{ $registerBag && $registerBag->has('password') ? 'is-invalid' : '' }}"
-                            required
-                            aria-invalid="{{ $registerBag && $registerBag->has('password') ? 'true' : 'false' }}"
-                            @if ($registerBag && $registerBag->has('password')) aria-describedby="{{ $id }}-password-error" @endif
-                            data-caps-hint="#{{ $id }}-caps" data-strength="#{{ $id }}-strength"
-                            data-needs="#{{ $id }}-pw-needs" data-suggest="#{{ $id }}-pw-suggest">
-                        <label for="{{ $id }}-password">รหัสผ่าน</label>
-                        <span class="lm-icon" aria-hidden="true"><i class="bi bi-shield-lock"></i></span>
-                        <button type="button" class="lm-eye" data-toggle-password="#{{ $id }}-password"
-                            aria-label="สลับการแสดงรหัสผ่าน">
-                            <i class="bi bi-eye eye-on"></i>
-                            <i class="bi bi-eye-slash eye-off d-none"></i>
-                        </button>
+                  {{-- PASSWORD --}}
+<div class="form-floating lm-floating mb-2">
+  <input id="{{ $id }}-password" type="password" name="password"
+    autocomplete="new-password" placeholder="รหัสผ่าน"
+    class="form-control lm-control {{ $registerBag && $registerBag->has('password') ? 'is-invalid' : '' }}"
+    required
+    aria-invalid="{{ $registerBag && $registerBag->has('password') ? 'true' : 'false' }}"
+    @if ($registerBag && $registerBag->has('password')) aria-describedby="{{ $id }}-password-error" @endif
+    data-caps-hint="#{{ $id }}-caps1" data-strength="#{{ $id }}-strength"
+    data-needs="#{{ $id }}-pw-needs" data-suggest="#{{ $id }}-pw-suggest">
+  <label for="{{ $id }}-password">รหัสผ่าน</label>
+  <span class="lm-icon" aria-hidden="true"><i class="bi bi-shield-lock"></i></span>
+  <button type="button" class="lm-eye" data-toggle-password="#{{ $id }}-password"
+    aria-label="สลับการแสดงรหัสผ่าน">
+    <i class="bi bi-eye eye-on"></i>
+    <i class="bi bi-eye-slash eye-off d-none"></i>
+  </button>
 
-                        @if ($registerBag && $registerBag->has('password'))
-                            <div id="{{ $id }}-password-error" class="invalid-feedback d-block mt-1">
-                                {{ $registerBag->first('password') }}</div>
-                        @endif
-                    </div>
+  @if ($registerBag && $registerBag->has('password'))
+    <div id="{{ $id }}-password-error" class="invalid-feedback d-block mt-1">
+      {{ $registerBag->first('password') }}
+    </div>
+  @endif
 
-                    <div class="d-flex align-items-center gap-2 mt-2 mb-3">
-                        <div class="progress flex-grow-1" style="height:6px;">
-                            <div id="{{ $id }}-strength" class="progress-bar" role="progressbar"
-                                style="width:0%;" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <small class="text-muted" id="{{ $id }}-caps"></small>
-                    </div>
+  <small class="text-danger caps-hint d-none" id="{{ $id }}-caps1"></small>
+</div>
 
-                    {{-- สิ่งที่ยังขาด” + ข้อเสนอแนะ --}}
-                    <ul class="lm-need-list" id="{{ $id }}-pw-needs" data-label="คำแนะนำการตั้งรหัสผ่าน">
-                    </ul>
+<div class="d-flex align-items-center gap-2 mt-2 mb-3">
+  <div class="progress flex-grow-1" style="height:6px;">
+    <div id="{{ $id }}-strength" class="progress-bar" role="progressbar"
+      style="width:0%;" aria-valuemin="0" aria-valuemax="100"></div>
+  </div>
+</div>
 
+{{-- สิ่งที่ยังขาด + ข้อเสนอแนะ --}}
+<ul class="lm-need-list" id="{{ $id }}-pw-needs" data-label="คำแนะนำการตั้งรหัสผ่าน"></ul>
 
-                    {{-- PASSWORD CONFIRM --}}
-                    <div class="form-floating lm-floating mb-3 mt-3">
-                        <input id="{{ $id }}-password_confirmation" type="password"
-                            name="password_confirmation" autocomplete="new-password" placeholder="ยืนยันรหัสผ่าน"
-                            class="form-control lm-control {{ $registerBag && $registerBag->has('password_confirmation') ? 'is-invalid' : '' }}"
-                            required>
-                        <label for="{{ $id }}-password_confirmation">ยืนยันรหัสผ่าน</label>
-                        <span class="lm-icon" aria-hidden="true"><i class="bi bi-shield-check"></i></span>
-                        @if ($registerBag && $registerBag->has('password_confirmation'))
-                            <div class="invalid-feedback d-block mt-1">
-                                {{ $registerBag->first('password_confirmation') }}</div>
-                        @endif
-                    </div>
+{{-- PASSWORD CONFIRM --}}
+<div class="form-floating lm-floating mb-3 mt-3">
+  <input id="{{ $id }}-password_confirmation" type="password" name="password_confirmation"
+    autocomplete="new-password" placeholder="ยืนยันรหัสผ่าน"
+    class="form-control lm-control {{ $registerBag && $registerBag->has('password_confirmation') ? 'is-invalid' : '' }}"
+    required
+    data-caps-hint="#{{ $id }}-caps2">
+  <label for="{{ $id }}-password_confirmation">ยืนยันรหัสผ่าน</label>
+  <span class="lm-icon" aria-hidden="true"><i class="bi bi-shield-check"></i></span>
+  <button type="button" class="lm-eye" data-toggle-password="#{{ $id }}-password_confirmation"
+    aria-label="สลับการแสดงรหัสผ่าน">
+    <i class="bi bi-eye eye-on"></i>
+    <i class="bi bi-eye-slash eye-off d-none"></i>
+  </button>
+
+  @if ($registerBag && $registerBag->has('password_confirmation'))
+    <div class="invalid-feedback d-block mt-1">
+      {{ $registerBag->first('password_confirmation') }}
+    </div>
+  @endif
+
+  <small class="text-danger caps-hint d-none" id="{{ $id }}-caps2"></small>
+</div>
+
 
                     {{-- TERMS --}}
                     <div class="form-check mb-1">

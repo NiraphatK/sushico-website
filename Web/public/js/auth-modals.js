@@ -175,19 +175,48 @@
     });
 
     // ===== CapsLock hint (แก้ให้ตัดสินจากสถานะทุกครั้ง) =====
-    const capsToggle = (e) => {
-        const inp = e.target.closest('input[type="password"][data-caps-hint]');
-        if (!inp) return;
-        const hint = document.querySelector(inp.getAttribute("data-caps-hint"));
-        if (!hint) return;
-        const on = e.getModifierState && e.getModifierState("CapsLock");
-        // ถ้าอยากใช้แบบข้อความถาวร:
-        hint.textContent = on ? "Caps Lock เปิดอยู่" : "";
-        // แสดง/ซ่อนด้วย d-none
-        hint.classList.toggle("d-none", !on);
-    };
-    document.addEventListener("keydown", capsToggle);
-    document.addEventListener("keyup", capsToggle);
+   // แสดง/ซ่อน Caps Lock hint เฉพาะ input ที่มี data-caps-hint
+const capsToggle = (e) => {
+  // รับเฉพาะ event จาก input[type=password]
+  const target = e.target;
+  if (!(target instanceof HTMLElement)) return;
+  if (!target.matches('input[type="password"][data-caps-hint]')) return;
+
+  const hintSel = target.getAttribute('data-caps-hint');
+  if (!hintSel) return;
+  const hint = document.querySelector(hintSel);
+  if (!hint) return;
+
+  // บางเบราว์เซอร์ (mobile) ไม่มี getModifierState ให้ปล่อยผ่าน
+  const hasState = typeof e.getModifierState === 'function';
+  const on = hasState ? e.getModifierState('CapsLock') : false;
+
+  hint.textContent = on ? 'Caps Lock เปิดอยู่' : '';
+  hint.classList.toggle('d-none', !on);
+};
+
+// ผูกกับ keydown/keyup + focusin/out เพื่อรีเฟรช/ซ่อนบนเปลี่ยนช่อง
+document.addEventListener('keydown', capsToggle);
+document.addEventListener('keyup', capsToggle);
+
+document.addEventListener('focusin', (e) => {
+  if (!(e.target instanceof HTMLElement)) return;
+  if (!e.target.matches('input[type="password"][data-caps-hint]')) return;
+  // สร้าง event ปลอมเพื่อตรวจสภาพทันทีเมื่อโฟกัสเข้า
+  const evt = new KeyboardEvent('keyup', { bubbles: true });
+  Object.defineProperty(evt, 'getModifierState', {
+    value: (k) => (k === 'CapsLock' ? false : false), // เริ่มต้นเป็น false; ผู้ใช้กดคีย์แล้วค่อยอัปเดตจริง
+  });
+  e.target.dispatchEvent(evt);
+});
+
+document.addEventListener('focusout', (e) => {
+  if (!(e.target instanceof HTMLElement)) return;
+  if (!e.target.matches('input[type="password"][data-caps-hint]')) return;
+  const hintSel = e.target.getAttribute('data-caps-hint');
+  const hint = hintSel ? document.querySelector(hintSel) : null;
+  if (hint) hint.classList.add('d-none');
+});
 
     // ===== prevent double submit + strip phone + spinner =====
     document.addEventListener("submit", (e) => {
