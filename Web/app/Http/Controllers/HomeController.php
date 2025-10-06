@@ -27,8 +27,7 @@ class HomeController extends Controller
 
     public function contact()
     {
-        // cache 5 นาที เพื่อลด query
-        $setting = Cache::remember('store_setting', 300, fn() => StoreSettingModel::first());
+        $setting = StoreSettingModel::first();
 
         // fallback ถ้าไม่มี record
         $tz = $setting->timezone ?? 'Asia/Bangkok';
@@ -37,8 +36,7 @@ class HomeController extends Controller
 
         // $fmt = fn($t) => Carbon::createFromFormat('H:i', $t, $tz)->format('g:i A');
 
-        return view('home.contact-us', compact('setting','open','close'));
-
+        return view('home.contact-us', compact('setting', 'open', 'close'));
     }
 
     public function menu()
