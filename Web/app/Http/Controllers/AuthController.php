@@ -82,7 +82,7 @@ class AuthController extends Controller
         if ($user->role === 'ADMIN' || $user->role === 'STAFF') {
             return redirect()->intended('/dashboard')->with('register_message', 'สมัครสมาชิกสำเร็จ!');
         }
-        
+
         Alert::toast('สมัครสมาชิกสำเร็จ', 'success')
             ->position('top-end')->timerProgressBar()->autoClose(2200);
         return redirect()->intended('/');
@@ -113,6 +113,7 @@ class AuthController extends Controller
             // ตรวจสอบค่า phone/password ที่ส่งมาจากฟอร์ม
             'phone' => $credentials['phone'],
             'password' => $credentials['password'],
+            'is_active' => 1,
         ])) {
             // ถ้า login สำเร็จ
 

@@ -180,6 +180,12 @@ class ReservationController extends Controller
             'seat_type'  => 'required|in:BAR,TABLE',
             'start_time' => 'required|date_format:H:i',
             'status'     => 'required|in:CONFIRMED,SEATED,COMPLETED,CANCELLED,NO_SHOW',
+        ], [
+            'user_id.required'    => 'กรุณาเลือกผู้ใช้งาน',
+            'party_size.required' => 'กรุณาระบุจำนวนลูกค้า',
+            'seat_type.required'  => 'กรุณาเลือกประเภทที่นั่ง',
+            'start_time.required' => 'กรุณาเลือกเวลาเริ่มต้น',
+            'status.required'     => 'กรุณาเลือกสถานะ',
         ]);
 
         if ($validator->fails()) {
